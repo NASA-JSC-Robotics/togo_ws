@@ -1,0 +1,107 @@
+serial_number: a300-00058
+version: 0
+system:
+  hosts:
+    - hostname: cpr-a300-00058
+      ip: 192.168.131.1
+  ros2:
+    namespace: a300_00058
+    domain_id: 0
+    middleware:
+      implementation: rmw_fastrtps_cpp
+      discovery: server
+      servers:
+       - hostname: cpr-a300-00058
+         port: 11811
+         enabled: True
+platform:
+  enable_ekf: false
+  enable_recorder: false
+  battery:
+    model: S_24V20_U1
+    configuration: S1P2
+  attachments:
+    - name: front_bumper
+      type: a300.bumper
+      parent: front_bumper_mount
+    - name: rear_bumper
+      type: a300.bumper
+      parent: rear_bumper_mount
+    - name: top_plate
+      type: a300.top_plate
+  extras:
+    ros_parameters:
+      platform_velocity_controller:
+        enable_odom_tf: False
+        velocity_rolling_window_size: 5
+      twist_mux:
+        topics:
+          ui:
+            priority: 1
+            timeout: 0.5
+            topic: ui_teleop/cmd_vel
+sensors:
+  imu:
+    - model: phidgets_spatial
+      urdf_enabled: true
+      launch_enabled: true
+      parent: base_link
+      xyz: [0.059, 0.0, 0.161275]
+      rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        phidgets_spatial:
+          data_interval_ms: 20
+  ins:
+    - model: fixposition
+      urdf_enabled: true
+      launch_enabled: false
+      parent: default_mount
+      xyz: [-0.4, 0.0, 0.07]
+      rpy: [0.0, 3.14159, 0.0]
+      antennas:
+        - type: spherical
+          parent: ins_0_sensor
+          xyz: [-0.03, -0.235, 0.46]
+          rpy: [0.0, 0.0, 0.0]
+        - type: spherical
+          parent: ins_0_sensor
+          xyz: [-0.03, 0.235, 0.46]
+          rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        fixposition_driver:
+          ip: 192.168.131.35
+          rate: 200
+  lidar3d:
+    - model: seyond_lidar
+      urdf_enabled: true
+      launch_enabled: false
+      parent: default_mount
+      xyz: [0.40, 0.0, 0.067]
+      rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        seyond_node:
+          frame_id: lidar3d_0_laser
+          ip_address: 192.168.131.25
+  camera:
+    - model: luxonis_oakd
+      urdf_enabled: false
+      launch_enabled: false
+      parent: default_mount
+      xyz: [-0.40, 0.0, 0.547]
+      rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        oakd:
+          camera:
+            device_type: pro_w_poe
+            i_ip: 192.168.131.15
+    - model: luxonis_oakd
+      urdf_enabled: false
+      launch_enabled: false
+      parent: default_mount
+      xyz: [-0.48, 0.0, 0.547]
+      rpy: [0.0, 0.57, 3.14159]
+      ros_parameters:
+        oakd:
+          camera:
+            device_type: pro_w_poe
+            i_ip: 192.168.131.16
