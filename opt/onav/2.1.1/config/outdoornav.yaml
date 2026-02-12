@@ -1,0 +1,11 @@
+version: 2.1.1
+sensors:
+  xvn:
+    enabled: true
+  robin_w:
+    enabled: true
+  oakd_front:
+    enabled: true
+  oakd_rear:
+    enabled: true
+

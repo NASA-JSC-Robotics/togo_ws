@@ -1,0 +1,33 @@
+meta:
+  last_updated: '2025-11-10T15:28:09.970512'
+  path: /opt/onav/data/.mission-storage.yaml
+  version: 0.0.5
+mission_waypoints: []
+missions: []
+network_edges: []
+network_maps: []
+network_mission_waypoints: []
+network_missions: []
+network_on_start_tasks: []
+network_on_stop_tasks: []
+network_points: []
+on_start_tasks: []
+on_stop_tasks: []
+points_of_interest: []
+tasks: []
+waypoint_tasks: []
+waypoints:
+- heading: -1.0
+  latitude: 43.50046332409724
+  longitude: -80.54714325602228
+  name: 'Waypoint: 1'
+  position_tolerance: -1.0
+  uuid: b2d1351c-9ea6-4f1e-86be-890f11caa9ba
+  yaw_tolerance: -1.0
+- heading: -1.0
+  latitude: 43.500683125557075
+  longitude: -80.5472860034872
+  name: 'Waypoint: 2'
+  position_tolerance: -1.0
+  uuid: fb7c49bb-c96f-4d56-9b21-344b2b5cb54e
+  yaw_tolerance: -1.0

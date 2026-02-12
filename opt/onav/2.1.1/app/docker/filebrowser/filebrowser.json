@@ -1,0 +1,25 @@
+{
+  "port": 80,
+  "baseURL": "/_/files",
+  "address": "",
+  "log": "stdout",
+  "database": "/database.db",
+  "root": "/opt/onav",
+  "branding":
+  {
+    "name": "OutdoorNav Files",
+    "files": "/branding"
+  },
+  "branding.files": "/branding",
+  "branding.name": "OutdoorNav Files",
+  "allowCommands": true,
+  "viewMode": "list",
+  "commands": [
+    "git",
+    "svn",
+    "ls",
+    "wget",
+    "filebrowser",
+    "onav"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "taskTypes": [
+    { "name": "Trigger", "label": "Trigger" },
+    { "name": "SetBool", "label": "Set Boolean" },
+    { "name": "SetAux", "label": "Set Auxiliary" },
+    { "name": "Custom", "label": "Custom (JSON)" }
+  ],
+  "taskTypeSchemas": {
+    "SetBool": {
+      "description": "Calls a service with a std_srvs/srv/SetBool interface",
+      "taskCategory": "service",
+      "serverName": "/robot_namespace/set_bool_server",
+      "fields": [
+        { "name": "data", "label": "Data", "type": "boolean", "default": true, "description": "Boolean value to set" }
+      ]
+    },
+    "Trigger": {
+      "description": "Calls a service with a std_srvs/srv/Trigger interface",
+      "taskCategory": "service",
+      "serverName": "/robot_namespace/trigger_server",
+      "fields": [
+      ]
+    },
+    "SetAux": {
+      "description": "Use the platform pinout API (clearpath_platform_msgs/srv/SetPinout interface)",
+      "taskCategory": "service",
+      "serverName": "/robot_namespace/platform/pinout/aux_1",
+      "fields": [
+        { "name": "state", "label": "State", "type": "boolean", "default": false, "description": "On/Off initial state" },
+        { "name": "toggle_period", "label": "Toggle Period (ms)", "type": "number", "default": 0, "min": 0, "description": "Toggle period in milliseconds. Minimum 100ms. A period of 0 implies no toggling." }
+      ]
+    },
+    "Custom": {
+      "description": "Custom task type with free-form JSON payload",
+      "fields": [],
+      "customPayload": true
+    }
+  }
+}

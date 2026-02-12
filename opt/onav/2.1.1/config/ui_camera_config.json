@@ -1,0 +1,21 @@
+{
+  "microphones": {},
+  "ptz_units": {},
+  "cameras": {
+    "1": {
+      "id": 1,
+      "type": "CAMERA",
+      "name": "oak_d_pro_w_front",
+      "camera": "OAKD_PRO",
+      "title": "Front"
+    },
+    "2": {
+      "id": 2,
+      "type": "CAMERA",
+      "name": "oak_d_pro_w_rear",
+      "camera": "OAKD_PRO",
+      "title": "Rear"
+    }
+  }
+}
+  
