@@ -26,6 +26,16 @@
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
   </xacro:top_plate>
 
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/attachments/amp_enclosure.urdf.xacro"/>
+  <xacro:amp_enclosure name="amp_enclosure" model="amp_enclosure" parent_link="base_link">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+  </xacro:amp_enclosure>
+
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/attachments/amp_sensor_arch.urdf.xacro"/>
+  <xacro:amp_sensor_arch name="amp_sensor_arch" model="amp_sensor_arch" parent_link="default_mount">
+    <origin xyz="-0.41 0.0 0.175" rpy="0.0 0.0 0.0"/>
+  </xacro:amp_sensor_arch>
+
 
   <!-- Links -->
 
@@ -49,8 +59,8 @@
 
   <!-- ins_0 -->
   <xacro:include filename="$(find clearpath_sensors_description)/urdf/fixposition.urdf.xacro"/>
-  <xacro:fixposition name="ins_0" parent_link="default_mount" num_antennas="2" gps_0_type="spherical" gps_0_xyz_x="-0.03" gps_0_xyz_y="-0.235" gps_0_xyz_z="0.46" gps_0_rpy_r="0.0" gps_0_rpy_p="0.0" gps_0_rpy_y="0.0" gps_0_parent="ins_0_sensor" gps_1_type="spherical" gps_1_xyz_x="-0.03" gps_1_xyz_y="0.235" gps_1_xyz_z="0.46" gps_1_rpy_r="0.0" gps_1_rpy_p="0.0" gps_1_rpy_y="0.0" gps_1_parent="ins_0_sensor">
-    <origin xyz="-0.4 0.0 0.07" rpy="0.0 3.14159 0.0"/>
+  <xacro:fixposition name="ins_0" parent_link="default_mount" num_antennas="2" gps_0_type="spherical" gps_0_xyz_x="-0.03" gps_0_xyz_y="-0.235" gps_0_xyz_z="0.545" gps_0_rpy_r="0.0" gps_0_rpy_p="0.0" gps_0_rpy_y="0.0" gps_0_parent="ins_0_sensor" gps_1_type="spherical" gps_1_xyz_x="-0.03" gps_1_xyz_y="0.235" gps_1_xyz_z="0.545" gps_1_rpy_r="0.0" gps_1_rpy_p="0.0" gps_1_rpy_y="0.0" gps_1_parent="ins_0_sensor">
+    <origin xyz="-0.4 0.0 0.07" rpy="3.14159 3.14159 0.0"/>
   </xacro:fixposition>
 
 

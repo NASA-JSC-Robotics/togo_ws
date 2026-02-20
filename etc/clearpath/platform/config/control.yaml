@@ -32,8 +32,8 @@ a300_00058:
       linear.x.has_velocity_limits: True
       linear.x.has_acceleration_limits: True
       linear.x.has_jerk_limits: False
-      linear.x.max_velocity: 2.0
-      linear.x.min_velocity: -2.0
+      linear.x.max_velocity: 0.1
+      linear.x.min_velocity: -0.1
       linear.x.max_acceleration: 2.0
       linear.x.max_deceleration: -4.0
       linear.x.max_acceleration_reverse: -2.0
