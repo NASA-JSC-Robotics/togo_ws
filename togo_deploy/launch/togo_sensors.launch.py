@@ -49,8 +49,9 @@ def generate_launch_description():
         plugin='depth_image_proc::PointCloudXyzNode',
         name='front_point_cloud_xyz_node',
         remappings=[
-            ('image_rect', 'stereo/image'),
-            ('camera_info', 'stereo/camera_info'),
+            ('image_rect', '/front_oakd/stereo/image_raw'),
+            ('camera_info', '/front_oakd/stereo/camera_info'),
+            ('points', '/front_oakd/points'),
         ],
     )
 
@@ -81,8 +82,9 @@ def generate_launch_description():
         plugin='depth_image_proc::PointCloudXyzNode',
         name='rear_point_cloud_xyz_node',
         remappings=[
-            ('image_rect', 'stereo/image'),
-            ('camera_info', 'stereo/camera_info'),
+            ('image_rect', '/rear_oakd/stereo/image_raw'),
+            ('camera_info', '/rear_oakd/stereo/camera_info'),
+            ('points', '/rear_oakd/points'),
         ],
     )
 
@@ -98,12 +100,23 @@ def generate_launch_description():
         output='screen'
     )
 
+    ## This is config section for INS sensor
+    yaml_ins_config=get_package_share_directory('togo_deploy')+'/config/ins_config.yaml'
+    fixposition_node = Node(
+        package='fixposition_driver_ros2',
+        executable='fixposition_driver_ros2_exec',
+        name='fixposition_driver',
+        output='screen',
+        parameters=[yaml_ins_config],
+    )
+
     return LaunchDescription(
         [
             rc_utils,
             config_arg,
             # seyond_node,
-            front_image_processing_container,
-            rear_image_processing_container,
+            # front_image_processing_container,
+            # rear_image_processing_container,
+            fixposition_node,
         ]
     )
