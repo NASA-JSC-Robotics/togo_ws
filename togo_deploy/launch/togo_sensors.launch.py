@@ -13,17 +13,7 @@ import os
 def generate_launch_description():
     ## This is config for Seyond lidar
     rviz_config=get_package_share_directory('togo_deploy')+'/rviz/rviz2.rviz'
-    yaml_config=get_package_share_directory('togo_deploy')+'/config/seyond_config.yaml'
-
-    # set log color
-    rc_utils = SetEnvironmentVariable(name='RCUTILS_COLORIZED_OUTPUT', value='1')
-
-    config_arg = DeclareLaunchArgument(
-        'config_path',
-        default_value=yaml_config,
-        description='config path'
-    )
-    
+    yaml_config=get_package_share_directory('togo_deploy')+'/config/seyond_config.yaml'    
 
     seyond_node = Node(
         package="seyond",
@@ -112,11 +102,9 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            rc_utils,
-            config_arg,
-            # seyond_node,
-            # front_image_processing_container,
-            # rear_image_processing_container,
+            seyond_node,
+            front_image_processing_container,
+            rear_image_processing_container,
             fixposition_node,
         ]
     )
