@@ -34,3 +34,6 @@
 [submodule "src/external/proton_ros2"]
 	path = src/external/proton_ros2
 	url = https://github.com/clearpathrobotics/proton_ros2.git
+[submodule "src/documentation"]
+	path = src/documentation
+	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/documentation.git
