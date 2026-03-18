@@ -1,0 +1,21 @@
+[submodule "src/togo"]
+	path = src/togo
+	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/togo.git
+[submodule "src/togo_capture"]
+	path = src/togo_capture
+	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/togo_capture.git
+[submodule "src/external/clearpath/clearpath_common"]
+	path = src/external/clearpath/clearpath_common
+	url = https://github.com/clearpathrobotics/clearpath_common.git
+[submodule "src/external/clearpath/clearpath_config"]
+	path = src/external/clearpath/clearpath_config
+	url = https://github.com/clearpathrobotics/clearpath_config.git
+[submodule "src/external/clearpath/clearpath_robot"]
+	path = src/external/clearpath/clearpath_robot
+	url = https://github.com/clearpathrobotics/clearpath_robot.git
+[submodule "src/external/clearpath/robot_upstart"]
+	path = src/external/clearpath/robot_upstart
+	url = https://github.com/clearpathrobotics/robot_upstart.git
+[submodule "src/external/fixposition_driver"]
+	path = src/external/fixposition_driver
+	url = https://github.com/fixposition/fixposition_driver.git
