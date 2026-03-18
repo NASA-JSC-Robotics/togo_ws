@@ -19,3 +19,18 @@
 [submodule "src/external/fixposition_driver"]
 	path = src/external/fixposition_driver
 	url = https://github.com/fixposition/fixposition_driver.git
+[submodule "src/external/seyond_ros_driver"]
+	path = src/external/seyond_ros_driver
+	url = https://github.com/Seyond-Inc/seyond_ros_driver.git
+[submodule "src/external/ewellix_lift"]
+	path = src/external/ewellix_lift
+	url = https://github.com/clearpathrobotics/ewellix_lift.git
+[submodule "src/external/serial"]
+	path = src/external/serial
+	url = https://github.com/tylerjw/serial.git
+[submodule "src/external/wiferion_charger"]
+	path = src/external/wiferion_charger
+	url = https://github.com/clearpathrobotics/wiferion_charger.git
+[submodule "src/external/proton_ros2"]
+	path = src/external/proton_ros2
+	url = https://github.com/clearpathrobotics/proton_ros2.git
