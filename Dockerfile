@@ -137,6 +137,15 @@ RUN colcon metadata add default  \
 COPY --chown=${USERNAME}:${USERNAME} config/colcon-defaults.yaml /home/${USERNAME}/.colcon/defaults.yaml
 COPY --chown=${USERNAME}:${USERNAME} config/terminator_config /home/${USERNAME}/.config/terminator/config
 
+# Don't build any Clearpath stuff, it's just for observation
+RUN touch src/external/clearpath/COLCON_IGNORE
+
+# Completely absurd extra build steps for the sensor packages
+RUN ./src/external/fixposition_driver/setup_ros_ws.sh && \
+    cd /home/${USERNAME}/ws/src/external/seyond_ros_driver/src/seyond_lidar_ros/src/seyond_sdk/build && \
+    ./build_unix.sh && \
+    cd -
+
 # Setup entrypoint and ensure it's added to ~/.bashrc
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN echo "source /entrypoint.sh" >> ~/.bashrc

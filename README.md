@@ -1,6 +1,6 @@
-# Sample Containerized Workspace
+# Togo Containerized Workspace
 
-This empty workspace can be used a starting point for a Docker-enabled workspace using Git submodules.
+Basic dockerized workspace for the EG Husky Togo.
 The contents of the `src` directory should be treated similarly to a "normal" ROS workspace.
 That is, source code can be imported and added as needed to `src/`, then be built and run inside of an isolated, ROS enabled environment.
 
@@ -13,10 +13,13 @@ Note the `2`! As this is intended to be isolated from your system.
 1) [Install Docker](https://docs.docker.com/engine/install/ubuntu/)
     - Don't worry about Docker Desktop
     - For Ubuntu recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
-2) Fork or copy the contents of this repository as needed
-3) Setup your source code for the `src/` directory
+2) ***VERY IMPORTANT*** Recursively initialize all submodules.  Note that the fixposition and seyond driver packages contain many nested submodules, so the `--recursive` flag is ***critical***.
+    ```bash
+    git submodule update --init --recursive
+    ```
+3) Setup additional source code for the `src/` directory
     - Either with git submodules (`git submodule add ...`)
-    - Or with a repos file and vcs tool  (`vcs import ...`)
+    - Or with a repos file and vcs tool (`vcs import ...`)
 4) Set your user information for the project build
     - We recommend just putting this in your `~/.bashrc`:
 
@@ -48,6 +51,15 @@ docker compose exec dev bash
 
 Once you're attached to the container, you can use it as a regular colcon workspace.
 The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src`.
+
+### Building the Togo Workspace
+
+Once you're attached to the container, built the workspace as normal:
+```bash
+colcon build
+```
+
+This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the packages will build fine.  They are just very whiny.
 
 ## The Pixi Workflow
 
