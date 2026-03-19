@@ -58,8 +58,9 @@ Once you're attached to the container, built the workspace as normal:
 ```bash
 colcon build
 ```
+This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the build should complete just fine, the packages are just whiny.
 
-This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the packages will build fine.  They are just very whiny.
+For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.  These are handled while the docker image is built.  By the time you attach to the container, these packages can be built as expected within a ROS workspace.
 
 ## The Pixi Workflow
 
