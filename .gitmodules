@@ -4,6 +4,9 @@
 [submodule "src/togo_capture"]
 	path = src/togo_capture
 	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/togo_capture.git
+[submodule "src/documentation"]
+	path = src/documentation
+	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/documentation.git
 [submodule "src/external/clearpath/clearpath_common"]
 	path = src/external/clearpath/clearpath_common
 	url = https://github.com/clearpathrobotics/clearpath_common.git
@@ -22,18 +25,3 @@
 [submodule "src/external/seyond_ros_driver"]
 	path = src/external/seyond_ros_driver
 	url = https://github.com/Seyond-Inc/seyond_ros_driver.git
-[submodule "src/external/ewellix_lift"]
-	path = src/external/ewellix_lift
-	url = https://github.com/clearpathrobotics/ewellix_lift.git
-[submodule "src/external/serial"]
-	path = src/external/serial
-	url = https://github.com/tylerjw/serial.git
-[submodule "src/external/wiferion_charger"]
-	path = src/external/wiferion_charger
-	url = https://github.com/clearpathrobotics/wiferion_charger.git
-[submodule "src/external/proton_ros2"]
-	path = src/external/proton_ros2
-	url = https://github.com/clearpathrobotics/proton_ros2.git
-[submodule "src/documentation"]
-	path = src/documentation
-	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/documentation.git
