@@ -61,9 +61,8 @@ services:
       - ./.ccache:/home/er4-user/.ccache
       - ./.bash:/home/er4-user/.bash
       # For rendering graphical commands inside the container
-      - x11_sock:/tmp/.X11-unix
-      - /tmp/.X11-unix:/tmp/.X11-unix:ro
-      - $HOME/.Xauthority:/home/${HOST_USERNAME:-er4-user}/.Xauthority:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - $HOME/.Xauthority:/home/${HOST_USERNAME:-er4-user}/.Xauthority
       # Uncomment to allow access to host hardware
       # NOTE: This is quite dangerous so be careful with these containers
       # - /dev:/dev
