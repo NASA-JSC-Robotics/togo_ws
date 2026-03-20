@@ -1,12 +1,12 @@
 [submodule "src/togo"]
 	path = src/togo
-	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/togo.git
+	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo.git
 [submodule "src/togo_capture"]
 	path = src/togo_capture
-	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/togo_capture.git
+	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo_capture.git
 [submodule "src/documentation"]
 	path = src/documentation
-	url = https://gitlab-fsl.jsc.nasa.gov/lunarsurfaceopnav/togo/documentation.git
+	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/documentation.git
 [submodule "src/external/clearpath/clearpath_common"]
 	path = src/external/clearpath/clearpath_common
 	url = https://github.com/clearpathrobotics/clearpath_common.git
