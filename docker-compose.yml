@@ -8,7 +8,7 @@ services:
       tags:
         - er4-dev:${ROS2_DISTRO:-jazzy}
       args:
-        - USERNAME=er4-user  # Changing username requires updating workspace mounts below
+        - USERNAME=er4-user  # WARNING: Changing username requires updating workspace mounts below
         - USER_UID=${USER_UID:-1000}
         - USER_GID=${USER_GID:-1000}
         - ROS_DISTRO=${ROS2_DISTRO:-jazzy}
@@ -17,6 +17,8 @@ services:
     init: true
     stdin_open: true
     tty: true
+    # WARNING: We set these by default but they may be trimmed down or removed depending on the exact nature
+    # of the application.
     privileged: true
     network_mode: host
     # Ensures the UR drivers have access to RT priority
@@ -61,8 +63,8 @@ services:
       - ./.ccache:/home/er4-user/.ccache
       - ./.bash:/home/er4-user/.bash
       # For rendering graphical commands inside the container
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - $HOME/.Xauthority:/home/${HOST_USERNAME:-er4-user}/.Xauthority
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - $HOME/.Xauthority:/home/er4-user/.Xauthority
       # Uncomment to allow access to host hardware
       # NOTE: This is quite dangerous so be careful with these containers
       # - /dev:/dev
