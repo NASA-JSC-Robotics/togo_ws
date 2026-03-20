@@ -34,10 +34,12 @@ Note the `2`! As this is intended to be isolated from your system.
 
 ## Using the Images
 
-Build the base images using the compose specification.
+***VERY IMPORTANT*** Apply the required pre-build steps on the host by running the following script from the repo root:
+```bash
+./scripts/pre_build.sh
+```
 
-To build the development image from the repo root, and then launch it
-
+Build the development image from the repo root, and then launch it:
 ```bash
 # Compile the image
 docker compose build
@@ -60,7 +62,7 @@ colcon build
 ```
 This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the build should complete just fine, the packages are just whiny.
 
-For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.  These are handled while the docker image is built.  By the time you attach to the container, these packages can be built as expected within a ROS workspace.
+For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.  These are handled by the `pre_build.sh` script run before building the docker images.  By the time you attach to the container, these packages can be built as expected within a ROS workspace.
 
 ## The Pixi Workflow
 
