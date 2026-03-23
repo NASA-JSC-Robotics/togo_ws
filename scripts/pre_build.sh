@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# don't build any Clearpath stuff, it's just in the workspace for observation
-touch src/external/clearpath/COLCON_IGNORE
-
 # set up fixposition
 cd src/external/fixposition_driver || exit
 ./setup_ros_ws.sh
