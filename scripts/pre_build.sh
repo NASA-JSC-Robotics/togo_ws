@@ -2,7 +2,7 @@
 
 # set up fixposition
 cd src/external/fixposition_driver || exit
-./setup_ros_ws.sh
+ROS_DISTRO=jazzy ./setup_ros_ws.sh
 cd - || exit
 # remove ROS1 dependency from package.xml
 ./scripts/remove_ros1_package_dependency.py -p src/external/fixposition_driver/fixposition-sdk/fpsdk_apps
