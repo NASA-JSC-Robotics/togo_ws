@@ -4,24 +4,24 @@
 [submodule "src/togo_capture"]
 	path = src/togo_capture
 	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo_capture.git
-[submodule "src/documentation"]
-	path = src/documentation
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/documentation.git
-[submodule "src/external/clearpath/clearpath_common"]
-	path = src/external/clearpath/clearpath_common
-	url = https://github.com/clearpathrobotics/clearpath_common.git
-[submodule "src/external/clearpath/clearpath_config"]
-	path = src/external/clearpath/clearpath_config
-	url = https://github.com/clearpathrobotics/clearpath_config.git
-[submodule "src/external/clearpath/clearpath_robot"]
-	path = src/external/clearpath/clearpath_robot
-	url = https://github.com/clearpathrobotics/clearpath_robot.git
-[submodule "src/external/clearpath/robot_upstart"]
-	path = src/external/clearpath/robot_upstart
-	url = https://github.com/clearpathrobotics/robot_upstart.git
 [submodule "src/external/fixposition_driver"]
 	path = src/external/fixposition_driver
 	url = https://github.com/fixposition/fixposition_driver.git
 [submodule "src/external/seyond_ros_driver"]
 	path = src/external/seyond_ros_driver
 	url = https://github.com/Seyond-Inc/seyond_ros_driver.git
+[submodule "references/documentation"]
+	path = references/documentation
+	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/documentation.git
+[submodule "references/clearpath/clearpath_common"]
+	path = references/clearpath/clearpath_common
+	url = https://github.com/clearpathrobotics/clearpath_common.git
+[submodule "references/clearpath/clearpath_config"]
+	path = references/clearpath/clearpath_config
+	url = https://github.com/clearpathrobotics/clearpath_config.git
+[submodule "references/clearpath/clearpath_robot"]
+	path = references/clearpath/clearpath_robot
+	url = https://github.com/clearpathrobotics/clearpath_robot.git
+[submodule "references/clearpath/robot_upstart"]
+	path = references/clearpath/robot_upstart
+	url = https://github.com/clearpathrobotics/robot_upstart.git
