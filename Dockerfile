@@ -110,7 +110,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     sudo apt update && \
     . /opt/ros/${ROS_DISTRO}/setup.bash && \
     rosdep update && \
-    rosdep install -iy --from-paths src
+    rosdep install -iyr --from-paths src
 
 # Install extra ROS deps
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
