@@ -13,13 +13,13 @@ import os
 def generate_launch_description():
     ## This is config for Seyond lidar
     rviz_config=get_package_share_directory('togo_deploy')+'/rviz/rviz2.rviz'
-    yaml_config=get_package_share_directory('togo_deploy')+'/config/seyond_config.yaml'    
+    yaml_config=get_package_share_directory('togo_deploy')+'/config/seyond_config.yaml'
 
     seyond_node = Node(
         package="seyond",
         executable="seyond_node",
         parameters=[
-            {'config_path': LaunchConfiguration('config_path')},
+            {'config_path': yaml_config},
         ],
     )
     # Node(namespace='rviz2', package='rviz2', executable='rviz2', arguments=['-d',rviz_config])
@@ -98,13 +98,36 @@ def generate_launch_description():
         name='fixposition_driver',
         output='screen',
         parameters=[yaml_ins_config],
+        # arguments=['--ros-args', '--log-level', 'DEBUG']
+    )
+
+    # This is config section for the IMU sensor
+    phidgets_imu_config=get_package_share_directory('togo_deploy')+'/config/phidgets_imu_config.yaml'
+    phidgets_node = ComposableNode(
+        package='phidgets_spatial',
+        plugin='phidgets::SpatialRosI',
+        name='phidgets_spatial',
+        namespace="",
+        parameters=[phidgets_imu_config],
+    )
+
+    imu_filter_container = ComposableNodeContainer(
+        name='imu_filter_container',
+        namespace="",
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            phidgets_node,
+        ],
+        output='screen',
     )
 
     return LaunchDescription(
         [
-            seyond_node,
-            front_image_processing_container,
-            rear_image_processing_container,
+            # seyond_node,
+            # front_image_processing_container,
+            # rear_image_processing_container,
             fixposition_node,
+            # imu_filter_container,
         ]
     )
