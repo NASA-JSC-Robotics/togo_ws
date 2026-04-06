@@ -3,10 +3,57 @@ from launch_ros.actions import Node
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch_ros.substitutions import FindPackageShare
-from launch.substitutions import PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 
 def generate_launch_description():
+    # DECLARE LAUNCH ARGUMENTS
+    declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_seyond",
+            default_value="true",
+            description="Flag to start the Seyond LIDAR",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_front_oakd",
+            default_value="true",
+            description="Flag to start the front OAK-D Camera",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_rear_oakd",
+            default_value="true",
+            description="Flag to start the rear OAK-D Camera",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_fixposition",
+            default_value="true",
+            description="Flag to start the FixPosition INS",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "launch_phidgets",
+            default_value="true",
+            description="Flag to start the Phidgets IMU",
+        )
+    )
+
+    # Initialize Arguments
+    launch_seyond = LaunchConfiguration("launch_seyond")
+    launch_front_oakd = LaunchConfiguration("launch_front_oakd")
+    launch_rear_oakd = LaunchConfiguration("launch_rear_oakd")
+    launch_fixposition = LaunchConfiguration("launch_fixposition")
+    launch_phidgets = LaunchConfiguration("launch_phidgets")
+
     # INCLUDE PACKAGES
     pkg_togo_deploy = FindPackageShare("togo_deploy")
 
@@ -26,6 +73,7 @@ def generate_launch_description():
         parameters=[
             {"config_path": yaml_seyond_config},
         ],
+        condition=IfCondition(launch_seyond),
     )
 
     # OAK-D Front Camera
@@ -35,6 +83,7 @@ def generate_launch_description():
         plugin="depthai_ros_driver::Camera",
         parameters=[yaml_front_oakd_config],
         extra_arguments=[{"use_intra_process_comms": True}],
+        condition=IfCondition(launch_front_oakd),
     )
 
     front_depthai_pcl_node = ComposableNode(
@@ -46,6 +95,7 @@ def generate_launch_description():
             ("camera_info", "/front_oakd/stereo/camera_info"),
             ("points", "/front_oakd/points"),
         ],
+        condition=IfCondition(launch_front_oakd),
     )
 
     front_image_processing_container = ComposableNodeContainer(
@@ -58,6 +108,7 @@ def generate_launch_description():
             front_depthai_pcl_node,
         ],
         output="screen",
+        condition=IfCondition(launch_front_oakd),
     )
 
     # OAK-D Rear Camera
@@ -67,6 +118,7 @@ def generate_launch_description():
         plugin="depthai_ros_driver::Camera",
         parameters=[yaml_rear_oakd_config],
         extra_arguments=[{"use_intra_process_comms": True}],
+        condition=IfCondition(launch_rear_oakd),
     )
 
     rear_depthai_pcl_node = ComposableNode(
@@ -78,6 +130,7 @@ def generate_launch_description():
             ("camera_info", "/rear_oakd/stereo/camera_info"),
             ("points", "/rear_oakd/points"),
         ],
+        condition=IfCondition(launch_rear_oakd),
     )
 
     rear_image_processing_container = ComposableNodeContainer(
@@ -90,6 +143,7 @@ def generate_launch_description():
             rear_depthai_pcl_node,
         ],
         output="screen",
+        condition=IfCondition(launch_rear_oakd),
     )
 
     # FixPosition INS
@@ -99,35 +153,39 @@ def generate_launch_description():
         name="fixposition_driver",
         output="screen",
         parameters=[yaml_ins_config],
-        # arguments=['--ros-args', '--log-level', 'DEBUG']
+        # arguments=['--ros-args', '--log-level', 'DEBUG'],
+        condition=IfCondition(launch_fixposition),
     )
 
     # Phidgets IMU
     phidgets_node = ComposableNode(
-        package='phidgets_spatial',
-        plugin='phidgets::SpatialRosI',
-        name='phidgets_spatial',
+        package="phidgets_spatial",
+        plugin="phidgets::SpatialRosI",
+        name="phidgets_spatial",
         namespace="",
         parameters=[yaml_phidgets_config],
+        condition=IfCondition(launch_phidgets),
     )
 
     imu_filter_container = ComposableNodeContainer(
-        name='imu_filter_container',
+        name="imu_filter_container",
         namespace="",
-        package='rclcpp_components',
-        executable='component_container',
+        package="rclcpp_components",
+        executable="component_container",
         composable_node_descriptions=[
             phidgets_node,
         ],
-        output='screen',
+        output="screen",
+        condition=IfCondition(launch_phidgets),
     )
 
     return LaunchDescription(
-        [
-            # seyond_node,
-            # front_image_processing_container,
-            # rear_image_processing_container,
+        declared_arguments
+        + [
+            seyond_node,
+            front_image_processing_container,
+            rear_image_processing_container,
             fixposition_node,
-            # imu_filter_container,
+            imu_filter_container,
         ]
     )
