@@ -15,6 +15,7 @@ def generate_launch_description():
     yaml_front_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "front_oakd_config.yaml"])
     yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "rear_oakd_config.yaml"])
     yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "ins_config.yaml"])
+    yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "phidgets_imu_config.yaml"])
 
     # SENSOR NODES
 
@@ -98,13 +99,35 @@ def generate_launch_description():
         name="fixposition_driver",
         output="screen",
         parameters=[yaml_ins_config],
+        # arguments=['--ros-args', '--log-level', 'DEBUG']
+    )
+
+    # Phidgets IMU
+    phidgets_node = ComposableNode(
+        package='phidgets_spatial',
+        plugin='phidgets::SpatialRosI',
+        name='phidgets_spatial',
+        namespace="",
+        parameters=[yaml_phidgets_config],
+    )
+
+    imu_filter_container = ComposableNodeContainer(
+        name='imu_filter_container',
+        namespace="",
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            phidgets_node,
+        ],
+        output='screen',
     )
 
     return LaunchDescription(
         [
-            seyond_node,
-            front_image_processing_container,
-            rear_image_processing_container,
+            # seyond_node,
+            # front_image_processing_container,
+            # rear_image_processing_container,
             fixposition_node,
+            # imu_filter_container,
         ]
     )
