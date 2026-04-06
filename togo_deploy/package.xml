@@ -3,7 +3,7 @@
 <package format="3">
   <name>togo_deploy</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Deploy package for Clearpath Husky known as Togo</description>
   <maintainer email="emma.zemler@nasa.gov">ur-user</maintainer>
   <license>TODO: License declaration</license>
 
@@ -15,6 +15,15 @@
   <depend>seyond</depend>
   <depend>fixposition_driver_ros2</depend>
 
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <!-- TODO DOUBLE CHECK BELOW -->
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>clearpath_desktop</exec_depend>
+  <exec_depend>clearpath_common</exec_depend>
+  <exec_depend>clearpath_robot</exec_depend>
+  <!-- TODO DOUBLE CHECK ABOVE -->
   <exec_depend>depthai-ros</exec_depend>
   <exec_depend>phidgets_spatial</exec_depend>
 
