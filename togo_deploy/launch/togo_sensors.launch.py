@@ -58,11 +58,11 @@ def generate_launch_description():
     pkg_togo_deploy = FindPackageShare("togo_deploy")
 
     # SENSOR CONFIGS
-    yaml_seyond_config = PathJoinSubstitution([pkg_togo_deploy, "config", "seyond_config.yaml"])
-    yaml_front_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "front_oakd_config.yaml"])
-    yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "rear_oakd_config.yaml"])
-    yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "ins_config.yaml"])
-    yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "phidgets_imu_config.yaml"])
+    yaml_seyond_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "seyond_config.yaml"])
+    yaml_front_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "front_oakd_config.yaml"])
+    yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "rear_oakd_config.yaml"])
+    yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "ins_config.yaml"])
+    yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "phidgets_imu_config.yaml"])
 
     # SENSOR NODES
 
