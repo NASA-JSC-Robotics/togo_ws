@@ -1,9 +1,11 @@
-# Clearpath Hardware Notes
+# Clearpath Hardware Architecture
 
-If we do our job right with the `togo_deploy` package, none of this information is really important for how to get the robot up and running.
-Ideally, all of this gets started up and runs in the background, enabling us to do our cool robotics things on top.
+If we do our job right with the `togo_deploy` package,
+all of this Clearpath hardware infrastructure will gets started up and run in the background,
+enabling us to do our cool robotics things on top.
 However, a lot of nodes get started to facilitate communication with the hardware due to how Clearpath sets up their platforms.
-This page documents (to the best of our understanding based on Clearpath's documentation) some of the Clearpath hardware and what nodes get started up to facilitate basic operations.
+
+This page documents (to the best of our understanding based on Clearpath's documentation) some of the Clearpath hardware architecture and what nodes get started up to facilitate basic operations.
 
 Some useful starting points in the Clearpath documentation:
 - [Husky A300 Overview](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/)
@@ -11,8 +13,8 @@ Some useful starting points in the Clearpath documentation:
 
 Alright, so let's get into it...
 
-> ![WARNING]
-> *whew* This is complicated.
+> [!WARNING]
+> :face_exhaling: *\*whew\** This is complicated.
 
 ## TODO FOR THIS PAGE
 - [ ] citations to back up what Mark said?
