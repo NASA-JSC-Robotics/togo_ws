@@ -11,29 +11,28 @@ Some useful starting points in the Clearpath documentation:
 - [Husky A300 Overview](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/)
 - [Husky A300 User Manual](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/user_manual_husky/)
 
+For a real deep-dive into all of the working parts, refer to [Clearpath's source code](https://github.com/clearpathrobotics).
+There are a lot of packages, so we link directly to relevant packages as needed if it could be illustrative.
+
 Alright, so let's get into it...
 
 > [!WARNING]
 > :face_exhaling: *\*whew\** This is complicated.
 
-## TODO FOR THIS PAGE
-- [ ] citations to back up what Mark said?
-- [ ] general cleanup
-
 ## CAN
 
 Several Clearpath platforms (like Ridgeback R100 and Husky A300) use [CAN bus for communication](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/can/).
-CAN bus is often used for automotive applications (TODO citation?).
-In the sense that this is a protocol for communicating data to hardware, we can think of CAN as comparable to ethercat. (TODO ethercat citation?)
-The difference between CAN and ethercat is that ethercat supports direct communication, while CAN does not.
+CAN bus is often used for [automotive applications](https://en.wikipedia.org/wiki/CAN_bus).
+In the sense that this is a protocol for communicating data to hardware, we can think of CAN as comparable to [ethercat](https://www.ethercat.org/en/why_use_ethercat.htm).
+The difference between CAN and ethercat is that [ethercat supports direct communication](https://en.wikipedia.org/wiki/EtherCAT#Principles), while CAN does not.
 
 The CAN is plugged directly into the onboard Microcontroller Unit (MCU), so data needs to be bridged between the MCU and the robot computer.
 To facilitate this communication, the Clearpath platform will have some default [Virtual CAN (VCAN) adapters](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/can/#virtual-can-adapters).
 This indirect communication through the VCAN is the biggest difference between CAN and ethercat.
 
 VCAN communications are facilitated by sender and receiver nodes, which we see launched in `togo_capture/etc/clearpath/platform/launch/platform-service.launch.py`.
-These sender and receiver nodes run on the robot computer, which tells us from what perspective data is sent and received. (TODO citation?)
-So the sender translates ROS packets into CAN packets and sends them along the bus to the MCU,
+These [sender and receiver nodes](https://github.com/clearpathrobotics/clearpath_ros2_socketcan_interface/tree/jazzy) run on the robot computer;
+the sender translates ROS packets into CAN packets and sends them along the bus to the MCU,
 while the receiver translates CAN packets received from the MCU into ROS packets.
 These sender and receiver nodes specifically handle controller commands; they are high-frequency and sent in the native language of the micro controller for the MCU to carry out.
 
@@ -45,17 +44,18 @@ The CAN bus facilitates communications with the control motors specifically.
 All other ROS messages are communicated between the MCU and the robot computer using [micro-ROS](https://micro.ros.org/).
 While both CAN and micro-ROS enable communication between the MCU and robot computer,
 they run parallel and independently, transporting different types of information to the MCU.
+micro-ROS is used for [resource constrained embedded systems](https://micro.ros.org/docs/overview/features/) that cannot support the full ROS middleware.
 
 Critically, micro-ROS *is not ROS*.
 ROS uses [DDS](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations.html), which expects high-frequency updates that a node is still alive.
 But the MCU does not need information that fast (at least, for anything that isn't the motor controller commands being sent over the CAN bus).
 Instead, micro-ROS is used for communication of ROS messages (such as status of batteries and lights) between the MCU and robot computer.
-(TODO everything after here may not add all that much in terms of knowledge capture...?)
-The MCU drives all of this, deciding when to send information to the robot computer and requesting data from the robot computer as needed.
-There's an agent that lives on the robot computer to carry out the ROS message translations and respond to the MCU's commands.
-(TODO citations for all of this)
 
-Basically micro-ROS simulates ROS for communication of ROS messages, but it *is not ROS* because it doesn't deal with DDS.
+Clearpath platforms launch the [micro-ROS agent](https://micro.ros.org/docs/overview/features/) on the robot computer, which [handles callbacks from the MCU](https://github.com/micro-ROS/micro-ROS-Agent).
+The MCU tells the micro-ROS agent what to do, including reading/writing data or service requests/responses.
+
+See the [micro-ROS source code](https://github.com/micro-ROS) for more information.
+For the purpose of understanding nodes launched on the Husky, launching the micro-ROS agent is most important.
 
 ## (Coming Soon?) Proton
 
