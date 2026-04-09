@@ -80,7 +80,7 @@ def generate_launch_description():
             "enable_can_fd": "false",
             "interval_sec": "0.01",
             "use_bus_time": "false",
-            "filters": "0.0",
+            "filters": "0:0",
             "auto_configure": "true",
             "auto_activate": "true",
             "timeout": "5.0",
@@ -261,4 +261,4 @@ def generate_launch_description():
 
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launches + nodes + processes)
 
-    return LaunchDescription([declared_arguments + ns_action])
+    return LaunchDescription(declared_arguments + [ns_action])
