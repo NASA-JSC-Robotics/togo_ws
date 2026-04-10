@@ -12,6 +12,7 @@ Some useful starting points in the Clearpath documentation:
 - [Husky A300 User Manual](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/user_manual_husky/)
 
 For a real deep-dive into all of the working parts, refer to [Clearpath's source code](https://github.com/clearpathrobotics).
+However, it is really hard to understand how everything fits together based on their organization, so only go investigate there if you are brave.
 There are a lot of packages, so we link directly to relevant packages as needed if it could be illustrative.
 
 Alright, so let's get into it...
@@ -62,3 +63,4 @@ Clearpath has starting migrating its MCU communication protocol from micro-ROS t
 This change is required on platforms using newer firmware versions.
 Based on the services started in the Clearpath generated launch files, this Husky A300 is still using micro-ROS.
 Use of Proton is required for firmware versions above 3.x; Togo is on firmware 2.7.1.
+You can check your installed version and available versions with `apt list -a ros-jazzy-clearpath-firmware`.
