@@ -23,12 +23,9 @@ Alright, so let's get into it...
 
 Several Clearpath platforms (like Ridgeback R100 and Husky A300) use [CAN bus for communication](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/can/).
 CAN bus is often used for [automotive applications](https://en.wikipedia.org/wiki/CAN_bus).
-In the sense that this is a protocol for communicating data to hardware, we can think of CAN as comparable to [ethercat](https://www.ethercat.org/en/why_use_ethercat.htm).
-The difference between CAN and ethercat is that [ethercat supports direct communication](https://en.wikipedia.org/wiki/EtherCAT#Principles), while CAN does not.
 
 The CAN bus is plugged directly into the onboard Microcontroller Unit (MCU), so data needs to be bridged between the MCU and the robot computer.
 To facilitate this communication, the Clearpath platform will have some default [Virtual CAN (VCAN) adapters](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/can/#virtual-can-adapters).
-This indirect communication through the VCAN is the biggest difference between CAN and ethercat.
 
 VCAN communications are facilitated by sender and receiver nodes, which we see launched in `togo_capture/etc/clearpath/platform/launch/platform-service.launch.py`.
 These [sender and receiver nodes](https://github.com/clearpathrobotics/clearpath_ros2_socketcan_interface/tree/jazzy) run on the robot computer;
