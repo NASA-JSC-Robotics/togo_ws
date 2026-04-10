@@ -47,9 +47,11 @@ Critically, micro-ROS *is not ROS*.
 ROS uses [DDS](https://docs.ros.org/en/jazzy/Installation/RMW-Implementations.html), which expects high-frequency updates that a node is still alive.
 But the MCU does not need information that fast (at least, for anything that isn't the motor controller commands being sent over the CAN bus).
 Instead, micro-ROS is used for communication of ROS messages (such as status of batteries and lights) between the MCU and robot computer.
+In particular, micro-ROS translates between the DDS-based ROS on the robot computer and the low-power world of the MCU.
 
 Clearpath platforms launch the [micro-ROS agent](https://micro.ros.org/docs/overview/features/) on the robot computer, which [handles callbacks from the MCU](https://github.com/micro-ROS/micro-ROS-Agent).
 The MCU tells the micro-ROS agent what to do, including reading/writing data or service requests/responses.
+Through micro-ROS, the MCU has all of the content of the ROS messages without having to deal with DDS.
 
 See the [micro-ROS source code](https://github.com/micro-ROS) for more information.
 For the purpose of understanding nodes launched on the Husky, launching the micro-ROS agent is most important.
