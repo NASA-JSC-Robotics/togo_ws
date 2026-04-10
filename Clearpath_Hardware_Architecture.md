@@ -26,22 +26,22 @@ CAN bus is often used for [automotive applications](https://en.wikipedia.org/wik
 In the sense that this is a protocol for communicating data to hardware, we can think of CAN as comparable to [ethercat](https://www.ethercat.org/en/why_use_ethercat.htm).
 The difference between CAN and ethercat is that [ethercat supports direct communication](https://en.wikipedia.org/wiki/EtherCAT#Principles), while CAN does not.
 
-The CAN is plugged directly into the onboard Microcontroller Unit (MCU), so data needs to be bridged between the MCU and the robot computer.
+The CAN bus is plugged directly into the onboard Microcontroller Unit (MCU), so data needs to be bridged between the MCU and the robot computer.
 To facilitate this communication, the Clearpath platform will have some default [Virtual CAN (VCAN) adapters](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/can/#virtual-can-adapters).
 This indirect communication through the VCAN is the biggest difference between CAN and ethercat.
 
 VCAN communications are facilitated by sender and receiver nodes, which we see launched in `togo_capture/etc/clearpath/platform/launch/platform-service.launch.py`.
 These [sender and receiver nodes](https://github.com/clearpathrobotics/clearpath_ros2_socketcan_interface/tree/jazzy) run on the robot computer;
-the sender translates ROS packets into CAN packets and sends them along the bus to the MCU,
+the sender translates ROS packets into CAN packets and sends them through the virtual CAN interface to the MCU,
 while the receiver translates CAN packets received from the MCU into ROS packets.
-These sender and receiver nodes specifically handle controller commands; they are high-frequency and sent in the native language of the micro controller for the MCU to carry out.
+These sender and receiver nodes specifically handle controller commands; they are high-frequency and sent in the native language of the motor controller for the MCU to carry out.
 
 For more information about the Husky's CAN network, please refer to [Clearpath's Husky documentation](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/integration_husky/#canbus-connection).
 
 ## micro-ROS
 
 The CAN bus facilitates communications with the control motors specifically.
-All other ROS messages are communicated between the MCU and the robot computer using [micro-ROS](https://micro.ros.org/).
+ROS messages are communicated between the MCU and the robot computer using [micro-ROS](https://micro.ros.org/).
 While both CAN and micro-ROS enable communication between the MCU and robot computer,
 they run parallel and independently, transporting different types of information to the MCU.
 micro-ROS is used for [resource constrained embedded systems](https://micro.ros.org/docs/overview/features/) that cannot support the full ROS middleware.
