@@ -59,3 +59,4 @@ For the purpose of understanding nodes launched on the Husky, launching the micr
 Clearpath has starting migrating its MCU communication protocol from micro-ROS to [Proton](https://docs.clearpathrobotics.com/docs/ros/config/yaml/platform/mcu/).
 This change is required on platforms using newer firmware versions.
 Based on the services started in the Clearpath generated launch files, this Husky A300 is still using micro-ROS.
+Use of Proton is required for firmware versions above 3.x; Togo is on firmware 2.7.1.
