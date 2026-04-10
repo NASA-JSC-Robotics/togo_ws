@@ -2,6 +2,15 @@
 
 Notes on bringing up the `togo_deploy` package.
 
+## Running List of Misc TODOs
+
+- [ ] Testing deploy functionality
+  - [ ] in `controllers_a300.yaml`, does changing `tf_frame_prefix_enable` to `True` cause problems given taht I also manually included the `tf_prefix`?
+  - [ ] double check tf_prefixing for lynx motor controller too; joint names have been changed in `motor_driver.yaml` config file
+- [ ] Docs
+  - [ ] include link to Clearpath Hardware notes when that gets merged in
+  - [ ] tidy up, especially under `husky_comm`; right now it's very stream-of-consciousness
+
 ## `togo_sensors.launch.py`
 
 Responsible for launching all sensors on Togo, using information from the respective sensor drivers/packages.
@@ -34,16 +43,25 @@ As more components are added to Togo, their controller configs can be similarly 
 - `controllers_a300.yaml` includes controllers specific to the Clearpath Husky.
 A few default parameters were changed from `togo_capture`:
   - `tf_frame_prefix_enable` is set to `True`
-    - TODO does this cause conflicts with the manual inclusion of the tf_prefix?
 
-## `togo_comm.launch.py`
+## `husky_comm.launch.py`
 
 Togo will eventually have an option to run in simulation or on hardware.
 To anticipate this separation, we have separated some hardware-specific launch files and configs to give us more control over what nodes get started.
-TODO include link to Clearpath Hardware notes when that gets merged in.
 <!-- For more information about what all of the nodes launched in this file do and why, see Clearpath Hardware Architecture notes. -->
+The `husky_comm` launch file is adapted from `togo_capture/etc/clearpath/platform/launch/platform-service.launch.py`.
 
-TODO double check tf_prefixing for lynx motor controller too; joint names have been changed in that yaml file
+### Husky Configs
+
+Any config files that were copied directly from `togo_capture/etc/clearpath/platform/config/` are placed in the sub-directory `togo_deploy/config/husky/`. The only changes made are to change the node namespace to the more generic `/**:`
+
+### Ignore `clearpath_common` Platform Launch
+
+Clearpath generated launch files will launch this `clearpath_common platform.launch.py`.  We do not launch this, since we separate these out for manual bringup.  Platform brings up the description, control, localization, teleop base, and teleop joy, all of which are turned into separate launch files.
+
+### Ignore `foxglove_bridge`
+
+The [Foxglove bridge](https://docs.foxglove.dev/docs/visualization/ros-foxglove-bridge) is used for data visualization purposes. Phoebe seems to ignore this, so Togo will too.
 
 ### Motor Driver
 
@@ -71,19 +89,30 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `├── platform`
 - [ ] `│   ├── config`
 - [x] `│   │   ├── control.yaml`
-- [ ] `│   │   ├── diagnostic_aggregator.yaml`
-- [ ] `│   │   ├── diagnostic_updater.yaml`
-- [ ] `│   │   ├── foxglove_bridge.yaml`
+- [x] `│   │   ├── diagnostic_aggregator.yaml`
+- [x] `│   │   ├── diagnostic_updater.yaml`
+- [x] `│   │   ├── foxglove_bridge.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
 - [ ] `│   │   ├── localization.yaml`
 - [ ] `│   │   ├── teleop_interactive_markers.yaml`
 - [ ] `│   │   ├── teleop_joy.yaml`
 - [ ] `│   │   └── twist_mux.yaml`
-- [ ] `│   └── launch`
-- [ ] `│       └── platform-service.launch.py`
-- [ ] `├── platform-extras`
-- [ ] `│   └── launch`
-- [ ] `│       └── platform-extras-service.launch.py`
+- [x] `│   └── launch`
+- [x] `│       └── platform-service.launch.py`
+- [x] `├── platform-extras`
+- [x] `│   └── launch`
+- [x] `│       └── platform-extras-service.launch.py`
+  - [ ] `clearpath_common platform.launch.py`
+    - [ ] `clearpath_platform_description description.launch.py`
+    - [ ] `clearpath_control control.launch.py`
+    - [ ] `clearpath_control localization.launch.py`
+    - [ ] `clearpath_control teleop_base.launch.py`
+    - [ ] `clearpath_control teleop_joy.launch.py`
+  - [x] `clearpath_diagnostics diagnostics.launch.py`
+  - [x] `clearpath_diagnostics foxglove_bridge.launch.py`
+  - [x] `clearpath_ros2_socketcan_interface receiver.launch.py`
+  - [x] `clearpath_ros2_socketcan_interface sender.launch.py`
+  - [x] `canopen_inventus_bringup inventus.launch.py`
 - [ ] `├── robot.srdf`
 - [ ] `├── robot.srdf.xacro`
 - [ ] `├── robot.urdf.xacro`
@@ -119,7 +148,7 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   │   ├── imu_filter.yaml`
 - [ ] `│   │   ├── lidar2d_0.yaml`
 - [ ] `│   │   ├── localization.yaml`
-- [ ] `│   │   ├── robot.yaml`
+- [x] `│   │   ├── robot.yaml`
 - [ ] `│   │   ├── teleop_interactive_markers.yaml`
 - [ ] `│   │   ├── teleop_joy.yaml`
 - [ ] `│   │   └── twist_mux.yaml`
@@ -131,7 +160,7 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   ├── pb_ur_gui.launch.py`
 - [x] `│   ├── phoebe_rspc_camera.launch.py`
 - [x] `│   ├── realsense_cameras.launch.py`
-- [ ] `│   ├── ridgeback_comm.launch.py`
+- [x] `│   ├── ridgeback_comm.launch.py`
 - [ ] `│   ├── ridgeback_sensors.launch.py`
 - [x] `│   ├── spawn_controllers`
 - [x] `│   │   ├── spawn_controllers_admittance.launch.py`
@@ -141,10 +170,10 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   └── spawn_controllers_ur.launch.py`
 - [x] `│   ├── spawn_controllers.launch.py`
 - [ ] `│   ├── teleop.launch.py`
-- [ ] `│   ├── transport`
-- [ ] `│   │   ├── transport_control.launch.py`
-- [ ] `│   │   ├── transport.launch.py`
-- [ ] `│   │   └── transport_robot_state_publisher.launch.py`
+- [x] `│   ├── transport`
+- [x] `│   │   ├── transport_control.launch.py`
+- [x] `│   │   ├── transport.launch.py`
+- [x] `│   │   └── transport_robot_state_publisher.launch.py`
 - [x] `│   └── ur_tools.launch.py`
 - [x] `├── package.xml`
 - [ ] `└── scripts`
@@ -160,10 +189,12 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   ├── controllers_common.yaml`
 - [x] `│   ├── controllers_a300.yaml`
 - [ ] `│   ├── husky`
+- [x] `│   │   ├── diagnostic_aggregator.yaml`
+- [x] `│   │   ├── diagnostic_updater.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
 - [ ] `│   │   ├── lidar2d_0.yaml`
 - [ ] `│   │   ├── localization.yaml`
-- [ ] `│   │   ├── robot.yaml`
+- [x] `│   │   ├── robot.yaml`
 - [ ] `│   │   ├── teleop_interactive_markers.yaml`
 - [ ] `│   │   ├── teleop_joy.yaml`
 - [ ] `│   │   └── twist_mux.yaml`
@@ -179,16 +210,12 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   ├── control_hardware.launch.py`
 - [x] `│   ├── control.launch.py`
 - [ ] `│   ├── control_mock_hardware.launch.py`
-- [ ] `│   ├── husky_comm.launch.py`
+- [x] `│   ├── husky_comm.launch.py`
 - [x] `│   ├── togo_sensors.launch.py`
 - [x] `│   ├── spawn_controllers`
 - [x] `│   │   ├── spawn_controllers_a300.launch.py`
 - [x] `│   ├── spawn_controllers.launch.py`
 - [ ] `│   ├── teleop.launch.py`
-- [ ] `│   ├── transport(?)`
-- [ ] `│   │   ├── transport_control.launch.py`
-- [ ] `│   │   ├── transport.launch.py`
-- [ ] `│   │   └── transport_robot_state_publisher.launch.py`
 - [x] `├── package.xml`
 - [ ] `└── scripts(?)`
 - [ ] `    ├── keyboard_joy.py`
