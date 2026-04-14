@@ -34,7 +34,26 @@ seyond_ros_driver
   * Make sure you are cloning recursively, as there are submodles.
 * There are instructions for building the drivers inside the workspace [here](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile).
 
-## Deploy Testing
+## Deploy
+
+To deploy Togo hardware:
+
+1. Start Husky hardware communications:
+    ```bash
+    ros2 launch togo_deploy husky_comm.launch.py
+    ```
+
+2. Start Togo's controllers:
+    ```bash
+    ros2 launch togo_deploy control.launch.py
+    ```
+
+3. Start Togo's sensors:
+    ```bash
+    ros2 launch togo_deploy togo_sensors.launcy.py
+    ```
+
+### Deploy Testing
 
 This info will eventually be wrapped up in the `systemd` processes on the Togo controls computer.
 For now, a few helpful notes on manually starting/stopping Clearpath services:
