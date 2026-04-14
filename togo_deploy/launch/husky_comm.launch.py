@@ -37,12 +37,13 @@ def generate_launch_description():
 
     # include packages
     pkg_togo_deploy = FindPackageShare("togo_deploy")
+    pkg_clearpath_diagnostics = FindPackageShare("clearpath_diagnostics")
     pkg_clearpath_ros2_socketcan_interface = FindPackageShare("clearpath_ros2_socketcan_interface")
     pkg_canopen_inventus_bringup = FindPackageShare("canopen_inventus_bringup")
-    pkg_clearpath_diagnostics = FindPackageShare("clearpath_diagnostics")
 
     # config files
     motor_driver_config = PathJoinSubstitution([pkg_togo_deploy, "config", "motor_driver.yaml"])
+    # path to the robot.yaml file
     setup_path = PathJoinSubstitution([pkg_togo_deploy, "config", "husky"])
     # diagnostics configs
     diagnostic_updater_params = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "diagnostic_updater.yaml"])
