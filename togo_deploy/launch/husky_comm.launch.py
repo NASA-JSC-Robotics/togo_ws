@@ -77,7 +77,6 @@ def generate_launch_description():
             "namespace": default_ns,
             "interface": "vcan0",
             "from_can_bus_topic": "vcan0/rx",
-            # TODO phoebe doesn't include any params beyond here
             "enable_can_fd": "false",
             "interval_sec": "0.01",
             "use_bus_time": "false",
@@ -94,7 +93,6 @@ def generate_launch_description():
             "namespace": default_ns,
             "interface": "vcan0",
             "to_can_bus_topic": "vcan0/tx",
-            # TODO phoebe doesn't include any params beyond here
             "enable_can_fd": "false",
             "interval_sec": "0.01",
             "auto_configure": "true",
