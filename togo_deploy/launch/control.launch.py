@@ -137,10 +137,7 @@ def generate_launch_description():
             ]
         )
 
-    # get controller config files
-    # contains update rate
-    controllers_common = GetControllersFile("controllers_common.yaml")
-    # controllers for the husky
+    # get controller config file
     controllers_a300 = GetControllersFile("controllers_a300.yaml")
 
     # launch description for Togo
@@ -183,7 +180,6 @@ def generate_launch_description():
         namespace=ns,
         # allow_substs allows tf_prefix to be pulled in
         parameters=[
-            ParameterFile(controllers_common, allow_substs=True),
             ParameterFile(controllers_a300, allow_substs=True),
             {"use_sim_time": use_sim_time},
         ],
