@@ -1,7 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -12,7 +10,6 @@ from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
-import os
 
 
 # TODO check if we actually need all of this or can do anything with these parameters
@@ -84,61 +81,10 @@ def generate_launch_description():
     robot_description_file = LaunchConfiguration("robot_description_file")
     extra_xacro_args = LaunchConfiguration("extra_xacro_args")
 
-    # common launch args shared across different nodes
-    common_launch_args = {
-        "use_fake_hardware": use_fake_hardware,
-        "tf_prefix": tf_prefix,
-        "ns": ns,
-        "robot_description_package": robot_description_package,
-        "robot_description_file": robot_description_file,
-        "is_sim": use_fake_hardware,
-    }.items()
-
-    # helper function to organize launch description objects with the same launch args and package names
-    def AddLaunchDescriptions(package_name, launch_file_names, launch_args, if_condition="true"):
-        launch_files_list = []
-        for launch_file_name in launch_file_names:
-            launch_files_list.append(
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        os.path.join(
-                            get_package_share_directory(package_name),
-                            "launch",
-                            launch_file_name,
-                        )
-                    ),
-                    launch_arguments=launch_args,
-                    condition=IfCondition(if_condition),
-                )
-            )
-
-        return launch_files_list
-
-    # list of launch files to start
-    launch_file_names = []
-
-    # add controller spawners
-    launch_file_names.append("spawn_controllers.launch.py")
-
-    # generate launch files
-    launch_files = AddLaunchDescriptions(
-        package_name="togo_deploy",
-        launch_file_names=launch_file_names,
-        launch_args=common_launch_args,
-    )
-
-    # helper function to get controllers files
-    def GetControllersFile(file_name):
-        return PathJoinSubstitution(
-            [
-                get_package_share_directory("togo_deploy"),
-                "config",
-                file_name,
-            ]
-        )
-
     # get controller config file
-    controllers_a300 = GetControllersFile("controllers_a300.yaml")
+    controllers_a300 = PathJoinSubstitution(
+        [get_package_share_directory("togo_deploy"), "config", "controllers_a300.yaml"]
+    )
 
     # launch description for Togo
     robot_description_content = Command(
@@ -186,6 +132,43 @@ def generate_launch_description():
         output="both",
     )
 
-    ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launch_files + [robot_state_publisher_node, control_node])
+    # spawn the joint state broadcaster
+    js_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        name="joint_state_broadcaster",
+        arguments=[
+            "--controller-manager",
+            "controller_manager",
+            "--controller-manager-timeout",
+            "300",
+            "--namespace",
+            ns,
+            "joint_state_broadcaster",
+        ],
+        output="screen",
+    )
+
+    # spawn the A300 velocity controller
+    vel_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        name="platform_velocity_controller",
+        arguments=[
+            "--controller-manager",
+            "controller_manager",
+            "--controller-manager-timeout",
+            "300",
+            "--namespace",
+            ns,
+            "platform_velocity_controller",
+        ],
+        output="screen",
+    )
+
+    ns_action = GroupAction(
+        actions=[PushRosNamespace(ns)]
+        + [robot_state_publisher_node, control_node, js_broadcaster_spawner, vel_controller_spawner]
+    )
 
     return LaunchDescription(declared_arguments + [ns_action])
