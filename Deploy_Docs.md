@@ -10,6 +10,9 @@ Notes on bringing up the `togo_deploy` package.
 - [ ] Docs
   - [ ] include link to Clearpath Hardware notes when that gets merged in
   - [ ] tidy up, especially under `husky_comm`; right now it's very stream-of-consciousness
+- [ ] Repo
+  - [ ] Verify all dependencies are used
+  - [ ] Verify all exec dependencies (especially in husky_comm) are in package.xml!
 
 ## `togo_sensors.launch.py`
 
@@ -186,7 +189,6 @@ Verify that all generated files are understood and something comparable is repli
 `togo_deploy` files(?):
 - [x] `├── CMakeLists.txt`
 - [ ] `├── config`
-- [x] `│   ├── controllers_common.yaml`
 - [x] `│   ├── controllers_a300.yaml`
 - [ ] `│   ├── husky`
 - [x] `│   │   ├── diagnostic_aggregator.yaml`
@@ -212,9 +214,6 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   ├── control_mock_hardware.launch.py`
 - [x] `│   ├── husky_comm.launch.py`
 - [x] `│   ├── togo_sensors.launch.py`
-- [x] `│   ├── spawn_controllers`
-- [x] `│   │   ├── spawn_controllers_a300.launch.py`
-- [x] `│   ├── spawn_controllers.launch.py`
 - [ ] `│   ├── teleop.launch.py`
 - [x] `├── package.xml`
 - [ ] `└── scripts(?)`
