@@ -18,12 +18,10 @@
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
-  <!-- TODO DOUBLE CHECK BELOW -->
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>clearpath_desktop</exec_depend>
   <exec_depend>clearpath_common</exec_depend>
   <exec_depend>clearpath_robot</exec_depend>
-  <!-- TODO DOUBLE CHECK ABOVE -->
   <exec_depend>depthai-ros</exec_depend>
   <exec_depend>phidgets_spatial</exec_depend>
 
