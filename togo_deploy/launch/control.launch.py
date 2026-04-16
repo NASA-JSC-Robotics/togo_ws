@@ -187,10 +187,6 @@ def generate_launch_description():
             ParameterFile(controllers_a300, allow_substs=True),
             {"use_sim_time": use_sim_time},
         ],
-        # remappings=[
-        #     # TODO check this from phoebe_deploy
-        #     ("/lidar2d_0_laser/scan", "/ridgeback/sensors/lidar2d_0/scan"),
-        # ],
         output="both",
     )
 
