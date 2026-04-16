@@ -4,7 +4,7 @@
   <name>togo_deploy</name>
   <version>0.0.0</version>
   <description>Deploy package for Clearpath Husky known as Togo</description>
-  <maintainer email="emma.zemler@nasa.gov">ur-user</maintainer>
+  <maintainer email="emily.j.sheetz@nasa.gov">Emily Sheetz</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
