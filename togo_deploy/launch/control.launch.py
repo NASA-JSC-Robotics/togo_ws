@@ -190,8 +190,6 @@ def generate_launch_description():
         output="both",
     )
 
-    # TODO phoebe has a puma throttle, seems comparable to lynx? is there a lynx_throttle somewhere?
-
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launch_files + [robot_state_publisher_node, control_node])
 
     return LaunchDescription(declared_arguments + [ns_action])
