@@ -57,16 +57,61 @@ To deploy Togo hardware:
 
 This info will eventually be wrapped up in the `systemd` processes on the Togo controls computer.
 For now, a few helpful notes on manually starting/stopping Clearpath services:
-- Stopping Clearpath:
-  - `sudo systemctl stop clearpath-robot.service` to stop all of the Clearpath processes
-  - `sudo systemctl disable clearpath-robot.service` to disable all of the Clearpath processes and prevent them from automatically restarting when they die
-- Starting the background Clearpath services that we do actually need:
-  - ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
-    - `source /opt/ros/jazzy/setup.bash`
-    - `fastdds discovery -i 0 -p 11811`
-  - VCAN
-    - `sudo systmctl start clearpath-vcan.service`
-    - Check the status of this process using `systemctl status clearpath-vcan.service`
-- Restarting Clearpath:
-  - `sudo systemctl enable clearpath-robot.service`
-  - `sudo systemctl start clearpath-robot.service`
+
+#### Stopping Clearpath
+
+Stop all Clearpath stuff:
+- To stop all of the Clearpath processes:
+  ```bash
+  sudo systemctl stop clearpath-robot.service
+  ```
+- To disable all of the Clearpath processes and prevent them from automaticallly restarting when they die:
+  ```bash
+  sudo systemctl disable clearpath-robot.service
+  ```
+- Clearpath starts a lot of docker containers by default. We can view all of the running containers:
+  ```bash
+  docker container ps
+  ```
+  To stop all running Clearpath dockers:
+  ```bash
+  docker stop $(docker ps -q)
+  ```
+- As a sanity check, you can confirm everything has stopped:
+  ```bash
+  # Clearpath robot services
+  systemctl status clearpath-robot.service
+  # Clearpath dockers
+  docker container ps
+  ```
+
+#### Starting Select Clearpath Services
+
+Start the background Clearpath services that we do actually need:
+- ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
+  ```bash
+  # source ROS
+  source /opt/ros/jazzy/setup.bash
+  # start ROS discovery service
+  fastdds discovery -i 0 -p 11811
+  ```
+  This server will hang in the terminal.
+- VCAN
+  - Start the VCAN service:
+    ```bash
+    sudo systmctl start clearpath-vcan.service
+    ```
+  - Check the status of this process:
+    ```bash
+    systemctl status clearpath-vcan.service
+    ```
+
+#### Restart Clearpath
+
+It's nice to restart Clearpath for now while we are still bringing up Togo.
+```bash
+# re-enable Clearpath robot services
+sudo systemctl enable clearpath-robot.service
+# re-start Clearpath robot services
+sudo systemctl start clearpath-robot.service
+```

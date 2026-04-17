@@ -29,8 +29,8 @@ def generate_launch_description():
 
     # initialize arguments
     ns = LaunchConfiguration("ns")
-    default_ns = "a300_00058"
-    vcan1_ns = "a300_00058/platform/bms"
+    default_ns = "husky"
+    vcan1_ns = "husky/platform/bms"
     tf_prefix = LaunchConfiguration("tf_prefix")
     tf_prefix = tf_prefix  # dummy use to stop precommit complaining about unused variables
     # tf_prefix will get passed into nodes implicitly
@@ -186,6 +186,7 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
+            ("/husky/platform/motors/cmd", "/platform/motors/cmd"),
         ],
         parameters=[
             ParameterFile(motor_driver_config, allow_substs=True),
