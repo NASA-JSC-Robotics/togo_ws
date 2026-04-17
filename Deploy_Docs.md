@@ -72,6 +72,10 @@ The Husky uses the `lynx_motor_driver`.
 The controller config is in `togo_deploy/config/motor_driver.yaml`, adapted from `togo_capture/etc/clearpath/platform/config/control.yaml`.
 The `lynx_motor_driver` needs information about [its VCAN device](https://github.com/clearpathrobotics/clearpath_robot/tree/jazzy/clearpath_motor_drivers/lynx_motor_driver) for communication to the MCU.
 
+## teleop
+
+Ignore BlueTooth cutoff (BT cutoff node); Phoebe does something similar, its params are removed from `teleop_joy.yaml`
+
 ## SCRATCH WORK
 
 ### clearpath capture
@@ -97,25 +101,26 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── foxglove_bridge.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
 - [ ] `│   │   ├── localization.yaml`
-- [ ] `│   │   ├── teleop_interactive_markers.yaml`
-- [ ] `│   │   ├── teleop_joy.yaml`
-- [ ] `│   │   └── twist_mux.yaml`
+- [x] `│   │   ├── teleop_interactive_markers.yaml`
+- [x] `│   │   ├── teleop_joy.yaml`
+- [x] `│   │   └── twist_mux.yaml`
 - [x] `│   └── launch`
 - [x] `│       └── platform-service.launch.py`
 - [x] `├── platform-extras`
 - [x] `│   └── launch`
 - [x] `│       └── platform-extras-service.launch.py`
   - [ ] `clearpath_common platform.launch.py`
-    - [ ] `clearpath_platform_description description.launch.py`
-    - [ ] `clearpath_control control.launch.py`
+    - [x] robot description: `clearpath_platform_description description.launch.py`
+      - [x] Includes some remappings for the `robot_state_publisher`; Phoebe ignores them, so Togo will too
+    - [x] controller manager/spawner: `clearpath_control control.launch.py`
     - [ ] `clearpath_control localization.launch.py`
-    - [ ] `clearpath_control teleop_base.launch.py`
-    - [ ] `clearpath_control teleop_joy.launch.py`
-  - [x] `clearpath_diagnostics diagnostics.launch.py`
-  - [x] `clearpath_diagnostics foxglove_bridge.launch.py`
-  - [x] `clearpath_ros2_socketcan_interface receiver.launch.py`
-  - [x] `clearpath_ros2_socketcan_interface sender.launch.py`
-  - [x] `canopen_inventus_bringup inventus.launch.py`
+    - [x] togo teleop: `clearpath_control teleop_base.launch.py`
+    - [x] togo teleop: `clearpath_control teleop_joy.launch.py`
+  - [x] diagnostics, called directly from togo: `clearpath_diagnostics diagnostics.launch.py`
+  - [x] ignored in togo: `clearpath_diagnostics foxglove_bridge.launch.py`
+  - [x] VCAN0, called directly from togo: `clearpath_ros2_socketcan_interface receiver.launch.py`
+  - [x] VCAN0, called directly from togo: `clearpath_ros2_socketcan_interface sender.launch.py`
+  - [x] VCAN1, called directly from togo: `canopen_inventus bringup inventus.launch.py`
 - [ ] `├── robot.srdf`
 - [ ] `├── robot.srdf.xacro`
 - [ ] `├── robot.urdf.xacro`
@@ -152,10 +157,10 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   │   ├── lidar2d_0.yaml`
 - [ ] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
-- [ ] `│   │   ├── teleop_interactive_markers.yaml`
-- [ ] `│   │   ├── teleop_joy.yaml`
-- [ ] `│   │   └── twist_mux.yaml`
-- [ ] `│   └── teleop_interactive_markers.yaml`
+- [x] `│   │   ├── teleop_interactive_markers.yaml`
+- [x] `│   │   ├── teleop_joy.yaml`
+- [x] `│   │   └── twist_mux.yaml`
+- [x] `│   └── teleop_interactive_markers.yaml`
 - [ ] `├── launch`
 - [ ] `│   ├── control_hardware.launch.py`
 - [x] `│   ├── control.launch.py`
@@ -172,21 +177,21 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── spawn_controllers_r100.launch.py`
 - [x] `│   │   └── spawn_controllers_ur.launch.py`
 - [x] `│   ├── spawn_controllers.launch.py`
-- [ ] `│   ├── teleop.launch.py`
+- [x] `│   ├── teleop.launch.py`
 - [x] `│   ├── transport`
 - [x] `│   │   ├── transport_control.launch.py`
 - [x] `│   │   ├── transport.launch.py`
 - [x] `│   │   └── transport_robot_state_publisher.launch.py`
 - [x] `│   └── ur_tools.launch.py`
 - [x] `├── package.xml`
-- [ ] `└── scripts`
-- [ ] `│   ├── keyboard_joy.py`
-- [ ] `│   ├── odometry_joint_state_publisher.py`
+- [x] `└── scripts`
+- [x] `│   ├── keyboard_joy.py`
+- [x] `│   ├── odometry_joint_state_publisher.py`
 - [x] `│   ├── prioritize_threads.sh`
-- [ ] `│   ├── world_publisher.py`
+- [x] `│   ├── world_publisher.py`
 
 
-`togo_deploy` files(?):
+`togo_deploy` files:
 - [x] `├── CMakeLists.txt`
 - [ ] `├── config`
 - [x] `│   ├── controllers_a300.yaml`
@@ -197,9 +202,9 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   │   ├── lidar2d_0.yaml`
 - [ ] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
-- [ ] `│   │   ├── teleop_interactive_markers.yaml`
-- [ ] `│   │   ├── teleop_joy.yaml`
-- [ ] `│   │   └── twist_mux.yaml`
+- [x] `│   │   ├── teleop_interactive_markers.yaml`
+- [x] `│   │   ├── teleop_joy.yaml`
+- [x] `│   │   └── twist_mux.yaml`
 - [x] `│   ├── motor_driver.yaml`
 - [x] `│   ├── sensors`
 - [x] `│   │   ├── front_oakd_config.yaml`
@@ -207,7 +212,6 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── phidgets_imu_config.yaml`
 - [x] `│   │   ├── rear_oakd_config.yaml`
 - [x] `│   │   ├── seyond_config.yaml`
-- [ ] `│   └── teleop_interactive_markers.yaml`
 - [ ] `├── launch`
 - [ ] `│   ├── control_hardware.launch.py`
 - [x] `│   ├── control.launch.py`
@@ -216,7 +220,3 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   ├── togo_sensors.launch.py`
 - [ ] `│   ├── teleop.launch.py`
 - [x] `├── package.xml`
-- [ ] `└── scripts(?)`
-- [ ] `    ├── keyboard_joy.py`
-- [ ] `    ├── odometry_joint_state_publisher.py`
-- [ ] `    └── world_publisher.py`
