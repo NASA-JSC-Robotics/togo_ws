@@ -1,0 +1,10 @@
+/**:
+  lynx_control:
+    ros__parameters:
+      feedback_hz: 50
+      status_hz: 20
+      debug_hz: 20
+      can_bus: 'vcan0'
+      joint_names: [$(var tf_prefix)rear_left_wheel_joint, $(var tf_prefix)front_left_wheel_joint, $(var tf_prefix)front_right_wheel_joint, $(var tf_prefix)rear_right_wheel_joint]
+      joint_can_ids: [101, 102, 103, 104]
+      joint_directions: [1, 1, -1, -1]
