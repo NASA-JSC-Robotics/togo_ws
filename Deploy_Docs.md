@@ -100,20 +100,17 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── diagnostic_updater.yaml`
 - [x] `│   │   ├── foxglove_bridge.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
-- [ ] `│   │   ├── localization.yaml`
+- [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── teleop_interactive_markers.yaml`
 - [x] `│   │   ├── teleop_joy.yaml`
 - [x] `│   │   └── twist_mux.yaml`
 - [x] `│   └── launch`
 - [x] `│       └── platform-service.launch.py`
-- [x] `├── platform-extras`
-- [x] `│   └── launch`
-- [x] `│       └── platform-extras-service.launch.py`
-  - [ ] `clearpath_common platform.launch.py`
+  - [x] `clearpath_common platform.launch.py`
     - [x] robot description: `clearpath_platform_description description.launch.py`
       - [x] Includes some remappings for the `robot_state_publisher`; Phoebe ignores them, so Togo will too
     - [x] controller manager/spawner: `clearpath_control control.launch.py`
-    - [ ] `clearpath_control localization.launch.py`
+    - [x] togo sensors: `clearpath_control localization.launch.py`
     - [x] togo teleop: `clearpath_control teleop_base.launch.py`
     - [x] togo teleop: `clearpath_control teleop_joy.launch.py`
   - [x] diagnostics, called directly from togo: `clearpath_diagnostics diagnostics.launch.py`
@@ -121,6 +118,9 @@ Verify that all generated files are understood and something comparable is repli
   - [x] VCAN0, called directly from togo: `clearpath_ros2_socketcan_interface receiver.launch.py`
   - [x] VCAN0, called directly from togo: `clearpath_ros2_socketcan_interface sender.launch.py`
   - [x] VCAN1, called directly from togo: `canopen_inventus bringup inventus.launch.py`
+- [x] `├── platform-extras`
+- [x] `│   └── launch`
+- [x] `│       └── platform-extras-service.launch.py`
 - [ ] `├── robot.srdf`
 - [ ] `├── robot.srdf.xacro`
 - [ ] `├── robot.urdf.xacro`
@@ -154,8 +154,8 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   ├── ridgeback`
 - [x] `│   │   ├── can_config.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
-- [ ] `│   │   ├── lidar2d_0.yaml`
-- [ ] `│   │   ├── localization.yaml`
+- [x] `│   │   ├── lidar2d_0.yaml`
+- [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
 - [x] `│   │   ├── teleop_interactive_markers.yaml`
 - [x] `│   │   ├── teleop_joy.yaml`
@@ -169,7 +169,7 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   ├── phoebe_rspc_camera.launch.py`
 - [x] `│   ├── realsense_cameras.launch.py`
 - [x] `│   ├── ridgeback_comm.launch.py`
-- [ ] `│   ├── ridgeback_sensors.launch.py`
+- [x] `│   ├── ridgeback_sensors.launch.py`
 - [x] `│   ├── spawn_controllers`
 - [x] `│   │   ├── spawn_controllers_admittance.launch.py`
 - [x] `│   │   ├── spawn_controllers_ewellix.launch.py`
@@ -199,8 +199,7 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── diagnostic_aggregator.yaml`
 - [x] `│   │   ├── diagnostic_updater.yaml`
 - [ ] `│   │   ├── imu_filter.yaml`
-- [ ] `│   │   ├── lidar2d_0.yaml`
-- [ ] `│   │   ├── localization.yaml`
+- [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
 - [x] `│   │   ├── teleop_interactive_markers.yaml`
 - [x] `│   │   ├── teleop_joy.yaml`
@@ -218,5 +217,5 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   ├── control_mock_hardware.launch.py`
 - [x] `│   ├── husky_comm.launch.py`
 - [x] `│   ├── togo_sensors.launch.py`
-- [ ] `│   ├── teleop.launch.py`
+- [x] `│   ├── teleop.launch.py`
 - [x] `├── package.xml`
