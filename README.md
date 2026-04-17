@@ -60,10 +60,20 @@ For now, a few helpful notes on manually starting/stopping Clearpath services:
 - Stopping Clearpath:
   - `sudo systemctl stop clearpath-robot.service` to stop all of the Clearpath processes
   - `sudo systemctl disable clearpath-robot.service` to disable all of the Clearpath processes and prevent them from automatically restarting when they die
+  - Clearpath starts a lot of docker containers by default. We can view all of the running containers:
+    ```bash
+    docker container ps
+    ```
+    To stop all running Clearpath dockers:
+    ```bash
+    docker stop $(docker ps -q)
+    ```
+  - As a sanity check, you can confirm everything has stopped using `systemctl status clearpath-robot.service` and `docker container ps`
 - Starting the background Clearpath services that we do actually need:
   - ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
     - `source /opt/ros/jazzy/setup.bash`
     - `fastdds discovery -i 0 -p 11811`
+    - This server will hang in the terminal
   - VCAN
     - `sudo systmctl start clearpath-vcan.service`
     - Check the status of this process using `systemctl status clearpath-vcan.service`
