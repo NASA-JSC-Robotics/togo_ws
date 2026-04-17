@@ -46,6 +46,13 @@ def generate_launch_description():
             description="Flag to start the Phidgets IMU",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "enable_ekf",
+            default_value="true",
+            description="Enable localization via EKF node",
+        )
+    )
 
     # Initialize Arguments
     launch_seyond = LaunchConfiguration("launch_seyond")
@@ -53,6 +60,7 @@ def generate_launch_description():
     launch_rear_oakd = LaunchConfiguration("launch_rear_oakd")
     launch_fixposition = LaunchConfiguration("launch_fixposition")
     launch_phidgets = LaunchConfiguration("launch_phidgets")
+    launch_localization = LaunchConfiguration("enable_ekf")
 
     # INCLUDE PACKAGES
     pkg_togo_deploy = FindPackageShare("togo_deploy")
@@ -63,6 +71,9 @@ def generate_launch_description():
     yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "rear_oakd_config.yaml"])
     yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "ins_config.yaml"])
     yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "phidgets_imu_config.yaml"])
+    # SENSOR RELATED CONFIGS
+    yaml_localization_config = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "localization.yaml"])
+    # TODO imu filter too?
 
     # SENSOR NODES
 
@@ -179,13 +190,34 @@ def generate_launch_description():
         condition=IfCondition(launch_phidgets),
     )
 
+    # Localization
+    node_localization = Node(
+        package="robot_localization",
+        executable="ekf_node",
+        name="ekf_node",
+        output="screen",
+        parameters=[yaml_localization_config],
+        remappings=[
+            ('odometry/filtered', 'platform/odom/filtered'),
+            ('/diagnostics', 'diagnostics'),
+            ('/tf', 'tf'),
+            ('/tf_static', 'tf_static'),
+        ],
+        condition=IfCondition(launch_localization),
+    )
+
+    # LAUNCH DESCRIPTION
+    sensor_launches = [
+        seyond_node,
+        front_image_processing_container,
+        rear_image_processing_container,
+        fixposition_node,
+        imu_filter_container,
+    ]
+    sensor_related_nodes = [
+        node_localization
+    ]
+
     return LaunchDescription(
-        declared_arguments
-        + [
-            seyond_node,
-            front_image_processing_container,
-            rear_image_processing_container,
-            fixposition_node,
-            imu_filter_container,
-        ]
+        declared_arguments + sensor_launches + sensor_related_nodes
     )
