@@ -5,8 +5,9 @@ Notes on bringing up the `togo_deploy` package.
 ## Running List of Misc TODOs
 
 - [ ] Testing deploy functionality
-  - [ ] in `controllers_a300.yaml`, does changing `tf_frame_prefix_enable` to `True` cause problems given taht I also manually included the `tf_prefix`?
+  - [ ] in `controllers_a300.yaml`, does changing `tf_frame_prefix_enable` to `True` cause problems given that I also manually included the `tf_prefix`?
   - [ ] double check tf_prefixing for lynx motor controller too; joint names have been changed in `motor_driver.yaml` config file
+  - [ ] double check that IMU filter container is set up properly, especially with topic remappings
 - [ ] Docs
   - [ ] include link to Clearpath Hardware notes when that gets merged in
   - [ ] tidy up, especially under `husky_comm`; right now it's very stream-of-consciousness
@@ -76,6 +77,13 @@ The `lynx_motor_driver` needs information about [its VCAN device](https://github
 
 Ignore BlueTooth cutoff (BT cutoff node); Phoebe does something similar, its params are removed from `teleop_joy.yaml`
 
+## sensors
+
+IMU launches related nodes, specifically EKF localization and IMU filter
+- `config/sensors/phidgets_imu_config.yaml` includes params for 2 nodes: `phidgets_spatial` and the `imu_filter_madgwick`
+- `config/husky/imu_filter.yaml` contains params for *just* the `imu_filter` node; this is merely for convenience, but you will notice the params are exactly the same between these two files
+- Clearpath seems to actually *only* use the equivalent of the `phidgets_imu_config.yaml` and pass this same set of params to both the IMU and filter node
+
 ## SCRATCH WORK
 
 ### clearpath capture
@@ -93,13 +101,13 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `│   │   └── moveit.yaml`
 - [ ] `│   └── launch`
 - [ ] `│       └── manipulators-service.launch.py`
-- [ ] `├── platform`
-- [ ] `│   ├── config`
+- [x] `├── platform`
+- [x] `│   ├── config`
 - [x] `│   │   ├── control.yaml`
 - [x] `│   │   ├── diagnostic_aggregator.yaml`
 - [x] `│   │   ├── diagnostic_updater.yaml`
 - [x] `│   │   ├── foxglove_bridge.yaml`
-- [ ] `│   │   ├── imu_filter.yaml`
+- [x] `│   │   ├── imu_filter.yaml`
 - [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── teleop_interactive_markers.yaml`
 - [x] `│   │   ├── teleop_joy.yaml`
@@ -125,14 +133,14 @@ Verify that all generated files are understood and something comparable is repli
 - [ ] `├── robot.srdf.xacro`
 - [ ] `├── robot.urdf.xacro`
 - [ ] `├── robot.yaml`
-- [ ] `├── sensors`
-- [ ] `│   ├── config`
-- [ ] `│   │   └── imu_0.yaml`
-- [ ] `│   └── launch`
-- [ ] `│       ├── imu_0.launch.py`
-- [ ] `│       ├── __pycache__`
-- [ ] `│       │   └── imu_0.launch.cpython-312.pyc`
-- [ ] `│       └── sensors-service.launch.py`
+- [x] `├── sensors`
+- [x] `│   ├── config`
+- [x] `│   │   └── imu_0.yaml` (phidgets config)
+- [x] `│   └── launch`
+- [x] `│       ├── imu_0.launch.py`
+  - [x] `clearpath_sensors phidgets_spatial.launch.py`
+  - [x] `clearpath_sensors imu_filter.launch.py`
+- [x] `│       └── sensors-service.launch.py`
 - [ ] `├── setup.bash`
 - [ ] `├── vcan-start`
 - [ ] `└── zenoh-router-start`
@@ -142,7 +150,7 @@ Verify that all generated files are understood and something comparable is repli
 
 `phoebe_deploy` files (mark complete when file has been reviewed):
 - [x] `├── CMakeLists.txt`
-- [ ] `├── config`
+- [x] `├── config`
 - [x] `│   ├── controllers_common.yaml`
 - [x] `│   ├── controllers_ewellix.yaml`
 - [x] `│   ├── controllers_hande.yaml`
@@ -151,9 +159,9 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   ├── controllers_ur.yaml`
 - [x] `│   ├── pb_left.yaml`
 - [x] `│   ├── pb_right.yaml`
-- [ ] `│   ├── ridgeback`
+- [x] `│   ├── ridgeback`
 - [x] `│   │   ├── can_config.yaml`
-- [ ] `│   │   ├── imu_filter.yaml`
+- [x] `│   │   ├── imu_filter.yaml`
 - [x] `│   │   ├── lidar2d_0.yaml`
 - [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
@@ -161,10 +169,10 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── teleop_joy.yaml`
 - [x] `│   │   └── twist_mux.yaml`
 - [x] `│   └── teleop_interactive_markers.yaml`
-- [ ] `├── launch`
-- [ ] `│   ├── control_hardware.launch.py`
+- [x] `├── launch`
+- [x] `│   ├── control_hardware.launch.py`
 - [x] `│   ├── control.launch.py`
-- [ ] `│   ├── control_mock_hardware.launch.py`
+- [x] `│   ├── control_mock_hardware.launch.py`
 - [x] `│   ├── pb_ur_gui.launch.py`
 - [x] `│   ├── phoebe_rspc_camera.launch.py`
 - [x] `│   ├── realsense_cameras.launch.py`
@@ -193,12 +201,12 @@ Verify that all generated files are understood and something comparable is repli
 
 `togo_deploy` files:
 - [x] `├── CMakeLists.txt`
-- [ ] `├── config`
+- [x] `├── config`
 - [x] `│   ├── controllers_a300.yaml`
-- [ ] `│   ├── husky`
+- [x] `│   ├── husky`
 - [x] `│   │   ├── diagnostic_aggregator.yaml`
 - [x] `│   │   ├── diagnostic_updater.yaml`
-- [ ] `│   │   ├── imu_filter.yaml`
+- [x] `│   │   ├── imu_filter.yaml`
 - [x] `│   │   ├── localization.yaml`
 - [x] `│   │   ├── robot.yaml`
 - [x] `│   │   ├── teleop_interactive_markers.yaml`
@@ -211,10 +219,9 @@ Verify that all generated files are understood and something comparable is repli
 - [x] `│   │   ├── phidgets_imu_config.yaml`
 - [x] `│   │   ├── rear_oakd_config.yaml`
 - [x] `│   │   ├── seyond_config.yaml`
-- [ ] `├── launch`
-- [ ] `│   ├── control_hardware.launch.py`
+- [x] `├── launch`
+- [x] `│   ├── control_hardware.launch.py`
 - [x] `│   ├── control.launch.py`
-- [ ] `│   ├── control_mock_hardware.launch.py`
 - [x] `│   ├── husky_comm.launch.py`
 - [x] `│   ├── togo_sensors.launch.py`
 - [x] `│   ├── teleop.launch.py`
