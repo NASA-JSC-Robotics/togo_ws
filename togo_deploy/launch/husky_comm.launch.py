@@ -64,7 +64,7 @@ def generate_launch_description():
 
     # include launch files
     launch_diagnostics = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_diagnostics]),
+        PythonLaunchDescriptionSource(launch_file_diagnostics),
         launch_arguments={
             "namespace": default_ns,
             "updater_parameters": diagnostic_updater_params,
@@ -72,7 +72,7 @@ def generate_launch_description():
         }.items(),
     )
     launch_receiver = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_receiver]),
+        PythonLaunchDescriptionSource(launch_file_receiver),
         launch_arguments={
             "namespace": default_ns,
             "interface": "vcan0",
@@ -88,7 +88,7 @@ def generate_launch_description():
         }.items(),
     )
     launch_sender = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_sender]),
+        PythonLaunchDescriptionSource(launch_file_sender),
         launch_arguments={
             "namespace": default_ns,
             "interface": "vcan0",
@@ -102,7 +102,7 @@ def generate_launch_description():
         }.items(),
     )
     launch_inventus = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_inventus]),
+        PythonLaunchDescriptionSource(launch_file_inventus),
         launch_arguments={
             "namespace": vcan1_ns,
             "interface": "vcan1",
