@@ -43,19 +43,23 @@ To deploy Togo hardware:
     ros2 launch togo_deploy husky_comm.launch.py
     ```
 
-2. Start Togo's controllers:
-    ```bash
-    ros2 launch togo_deploy control.launch.py
-    ```
+2. To bring up Togo's controllers and teleop control (enabling control through the PS4 controller),
+we include a few convenient launch files for Togo's different operation modes.
+   1. For Togo hardware:
+        ```bash
+        ros2 launch togo_deploy control_hardware.launch.py
+        ```
+        This launch file is equivalent to launching controls and teleop separately:
+        ```bash
+        # controllers
+        ros2 launch togo_deploy control.launch.py
+        # teleop
+        ros2 launch togo_deploy teleop.launch.py
+        ```
 
-3. Start Togo's sensors:
+1. Start Togo's sensors (and related nodes, including the IMU filter and localization):
     ```bash
     ros2 launch togo_deploy togo_sensors.launch.py
-    ```
-
-4. Start Togo's teleop control, enabling control through the PS4 controller
-    ```bash
-    ros2 launch togo_deploy teleop.launch.py
     ```
 
 ### Deploy Testing
@@ -70,7 +74,7 @@ Stop all Clearpath stuff:
     ```bash
     sudo systemctl stop clearpath-robot.service
     ```
-- To disable all of the Clearpath processes and prevent them from automaticallly restarting when they die:
+- To disable all of the Clearpath processes and prevent them from automatically restarting when they die:
     ```bash
     sudo systemctl disable clearpath-robot.service
     ```
