@@ -60,15 +60,14 @@ def generate_launch_description():
     pkg_togo_deploy = FindPackageShare("togo_deploy")
 
     # SENSOR CONFIGS
-    yaml_seyond_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "seyond_config.yaml"])
-    yaml_front_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "front_oakd_config.yaml"])
-    yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "rear_oakd_config.yaml"])
-    yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "ins_config.yaml"])
-    yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "phidgets_imu_config.yaml"])
+    config_seyond = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "seyond_config.yaml"])
+    config_front_oakd = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "front_oakd_config.yaml"])
+    config_rear_oakd = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "rear_oakd_config.yaml"])
+    config_ins = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "ins_config.yaml"])
+    config_phidgets = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "phidgets_imu_config.yaml"])
     # SENSOR DEPENDENT CONFIGS
-    yaml_localization_config = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "localization.yaml"])
-    yaml_imu_filter_config = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "imu_filter.yaml"])
-    # TODO these config names are insane, clean these up by removing `yaml_`
+    config_localization = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "localization.yaml"])
+    config_imu_filter = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "imu_filter.yaml"])
 
     # SENSOR NODES
 
@@ -77,7 +76,7 @@ def generate_launch_description():
         package="seyond",
         executable="seyond_node",
         parameters=[
-            {"config_path": yaml_seyond_config},
+            {"config_path": config_seyond},
         ],
         condition=IfCondition(launch_seyond),
     )
@@ -87,7 +86,7 @@ def generate_launch_description():
         package="depthai_ros_driver",
         name="front_oakd",
         plugin="depthai_ros_driver::Camera",
-        parameters=[yaml_front_oakd_config],
+        parameters=[config_front_oakd],
         extra_arguments=[{"use_intra_process_comms": True}],
         condition=IfCondition(launch_front_oakd),
     )
@@ -122,7 +121,7 @@ def generate_launch_description():
         package="depthai_ros_driver",
         name="rear_oakd",
         plugin="depthai_ros_driver::Camera",
-        parameters=[yaml_rear_oakd_config],
+        parameters=[config_rear_oakd],
         extra_arguments=[{"use_intra_process_comms": True}],
         condition=IfCondition(launch_rear_oakd),
     )
@@ -158,7 +157,7 @@ def generate_launch_description():
         executable="fixposition_driver_ros2_exec",
         name="fixposition_driver",
         output="screen",
-        parameters=[yaml_ins_config],
+        parameters=[config_ins],
         # arguments=['--ros-args', '--log-level', 'DEBUG'],
         condition=IfCondition(launch_fixposition),
     )
@@ -169,7 +168,7 @@ def generate_launch_description():
         plugin="phidgets::SpatialRosI",
         name="phidgets_spatial",
         namespace="",
-        parameters=[yaml_phidgets_config],
+        parameters=[config_phidgets],
         condition=IfCondition(launch_phidgets),
     )
 
@@ -179,7 +178,7 @@ def generate_launch_description():
         plugin="ImuFilterMadgwickRos",
         name="imu_filter_madgwick",
         namespace=default_ns,
-        parameters=[yaml_imu_filter_config],
+        parameters=[config_imu_filter],
         remappings=[
             ("imu/data", "sensors/imu_0/data"),
             ("imu/data_raw", "sensors/imu_0/data_raw"),
@@ -209,7 +208,7 @@ def generate_launch_description():
         name="ekf_node",
         namespace=default_ns,
         output="screen",
-        parameters=[yaml_localization_config],
+        parameters=[config_localization],
         remappings=[
             ("odometry/filtered", "platform/odom/filtered"),
             ("/diagnostics", "diagnostics"),
