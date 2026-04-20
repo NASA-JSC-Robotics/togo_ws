@@ -43,14 +43,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "launch_phidgets",
             default_value="true",
-            description="Flag to start the Phidgets IMU",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "enable_ekf",
-            default_value="true",
-            description="Enable localization via EKF node",
+            description="Flag to start the Phidgets IMU."
+            "Will also launch IMU filter and localization, since they depend on IMU data.",
         )
     )
 
@@ -60,7 +54,7 @@ def generate_launch_description():
     launch_rear_oakd = LaunchConfiguration("launch_rear_oakd")
     launch_fixposition = LaunchConfiguration("launch_fixposition")
     launch_phidgets = LaunchConfiguration("launch_phidgets")
-    launch_localization = LaunchConfiguration("enable_ekf")
+    default_ns = "husky"
 
     # INCLUDE PACKAGES
     pkg_togo_deploy = FindPackageShare("togo_deploy")
@@ -71,9 +65,10 @@ def generate_launch_description():
     yaml_rear_oakd_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "rear_oakd_config.yaml"])
     yaml_ins_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "ins_config.yaml"])
     yaml_phidgets_config = PathJoinSubstitution([pkg_togo_deploy, "config", "sensors", "phidgets_imu_config.yaml"])
-    # SENSOR RELATED CONFIGS
+    # SENSOR DEPENDENT CONFIGS
     yaml_localization_config = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "localization.yaml"])
-    # TODO imu filter too?
+    yaml_imu_filter_config = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "imu_filter.yaml"])
+    # TODO these config names are insane, clean these up by removing `yaml_`
 
     # SENSOR NODES
 
@@ -178,6 +173,22 @@ def generate_launch_description():
         condition=IfCondition(launch_phidgets),
     )
 
+    # IMU Filter
+    imu_filter_node = ComposableNode(
+        package="imu_filter_madgwick",
+        plugin="ImuFilterMadgwickRos",
+        name="imu_filter_madgwick",
+        namespace=default_ns,
+        parameters=[yaml_imu_filter_config],
+        remappings=[
+            ("imu/data", "sensors/imu_0/data"),
+            ("imu/data_raw", "sensors/imu_0/data_raw"),
+            ("imu/mag", "sensors/imu_0/mag"),
+            ("/tf", "tf"),
+        ],
+        condition=IfCondition(launch_phidgets),
+    )
+
     imu_filter_container = ComposableNodeContainer(
         name="imu_filter_container",
         namespace="",
@@ -185,6 +196,7 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             phidgets_node,
+            imu_filter_node,
         ],
         output="screen",
         condition=IfCondition(launch_phidgets),
@@ -195,15 +207,16 @@ def generate_launch_description():
         package="robot_localization",
         executable="ekf_node",
         name="ekf_node",
+        namespace=default_ns,
         output="screen",
         parameters=[yaml_localization_config],
         remappings=[
-            ('odometry/filtered', 'platform/odom/filtered'),
-            ('/diagnostics', 'diagnostics'),
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static'),
+            ("odometry/filtered", "platform/odom/filtered"),
+            ("/diagnostics", "diagnostics"),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
         ],
-        condition=IfCondition(launch_localization),
+        condition=IfCondition(launch_phidgets),
     )
 
     # LAUNCH DESCRIPTION
@@ -214,10 +227,6 @@ def generate_launch_description():
         fixposition_node,
         imu_filter_container,
     ]
-    sensor_related_nodes = [
-        node_localization
-    ]
+    sensor_dependent_nodes = [node_localization]
 
-    return LaunchDescription(
-        declared_arguments + sensor_launches + sensor_related_nodes
-    )
+    return LaunchDescription(declared_arguments + sensor_launches + sensor_dependent_nodes)
