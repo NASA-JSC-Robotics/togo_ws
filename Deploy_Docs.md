@@ -8,7 +8,6 @@ Notes on bringing up the `togo_deploy` package.
 
 - [`togo_deploy` Documentation](#togo_deploy-documentation)
   - [Table of Contents](#table-of-contents)
-  - [Running List of Misc TODOs](#running-list-of-misc-todos)
   - [`husky_comm.launch.py`](#husky_commlaunchpy)
     - [Husky Configs](#husky-configs)
     - [Clearpath Common Platform Launch](#clearpath-common-platform-launch)
@@ -21,24 +20,8 @@ Notes on bringing up the `togo_deploy` package.
   - [`teleop.launch.py`](#teleoplaunchpy)
     - [Ignore Bluetooth Cutoff](#ignore-bluetooth-cutoff)
   - [`togo_sensors.launch.py`](#togo_sensorslaunchpy)
-    - [IMU-Related Nodes](#imu-related-nodes)
+    - [IMU Related Nodes](#imu-related-nodes)
     - [IMU Config Files](#imu-config-files)
-
-
-
-## Running List of Misc TODOs
-
-- [ ] Testing deploy functionality
-  - [ ] in `controllers_a300.yaml`, does changing `tf_frame_prefix_enable` to `True` cause problems given that I also manually included the `tf_prefix`?
-  - [ ] double check tf_prefixing for lynx motor controller too; joint names have been changed in `motor_driver.yaml` config file
-  - [ ] double check that IMU filter container is set up properly, especially with topic remappings
-- [x] Docs
-  - [x] include link to Clearpath Hardware notes when that gets merged in
-  - [x] tidy up, especially under `husky_comm`; right now it's very stream-of-consciousness
-  - [x] remove scratch work; put that somewhere internal
-- [ ] Repo
-  - [ ] Verify all dependencies are used
-  - [ ] Verify all exec dependencies (especially in husky_comm) are in package.xml!
 
 
 
@@ -55,7 +38,7 @@ Any config files that were copied directly from `togo_capture/etc/clearpath/plat
 
 ### Clearpath Common Platform Launch
 
-Clearpath generated launch files will launch this `clearpath_common platform.launch.py`.
+The Clearpath generated `platform-service.launch.py` launches many other files, including `clearpath_common platform.launch.py`.
 We do not launch this, since we separate everything in that launch file for manual bringup.
 Platform brings up the description, control, localization, teleop base, and teleop joy, all of which are turned into separate launch files (description, control, sensors, and teleop, respectively).
 
@@ -71,8 +54,8 @@ The `lynx_motor_driver` needs information about [its VCAN device](https://github
 
 ### Motor Driver Remappings
 
-The `lynx_motor_driver` node includes topic remapping to ensure the appropriate velocity commands get communicated to the MCU via the `lynx_hardware_interface`.
-The `lynx_hardware_interface` node gets brought up by the controller manager based on the URDF; right now this is buried in the URDF, so we won't change the topics expected by the `lynx_hardware_interface`.
+The `lynx_motor_driver` node includes topic remapping to ensure the appropriate velocity commands get communicated via the `lynx_hardware_interface`.
+The `lynx_hardware_interface` gets brought up by the controller manager based on the URDF; right now this is buried in the URDF, so we won't change the topics expected by the `lynx_hardware_interface`.
 Once this remapping is completed, these two nodes will communicate properly and we can send velocity commands to Togo!
 
 
@@ -93,7 +76,7 @@ For example, `togo_1/controller_manager` and `togo_2/controller_manager` differe
 ### Controller Configs
 
 Controller configs are adapted from `togo_capture/etc/clearpath/platform/config/control.yaml` to be a little more readable.
-The main change is we separate:
+In particular, we separate this file into:
 - `controllers_a300.yaml` includes the joint state publisher and platform velocity controller.
 A few default parameters were changed from `togo_capture`:
   - `tf_frame_prefix_enable` is set to `True`
@@ -106,7 +89,7 @@ A few default parameters were changed from `togo_capture`:
 ### Ignore Bluetooth Cutoff
 
 We ignore the Bluetooth cutoff (BT cutoff node).
-Phoebe similar does not launch this node.
+Phoebe similarly does not launch this node.
 Its params are removed from `teleop_joy.yaml`.
 
 
@@ -123,8 +106,9 @@ see `fixposition_driver/fixposition_driver_ros2/launch/node.launch` for inspirat
 see `togo_capture/etc/clearpath/sensors/launch/imu_0.launch.py` for inspiration example and more information
 
 This launch file includes flags for launching each sensor.
+Config files for each sensor are included within `togo_deploy/config/sensors/`.
 
-### IMU-Related Nodes
+### IMU Related Nodes
 
 When the IMU flag is true (`launch_phidgets:=true`), related nodes (IMU filter and EKF localization) are also launched.
 
