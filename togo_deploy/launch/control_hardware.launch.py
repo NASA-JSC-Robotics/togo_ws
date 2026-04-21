@@ -23,7 +23,7 @@ def generate_launch_description():
     # launch control for hardware
     launch_control = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution(FindPackageShare("togo_deploy"), "launch", "control.launch.py")
+            PathJoinSubstitution([FindPackageShare("togo_deploy"), "launch", "control.launch.py"])
         ),
         launch_arguments={
             "use_fake_hardware": "false",
@@ -34,7 +34,7 @@ def generate_launch_description():
     # launch teleop
     launch_teleop = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution(FindPackageShare("togo_deploy"), "launch", "teleop.launch.py")
+            PathJoinSubstitution([FindPackageShare("togo_deploy"), "launch", "teleop.launch.py"])
         ),
         launch_arguments={
             "ns": ns,
@@ -43,4 +43,4 @@ def generate_launch_description():
 
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + [launch_control, launch_teleop])
 
-    return LaunchDescription(declared_arguments + ns_action)
+    return LaunchDescription(declared_arguments + [ns_action])

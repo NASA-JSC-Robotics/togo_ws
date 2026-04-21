@@ -4,6 +4,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+# TODO check namespacing
 
 def generate_launch_description():
     # declare launch arguments
@@ -11,7 +12,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ns",
-            default_value="",
+            default_value="husky",
             description="Namespace for the robot",
         )
     )
@@ -100,7 +101,7 @@ def generate_launch_description():
         namespace=ns,
         output="screen",
         remappings=[
-            ('cmd_vel_out', 'platform/cmd_vel'),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
+            ('cmd_vel_out', 'platform_velocity_controller/cmd_vel'),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
             ('/diagnostics', 'diagnostics'),
             ('/tf', 'tf'),
             ('/tf_static', 'tf_static'),
