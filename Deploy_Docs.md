@@ -40,7 +40,7 @@ Any config files that were copied directly from `togo_capture/etc/clearpath/plat
 
 The Clearpath generated `platform-service.launch.py` launches many other files, including `clearpath_common platform.launch.py`.
 We do not launch this, since we separate everything in that launch file for manual bringup.
-Platform brings up the description, control, localization, teleop base, and teleop joy, all of which are turned into separate launch files (description, control, sensors, and teleop, respectively).
+Clearpath's platform launch brings up the description, control, localization, teleop base, and teleop joy, all of which are turned into separate launch files for the togo-specific bringup (description, control, sensors, and teleop, respectively).
 
 ### Ignore `foxglove_bridge`
 
@@ -55,7 +55,7 @@ The `lynx_motor_driver` needs information about [its VCAN device](https://github
 ### Motor Driver Remappings
 
 The `lynx_motor_driver` node includes topic remapping to ensure the appropriate velocity commands get communicated via the `lynx_hardware_interface`.
-The `lynx_hardware_interface` gets brought up by the controller manager based on the URDF; right now this is buried in the URDF, so we won't change the topics expected by the `lynx_hardware_interface`.
+The `lynx_hardware_interface` gets brought up by the controller manager based on the URDF; the node inside there isn't easily accessible to remap topics, so we won't change the topics expected by the `lynx_hardware_interface`.
 Once this remapping is completed, these two nodes will communicate properly and we can send velocity commands to Togo!
 
 
