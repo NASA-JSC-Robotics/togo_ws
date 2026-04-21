@@ -11,7 +11,6 @@ Notes on bringing up the `togo_deploy` package.
   - [`husky_comm.launch.py`](#husky_commlaunchpy)
     - [Husky Configs](#husky-configs)
     - [Clearpath Common Platform Launch](#clearpath-common-platform-launch)
-    - [Ignore `foxglove_bridge`](#ignore-foxglove_bridge)
     - [Motor Driver](#motor-driver)
     - [Motor Driver Remappings](#motor-driver-remappings)
   - [`control.launch.py`](#controllaunchpy)
@@ -41,10 +40,6 @@ Any config files that were copied directly from `togo_capture/etc/clearpath/plat
 The Clearpath generated `platform-service.launch.py` launches many other files, including `clearpath_common platform.launch.py`.
 We do not launch this, since we separate everything in that launch file for manual bringup.
 Clearpath's platform launch brings up the description, control, localization, teleop base, and teleop joy, all of which are turned into separate launch files for the togo-specific bringup (description, control, sensors, and teleop, respectively).
-
-### Ignore `foxglove_bridge`
-
-The [Foxglove bridge](https://docs.foxglove.dev/docs/visualization/ros-foxglove-bridge) is used for data visualization purposes. Phoebe seems to ignore this, so Togo will too.
 
 ### Motor Driver
 
