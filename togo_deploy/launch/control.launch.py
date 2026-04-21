@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.conditions import UnlessCondition
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -18,6 +19,9 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     # declare launch arguments
     declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument("is_sim", default_value="false", description="Start robot with Gazebo simulation.")
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
@@ -73,6 +77,7 @@ def generate_launch_description():
     )
 
     # initialize arguments
+    is_sim = LaunchConfiguration("is_sim")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     use_sim_time = LaunchConfiguration("use_sim_time")
     tf_prefix = LaunchConfiguration("tf_prefix")
@@ -100,6 +105,9 @@ def generate_launch_description():
             tf_prefix,
             " ",
             "is_sim:=",
+            is_sim,
+            " ",
+            "use_fake_hardware:=",
             use_fake_hardware,
             " ",
             extra_xacro_args,  # this should always be last
@@ -130,6 +138,7 @@ def generate_launch_description():
             {"use_sim_time": use_sim_time},
         ],
         output="both",
+        condition=UnlessCondition(is_sim),
     )
 
     # spawn the joint state broadcaster
