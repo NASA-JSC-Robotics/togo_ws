@@ -43,7 +43,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "launch_phidgets",
             default_value="true",
-            description="Flag to start the Phidgets IMU."
+            description="Flag to start the Phidgets IMU. "
             "Will also launch IMU filter and localization, since they depend on IMU data.",
         )
     )
