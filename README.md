@@ -26,12 +26,12 @@ I think the source code should be [here](https://github.com/ros-drivers/phidgets
 
 fixposition_driver
 * The driver is located [here](https://github.com/fixposition/fixposition_driver).
-  * Make sure you are cloning recursively, as there are submodles.
+    * Make sure you are cloning recursively, as there are submodles.
 * There is an extra step where you should run the script `setup_ros_ws.sh` from the fixposition_driver directory in your directory. Instructions are [here](<https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a)SetupdriverforanexistingROSworkspace>). It seems like that might just add some colcon ignores on things you don't need depending on your ros version.
 
 seyond_ros_driver
 * The driver is located [here](https://github.com/Seyond-Inc/seyond_ros_driver).
-  * Make sure you are cloning recursively, as there are submodles.
+    * Make sure you are cloning recursively, as there are submodles.
 * There are instructions for building the drivers inside the workspace [here](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile).
 
 ## Deploy
@@ -43,14 +43,40 @@ To deploy Togo hardware:
     ros2 launch togo_deploy husky_comm.launch.py
     ```
 
-2. Start Togo's controllers:
+2. To bring up Togo's controllers and teleop control (enabling control through the PS4 controller),
+we include a few convenient launch files for Togo's different operation modes.
+   1. For Togo hardware:
+        ```bash
+        ros2 launch togo_deploy control_hardware.launch.py
+        ```
+        This launch file is equivalent to launching controls and teleop separately:
+        ```bash
+        # controllers
+        ros2 launch togo_deploy control.launch.py
+        # teleop
+        ros2 launch togo_deploy teleop.launch.py
+        ```
+
+3. Start Togo's sensors (and related nodes, including the IMU filter and localization):
     ```bash
-    ros2 launch togo_deploy control.launch.py
+    ros2 launch togo_deploy togo_sensors.launch.py
     ```
 
-3. Start Togo's sensors:
+4. (Optional; ***BE READY ON THE E-STOP!***) To check that the controllers are communicating with the motor driver properly, you can publish a small velocity command from the command line:
     ```bash
-    ros2 launch togo_deploy togo_sensors.launcy.py
+    ros2 topic pub /platform_velocity_controller/cmd_vel geometry_msgs/msg/TwistStamped 'header:
+    stamp: now
+    frame_id: ''
+    twist:
+    linear:
+        x: 0.05
+        y: 0.0
+        z: 0.0
+    angular:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+    '
     ```
 
 ### Deploy Testing
@@ -62,49 +88,49 @@ For now, a few helpful notes on manually starting/stopping Clearpath services:
 
 Stop all Clearpath stuff:
 - To stop all of the Clearpath processes:
-  ```bash
-  sudo systemctl stop clearpath-robot.service
-  ```
-- To disable all of the Clearpath processes and prevent them from automaticallly restarting when they die:
-  ```bash
-  sudo systemctl disable clearpath-robot.service
-  ```
+    ```bash
+    sudo systemctl stop clearpath-robot.service
+    ```
+- To disable all of the Clearpath processes and prevent them from automatically restarting when they die:
+    ```bash
+    sudo systemctl disable clearpath-robot.service
+    ```
 - Clearpath starts a lot of docker containers by default. We can view all of the running containers:
-  ```bash
-  docker container ps
-  ```
-  To stop all running Clearpath dockers:
-  ```bash
-  docker stop $(docker ps -q)
-  ```
+    ```bash
+    docker container ps
+    ```
+    To stop all running Clearpath dockers:
+    ```bash
+    docker stop $(docker ps -q)
+    ```
 - As a sanity check, you can confirm everything has stopped:
-  ```bash
-  # Clearpath robot services
-  systemctl status clearpath-robot.service
-  # Clearpath dockers
-  docker container ps
-  ```
+    ```bash
+    # Clearpath robot services
+    systemctl status clearpath-robot.service
+    # Clearpath dockers
+    docker container ps
+    ```
 
 #### Starting Select Clearpath Services
 
 Start the background Clearpath services that we do actually need:
 - ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
-  ```bash
-  # source ROS
-  source /opt/ros/jazzy/setup.bash
-  # start ROS discovery service
-  fastdds discovery -i 0 -p 11811
-  ```
-  This server will hang in the terminal.
+    ```bash
+    # source ROS
+    source /opt/ros/jazzy/setup.bash
+    # start ROS discovery service
+    fastdds discovery -i 0 -p 11811
+    ```
+    This server will hang in the terminal.
 - VCAN
-  - Start the VCAN service:
-    ```bash
-    sudo systmctl start clearpath-vcan.service
-    ```
-  - Check the status of this process:
-    ```bash
-    systemctl status clearpath-vcan.service
-    ```
+    - Start the VCAN service:
+        ```bash
+        sudo systmctl start clearpath-vcan.service
+        ```
+    - Check the status of this process:
+        ```bash
+        systemctl status clearpath-vcan.service
+        ```
 
 #### Restart Clearpath
 

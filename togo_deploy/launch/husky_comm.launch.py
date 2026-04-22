@@ -50,10 +50,14 @@ def generate_launch_description():
     diagnostic_aggregator_params = PathJoinSubstitution(
         [pkg_togo_deploy, "config", "husky", "diagnostic_aggregator.yaml"]
     )
+    # foxglove configs
+    foxglove_bridge_params = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "foxglove_bridge.yaml"])
 
     # launch files
     # diagnostics
     launch_file_diagnostics = PathJoinSubstitution([pkg_clearpath_diagnostics, "launch", "diagnostics.launch.py"])
+    # foxglove
+    launch_file_foxglove = PathJoinSubstitution([pkg_clearpath_diagnostics, "launch", "foxglove_bridge.launch.py"])
     # vcan0
     launch_file_receiver = PathJoinSubstitution(
         [pkg_clearpath_ros2_socketcan_interface, "launch", "receiver.launch.py"]
@@ -64,15 +68,22 @@ def generate_launch_description():
 
     # include launch files
     launch_diagnostics = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_diagnostics]),
+        PythonLaunchDescriptionSource(launch_file_diagnostics),
         launch_arguments={
             "namespace": default_ns,
             "updater_parameters": diagnostic_updater_params,
             "aggregator_parameters": diagnostic_aggregator_params,
         }.items(),
     )
+    launch_foxglove = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(launch_file_foxglove),
+        launch_arguments={
+            "namespace": default_ns,
+            "parameters": foxglove_bridge_params,
+        }.items(),
+    )
     launch_receiver = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_receiver]),
+        PythonLaunchDescriptionSource(launch_file_receiver),
         launch_arguments={
             "namespace": default_ns,
             "interface": "vcan0",
@@ -88,7 +99,7 @@ def generate_launch_description():
         }.items(),
     )
     launch_sender = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_sender]),
+        PythonLaunchDescriptionSource(launch_file_sender),
         launch_arguments={
             "namespace": default_ns,
             "interface": "vcan0",
@@ -102,7 +113,7 @@ def generate_launch_description():
         }.items(),
     )
     launch_inventus = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_file_inventus]),
+        PythonLaunchDescriptionSource(launch_file_inventus),
         launch_arguments={
             "namespace": vcan1_ns,
             "interface": "vcan1",
@@ -238,7 +249,7 @@ def generate_launch_description():
             ],
             [
                 FindExecutable(name="ros2"),
-                " service call platform/mcu/configure",
+                " service call /platform/mcu/configure",
                 " clearpath_platform_msgs/srv/ConfigureMcu",
                 ' "{domain_id: 0,',
                 f" robot_namespace: '{default_ns}'}}\"",
@@ -246,7 +257,7 @@ def generate_launch_description():
         ],
     )
 
-    launches = [launch_diagnostics, launch_receiver, launch_sender, launch_inventus]
+    launches = [launch_diagnostics, launch_foxglove, launch_receiver, launch_sender, launch_inventus]
     nodes = [
         node_wireless_watcher,
         node_battery_state_control,
