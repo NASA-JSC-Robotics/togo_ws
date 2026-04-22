@@ -75,6 +75,12 @@ RUN groupadd -g ${USER_GID} ${USERNAME} \
         ${ER4_WS}/log && \
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
 
+# Add clearpath rosdeps and apt packages so that we can pull non-ros-standard clearpath ros packages
+RUN wget -q https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
+    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list && \
+    wget https://packages.clearpathrobotics.com/public.key -O - | sudo apt-key add - && \
+    sudo bash -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu noble main" > /etc/apt/sources.list.d/clearpath-latest.list'
+
 # Configure and install MuJoCo using the defaults for the MuJoCo drivers.
 # We use MuJoCo in many systems so we just install the drivers in the base workspace.
 # The install is CPU dependent, this works with `x86_64` and `arm64` chips, TBD on others.
