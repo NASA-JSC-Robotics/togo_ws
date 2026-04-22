@@ -57,9 +57,26 @@ we include a few convenient launch files for Togo's different operation modes.
         ros2 launch togo_deploy teleop.launch.py
         ```
 
-1. Start Togo's sensors (and related nodes, including the IMU filter and localization):
+3. Start Togo's sensors (and related nodes, including the IMU filter and localization):
     ```bash
     ros2 launch togo_deploy togo_sensors.launch.py
+    ```
+
+4. (Optional; ***BE READY ON THE E-STOP!***) To check that the controllers are communicating with the motor driver properly, you can publish a small velocity command from the command line:
+    ```bash
+    ros2 topic pub /platform_velocity_controller/cmd_vel geometry_msgs/msg/TwistStamped 'header:
+    stamp: now
+    frame_id: ''
+    twist:
+    linear:
+        x: 0.05
+        y: 0.0
+        z: 0.0
+    angular:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+    '
     ```
 
 ### Deploy Testing
