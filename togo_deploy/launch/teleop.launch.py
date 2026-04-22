@@ -52,8 +52,6 @@ def generate_launch_description():
         ],
         remappings=[
             ("/diagnostics", "diagnostics"),
-            ("/tf", "tf"),
-            ("/tf_static", "tf_static"),
             ("joy", "joy_teleop/joy"),
             ("joy/set_feedback", "joy_teleop/joy/set_feedback"),
         ],
@@ -109,8 +107,6 @@ def generate_launch_description():
                 "platform_velocity_controller/cmd_vel",
             ),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
             ("/diagnostics", "diagnostics"),
-            ("/tf", "tf"),
-            ("/tf_static", "tf_static"),
         ],
         parameters=[
             config_twist_mux,
