@@ -16,8 +16,6 @@ Notes on bringing up the `togo_deploy` package.
   - [`control.launch.py`](#controllaunchpy)
     - [Launch Args](#launch-args)
     - [Controller Configs](#controller-configs)
-  - [`teleop.launch.py`](#teleoplaunchpy)
-    - [Ignore Bluetooth Cutoff](#ignore-bluetooth-cutoff)
   - [`togo_sensors.launch.py`](#togo_sensorslaunchpy)
     - [IMU Related Nodes](#imu-related-nodes)
     - [IMU Config Files](#imu-config-files)
@@ -76,16 +74,6 @@ In particular, we separate this file into:
 A few default parameters were changed from `togo_capture`:
   - `tf_frame_prefix_enable` is set to `True`
 - `motor_driver.yaml` includes the [`lynx_motor_driver` parameters](#motor-driver), used in [`husky_comm.launch.py`](#husky_commlaunchpy).
-
-
-
-## `teleop.launch.py`
-
-### Ignore Bluetooth Cutoff
-
-We ignore the Bluetooth cutoff (BT cutoff node).
-Phoebe similarly does not launch this node.
-Its params are removed from `teleop_joy.yaml`.
 
 
 
