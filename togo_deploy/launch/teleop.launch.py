@@ -105,7 +105,7 @@ def generate_launch_description():
             (
                 "cmd_vel_out",
                 "platform_velocity_controller/cmd_vel",
-            ),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
+            ),
             ("/diagnostics", "diagnostics"),
         ],
         parameters=[
