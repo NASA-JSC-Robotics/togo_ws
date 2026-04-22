@@ -6,13 +6,14 @@ from launch_ros.substitutions import FindPackageShare
 
 # TODO check namespacing
 
+
 def generate_launch_description():
     # declare launch arguments
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
             "ns",
-            default_value="husky",
+            default_value="",
             description="Namespace for the robot",
         )
     )
@@ -33,7 +34,9 @@ def generate_launch_description():
 
     # config files
     config_teleop_joy = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "teleop_joy.yaml"])
-    config_interactive_markers = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "teleop_interactive_markers.yaml"])
+    config_interactive_markers = PathJoinSubstitution(
+        [pkg_togo_deploy, "config", "husky", "teleop_interactive_markers.yaml"]
+    )
     config_twist_mux = PathJoinSubstitution([pkg_togo_deploy, "config", "husky", "twist_mux.yaml"])
 
     # Linux joystick
@@ -48,11 +51,11 @@ def generate_launch_description():
             {"use_sim_time": use_sim_time},
         ],
         remappings=[
-            ('/diagnostics', 'diagnostics'),
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static'),
-            ('joy', 'joy_teleop/joy'),
-            ('joy/set_feedback', 'joy_teleop/joy/set_feedback'),
+            ("/diagnostics", "diagnostics"),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
+            ("joy", "joy_teleop/joy"),
+            ("joy/set_feedback", "joy_teleop/joy/set_feedback"),
         ],
         respawn=True,
     )
@@ -70,9 +73,9 @@ def generate_launch_description():
             {"publish_stamped_twist": True},
         ],
         remappings=[
-            ('joy', 'joy_teleop/joy'),
-            ('cmd_vel', 'joy_teleop/cmd_vel'),
-        ]
+            ("joy", "joy_teleop/joy"),
+            ("cmd_vel", "joy_teleop/cmd_vel"),
+        ],
     )
 
     # interactive marker server
@@ -82,9 +85,9 @@ def generate_launch_description():
         namespace=ns,
         name="twist_server_node",
         remappings=[
-            ('cmd_vel', 'twist_marker_server/cmd_vel'),
-            ('twist_server/feedback', 'twist_marker_server/feedback'),
-            ('twist_server/update', 'twist_marker_server/update')
+            ("cmd_vel", "twist_marker_server/cmd_vel"),
+            ("twist_server/feedback", "twist_marker_server/feedback"),
+            ("twist_server/update", "twist_marker_server/update"),
         ],
         parameters=[
             config_interactive_markers,
@@ -101,16 +104,19 @@ def generate_launch_description():
         namespace=ns,
         output="screen",
         remappings=[
-            ('cmd_vel_out', 'platform_velocity_controller/cmd_vel'),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
-            ('/diagnostics', 'diagnostics'),
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static'),
+            (
+                "cmd_vel_out",
+                "platform_velocity_controller/cmd_vel",
+            ),  # TODO investigate this; phoebe remaps to platform_velocity_controller/reference
+            ("/diagnostics", "diagnostics"),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
         ],
         parameters=[
             config_twist_mux,
             {"use_sim_time": use_sim_time},
             {"use_stamped": True},
-        ]
+        ],
     )
 
     nodes = [
