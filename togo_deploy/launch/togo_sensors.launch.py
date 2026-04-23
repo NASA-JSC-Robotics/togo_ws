@@ -43,7 +43,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "launch_phidgets",
             default_value="true",
-            description="Flag to start the Phidgets IMU."
+            description="Flag to start the Phidgets IMU. "
             "Will also launch IMU filter and localization, since they depend on IMU data.",
         )
     )
@@ -55,6 +55,7 @@ def generate_launch_description():
     launch_fixposition = LaunchConfiguration("launch_fixposition")
     launch_phidgets = LaunchConfiguration("launch_phidgets")
     default_ns = "husky"
+    sensor_ns = "husky/sensors"
 
     # INCLUDE PACKAGES
     pkg_togo_deploy = FindPackageShare("togo_deploy")
@@ -75,6 +76,7 @@ def generate_launch_description():
     seyond_node = Node(
         package="seyond",
         executable="seyond_node",
+        namespace=sensor_ns,
         parameters=[
             {"config_path": config_seyond},
         ],
@@ -85,6 +87,7 @@ def generate_launch_description():
     front_depthai_oakd_node = ComposableNode(
         package="depthai_ros_driver",
         name="front_oakd",
+        namespace=sensor_ns,
         plugin="depthai_ros_driver::Camera",
         parameters=[config_front_oakd],
         extra_arguments=[{"use_intra_process_comms": True}],
@@ -95,10 +98,11 @@ def generate_launch_description():
         package="depth_image_proc",
         plugin="depth_image_proc::PointCloudXyzNode",
         name="front_point_cloud_xyz_node",
+        namespace=sensor_ns,
         remappings=[
-            ("image_rect", "/front_oakd/stereo/image_raw"),
-            ("camera_info", "/front_oakd/stereo/camera_info"),
-            ("points", "/front_oakd/points"),
+            ("image_rect", "/husky/sensors/front_oakd/stereo/image_raw"),
+            ("camera_info", "/husky/sensors/front_oakd/stereo/camera_info"),
+            ("points", "/husky/sensors/front_oakd/points"),
         ],
         condition=IfCondition(launch_front_oakd),
     )
@@ -106,7 +110,7 @@ def generate_launch_description():
     front_image_processing_container = ComposableNodeContainer(
         name="front_image_processing_container",
         package="rclcpp_components",
-        namespace="",
+        namespace=sensor_ns,
         executable="component_container",
         composable_node_descriptions=[
             front_depthai_oakd_node,
@@ -120,6 +124,7 @@ def generate_launch_description():
     rear_depthai_oakd_node = ComposableNode(
         package="depthai_ros_driver",
         name="rear_oakd",
+        namespace=sensor_ns,
         plugin="depthai_ros_driver::Camera",
         parameters=[config_rear_oakd],
         extra_arguments=[{"use_intra_process_comms": True}],
@@ -130,6 +135,7 @@ def generate_launch_description():
         package="depth_image_proc",
         plugin="depth_image_proc::PointCloudXyzNode",
         name="rear_point_cloud_xyz_node",
+        namespace=sensor_ns,
         remappings=[
             ("image_rect", "/rear_oakd/stereo/image_raw"),
             ("camera_info", "/rear_oakd/stereo/camera_info"),
@@ -141,7 +147,7 @@ def generate_launch_description():
     rear_image_processing_container = ComposableNodeContainer(
         name="rear_image_processing_container",
         package="rclcpp_components",
-        namespace="",
+        namespace=sensor_ns,
         executable="component_container",
         composable_node_descriptions=[
             rear_depthai_oakd_node,
@@ -156,6 +162,7 @@ def generate_launch_description():
         package="fixposition_driver_ros2",
         executable="fixposition_driver_ros2_exec",
         name="fixposition_driver",
+        namespace=sensor_ns,
         output="screen",
         parameters=[config_ins],
         # arguments=['--ros-args', '--log-level', 'DEBUG'],
@@ -167,8 +174,13 @@ def generate_launch_description():
         package="phidgets_spatial",
         plugin="phidgets::SpatialRosI",
         name="phidgets_spatial",
-        namespace="",
+        namespace=sensor_ns,
         parameters=[config_phidgets],
+        remappings=[
+            ("imu/data_raw", "/husky/sensors/imu_0/data_raw"),
+            ("imu/is_calibrated", "/husky/sensors/imu_0/is_calibrated"),
+            ("imu/mag", "/husky/sensors/imu_0/mag"),
+        ],
         condition=IfCondition(launch_phidgets),
     )
 
@@ -183,14 +195,13 @@ def generate_launch_description():
             ("imu/data", "sensors/imu_0/data"),
             ("imu/data_raw", "sensors/imu_0/data_raw"),
             ("imu/mag", "sensors/imu_0/mag"),
-            ("/tf", "tf"),
         ],
         condition=IfCondition(launch_phidgets),
     )
 
     imu_filter_container = ComposableNodeContainer(
         name="imu_filter_container",
-        namespace="",
+        namespace=sensor_ns,
         package="rclcpp_components",
         executable="component_container",
         composable_node_descriptions=[
@@ -212,8 +223,6 @@ def generate_launch_description():
         remappings=[
             ("odometry/filtered", "platform/odom/filtered"),
             ("/diagnostics", "diagnostics"),
-            ("/tf", "tf"),
-            ("/tf_static", "tf_static"),
         ],
         condition=IfCondition(launch_phidgets),
     )
