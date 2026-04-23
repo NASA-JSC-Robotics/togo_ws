@@ -10,6 +10,9 @@
 [submodule "references/documentation"]
 	path = references/documentation
 	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/documentation.git
+[submodule "references/togo_capture"]
+	path = references/togo_capture
+	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo_capture.git
 [submodule "references/clearpath/clearpath_common"]
 	path = references/clearpath/clearpath_common
 	url = https://github.com/clearpathrobotics/clearpath_common.git
@@ -22,6 +25,6 @@
 [submodule "references/clearpath/robot_upstart"]
 	path = references/clearpath/robot_upstart
 	url = https://github.com/clearpathrobotics/robot_upstart.git
-[submodule "references/togo_capture"]
-	path = references/togo_capture
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo_capture.git
+[submodule "references/clearpath/clearpath_simulator"]
+	path = references/clearpath/clearpath_simulator
+	url = https://github.com/clearpathrobotics/clearpath_simulator.git
