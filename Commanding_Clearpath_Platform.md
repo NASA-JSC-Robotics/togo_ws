@@ -1,7 +1,7 @@
 # Commanding Clearpath Platform
 
-Clearpath platforms (mostly) utilize the [ROS2 Control framework](https://control.ros.org/rolling/doc/getting_started/getting_started.html#architecture).
-But communication to the MCU (see [Clearpath Hardware Architecture](./Clearpath_Hardware_Architecture.md) for more details) keeps the ROS2 infrastructure slightly removed from the physical hardware.
+Clearpath platforms (mostly) utilize the [ros2_control framework](https://control.ros.org/rolling/doc/getting_started/getting_started.html#architecture).
+But communication to the MCU (see [Clearpath Hardware Architecture](./Clearpath_Hardware_Architecture.md) for more details) keeps the ROS 2 infrastructure slightly removed from the physical hardware.
 This means that tracing down commands to the hardware can be a little tricky.
 
 > [!NOTE] The Short Version!
