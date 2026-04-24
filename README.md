@@ -125,7 +125,7 @@ Start the background Clearpath services that we do actually need:
 - VCAN
     - Start the VCAN service:
         ```bash
-        sudo systmctl start clearpath-vcan.service
+        sudo systemctl start clearpath-vcan.service
         ```
     - Check the status of this process:
         ```bash
