@@ -3,11 +3,14 @@
 <package format="3">
   <name>togo_description</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="robot@todo.todo">robot</maintainer>
+  <description>Description package for Clearpath Husky known as Togo</description>
+  <maintainer email="emily.j.sheetz@nasa.gov">Emily Sheetz</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>clearpath_platform_description</exec_depend>
+  <exec_depend>togo_gz</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
