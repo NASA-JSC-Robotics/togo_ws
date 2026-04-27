@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="togo_gz_ros2_control"
+    params="
+      ns:=''
+      gazebo_controller_configs
+    "
+  >
+    <gazebo>
+      <!-- Gazebo plugin to enable ROS2 control for the system -->
+      <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(arg gazebo_controller_configs)</parameters>
+        <ros>
+          <!-- TODO check that we like these remappings -->
+          <remapping>~/odom:=platform/odom</remapping>
+          <remapping>~/cmd_vel:=platform/cmd_vel</remapping>
+          <remapping>/tf:=tf</remapping>
+          <remapping>/tf_static:=tf_static</remapping>
+          <remapping>/diagnostics:=diagnostics</remapping>
+          <remapping>/dynamic_joint_states:=platform/dynamic_joint_states</remapping>
+          <remapping>joint_states:=platform/joint_states</remapping>
+          <remapping>~/reference:=platform/cmd_vel</remapping>
+          <remapping>~/odometry:=platform/odom</remapping>
+          <namespace>${ns}</namespace>
+        </ros>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+</robot>
