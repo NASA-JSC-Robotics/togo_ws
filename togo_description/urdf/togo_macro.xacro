@@ -8,9 +8,6 @@
   <!-- Common; let Clearpath own this -->
   <xacro:include filename="$(find clearpath_platform_description)/urdf/common.urdf.xacro"/>
 
-  <!-- if ignition or gazebo - need to use absolute paths instead of relative-->
-  <!-- <xacro:property name="force_abs_paths" value="$(arg is_sim)" scope="global" /> -->
-
   <!-- Platform -->
   <xacro:include filename="$(find togo_description)/urdf/a300/a300.urdf.xacro"/>
   <xacro:a300 control="diff_4wd" front_wheels="outdoor" rear_wheels="outdoor"/>
