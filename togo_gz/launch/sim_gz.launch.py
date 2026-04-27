@@ -105,6 +105,8 @@ def generate_launch_description():
     control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_deploy, "launch", "control.launch.py"])),
         launch_arguments={
+            "robot_description_package": "togo_gz",
+            "robot_description_file": "togo_gz.urdf.xacro",
             "is_sim": "true",
             "tf_prefix": tf_prefix,
             "ns": ns,
