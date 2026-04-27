@@ -1,5 +1,22 @@
 # togo
 
+## Table of Contents
+
+- [togo](#togo)
+  - [Table of Contents](#table-of-contents)
+  - [Sensors](#sensors)
+    - [OAK-D cameras](#oak-d-cameras)
+    - [Fixposition GNSS](#fixposition-gnss)
+    - [Seyond 3D lidar](#seyond-3d-lidar)
+    - [Phidgets spatial](#phidgets-spatial)
+  - [External packages to pull in source code from](#external-packages-to-pull-in-source-code-from)
+  - [Deploy](#deploy)
+    - [Deploy Testing](#deploy-testing)
+      - [Stopping Clearpath](#stopping-clearpath)
+      - [Starting Select Clearpath Services](#starting-select-clearpath-services)
+      - [Restart Clearpath](#restart-clearpath)
+  - [Gazebo](#gazebo)
+
 ## Sensors
 
 ### OAK-D cameras
@@ -29,15 +46,15 @@ I think the source code should be [here](https://github.com/ros-drivers/phidgets
 
 fixposition_driver
 
-* The driver is located [here](https://github.com/fixposition/fixposition_driver).
-  * Make sure you are cloning recursively, as there are submodules.
-* There is an extra step where you should run the script `setup_ros_ws.sh` from the fixposition_driver directory in your directory. Instructions are [here](<https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a)SetupdriverforanexistingROSworkspace>). It seems like that might just add some colcon ignores on things you don't need depending on your ros version.
+- The driver is located [here](https://github.com/fixposition/fixposition_driver).
+  - Make sure you are cloning recursively, as there are submodules.
+- There is an extra step where you should run the script `setup_ros_ws.sh` from the fixposition_driver directory in your directory. Instructions are [here](<https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a)SetupdriverforanexistingROSworkspace>). It seems like that might just add some colcon ignores on things you don't need depending on your ros version.
 
 seyond_ros_driver
 
-* The driver is located [here](https://github.com/Seyond-Inc/seyond_ros_driver).
-  * Make sure you are cloning recursively, as there are submodules.
-* There are instructions for building the drivers inside the workspace [here](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile).
+- The driver is located [here](https://github.com/Seyond-Inc/seyond_ros_driver).
+  - Make sure you are cloning recursively, as there are submodules.
+- There are instructions for building the drivers inside the workspace [here](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile).
 
 ## Deploy
 
@@ -99,19 +116,19 @@ For now, a few helpful notes on manually starting/stopping Clearpath services:
 
 Stop all Clearpath stuff:
 
-* To stop all of the Clearpath processes:
+- To stop all of the Clearpath processes:
 
     ```bash
     sudo systemctl stop clearpath-robot.service
     ```
 
-* To disable all of the Clearpath processes and prevent them from automatically restarting when they die:
+- To disable all of the Clearpath processes and prevent them from automatically restarting when they die:
 
     ```bash
     sudo systemctl disable clearpath-robot.service
     ```
 
-* Clearpath starts a lot of docker containers by default. We can view all of the running containers:
+- Clearpath starts a lot of docker containers by default. We can view all of the running containers:
 
     ```bash
     docker container ps
@@ -123,7 +140,7 @@ Stop all Clearpath stuff:
     docker stop $(docker ps -q)
     ```
 
-* As a sanity check, you can confirm everything has stopped:
+- As a sanity check, you can confirm everything has stopped:
 
     ```bash
     # Clearpath robot services
@@ -136,7 +153,7 @@ Stop all Clearpath stuff:
 
 Start the background Clearpath services that we do actually need:
 
-* ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
+- ROS discovery service: copy the commands from `/etc/clearpath/discovery-server-start`:
 
     ```bash
     # source ROS
@@ -146,14 +163,14 @@ Start the background Clearpath services that we do actually need:
     ```
 
     This server will hang in the terminal.
-* VCAN
-  * Start the VCAN service:
+- VCAN
+  - Start the VCAN service:
 
     ```bash
     sudo systmctl start clearpath-vcan.service
     ```
 
-  * Check the status of this process:
+  - Check the status of this process:
 
     ```bash
     systemctl status clearpath-vcan.service
@@ -168,4 +185,51 @@ It's nice to restart Clearpath for now while we are still bringing up Togo.
 sudo systemctl enable clearpath-robot.service
 # re-start Clearpath robot services
 sudo systemctl start clearpath-robot.service
+```
+
+## Gazebo
+
+To bring up Togo in Gazebo, run:
+
+```bash
+ros2 launch togo_gz sim_gz.launch.py
+```
+
+This launch file will launch the controls appropriately from the `togo_deploy` package using the Gazebo URDF in the `togo_gz` package.
+The Gazebo URDF instantiates the Togo macro in `togo_description` and adds the appropriate `ros2_control` plugins for Gazebo.
+
+Once Gazebo is running, you can publish velocity commands from the command line:
+
+```bash
+ros2 topic pub --once /platform_velocity_controller/cmd_vel geometry_msgs/msg/TwistStamped 'header:
+  stamp: now
+  frame_id: ''
+twist:
+  linear:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  angular:
+    x: 0.0
+    y: 0.0
+    z: 0.5
+'
+```
+
+Publish a zero command to stop the robot:
+
+```bash
+ros2 topic pub --once /platform_velocity_controller/cmd_vel geometry_msgs/msg/TwistStamped 'header:
+  stamp: now
+  frame_id: ''
+twist:
+  linear:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  angular:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+'
 ```
