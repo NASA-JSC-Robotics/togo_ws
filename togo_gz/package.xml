@@ -14,18 +14,18 @@
 
   <depend>clearpath_platform_description</depend>
 
-  <!-- TODO check these; copied directly from balto -->
-  <exec_depend>ign_ros2_control</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ros2_control</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>urdf</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <!-- gazebo dependencies -->
+  <exec_depend>gz_ros2_control</exec_depend>
   <exec_depend>ros_gz_sim</exec_depend>
   <exec_depend>ros_gz_bridge</exec_depend>
-  <exec_depend>ros2_control</exec_depend>
-  <exec_depend>xacro</exec_depend>
-  <exec_depend>gz_ros2_control</exec_depend>
+  <!-- togo dependencies -->
   <exec_depend>togo_description</exec_depend>
   <exec_depend>togo_deploy</exec_depend>
 
