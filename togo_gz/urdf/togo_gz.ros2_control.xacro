@@ -12,15 +12,15 @@
         <parameters>$(arg gazebo_controller_configs)</parameters>
         <ros>
           <!-- TODO check that we like these remappings -->
-          <remapping>~/odom:=platform/odom</remapping>
-          <remapping>~/cmd_vel:=platform/cmd_vel</remapping>
+          <remapping>~/odom:=/platform_velocity_controller/odom</remapping>
+          <remapping>~/cmd_vel:=/platform_velocity_controller/cmd_vel</remapping>
           <remapping>/tf:=tf</remapping>
           <remapping>/tf_static:=tf_static</remapping>
           <remapping>/diagnostics:=diagnostics</remapping>
-          <remapping>/dynamic_joint_states:=platform/dynamic_joint_states</remapping>
-          <remapping>joint_states:=platform/joint_states</remapping>
-          <remapping>~/reference:=platform/cmd_vel</remapping>
-          <remapping>~/odometry:=platform/odom</remapping>
+          <remapping>/dynamic_joint_states:=dynamic_joint_states</remapping>
+          <remapping>joint_states:=joint_states</remapping>
+          <remapping>~/reference:=/platform_velocity_controller/cmd_vel</remapping>
+          <remapping>~/odometry:=/platform_velocity_controller/odom</remapping>
           <namespace>${ns}</namespace>
         </ros>
       </plugin>
