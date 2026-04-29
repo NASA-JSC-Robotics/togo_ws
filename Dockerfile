@@ -4,7 +4,7 @@ ARG ROS_DISTRO=jazzy
 # The base image for the overlay deployment
 # These must be overridden from the local .env if using this workflow.
 ARG ROS_WS_BASE_IMAGE_TAG="latest"
-ARG ROS_WS_BASE_IMAGE="togo_docker_ws"
+ARG ROS_WS_BASE_IMAGE="togo_docker_ws-dev"
 ARG ROS_WS_BASE_IMAGE="${ROS_WS_BASE_IMAGE}:${ROS_WS_BASE_IMAGE_TAG}"
 
 # This layer grabs package manifests from the src directory for preserving rosdep installs.
@@ -166,7 +166,7 @@ ARG USERNAME
 RUN . /opt/ros/${ROS_DISTRO}/setup.bash && \
     colcon build
 
-FROM ${ROS_WS_BASE_IMAGE} AS er4-demo
+FROM ${ROS_WS_BASE_IMAGE} AS er4-deploy
 
 ARG USERNAME
 ARG USER_UID

@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: er4-demo
+      target: er4-deploy
       args:
         # WARNING: Changing username requires updating workspace mounts below.
         # Do not mess with these unless you know what you are doing!
@@ -65,6 +65,27 @@ services:
   demo:
     extends: _base
     command: sleep infinity
+    # fix mounting; this is more like a release image, but that's not ultimately want we want for Togo
+
+  deploy:
+    extends: _base
+    ulimits:
+      rtprio: 99
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      # If you build this locally with the correct user information then this shouldn't be an issue
+      # mounting without bindfs
+      - ./src:/home/er4-user/ws/src/:rw
+      # Bind mount folders into the container for preserving build artifacts
+      - ./install:/home/er4-user/ws/install/:rw
+      - ./build:/home/er4-user/ws/build/:rw
+      - ./log:/home/er4-user/ws/log/:rw
+      - ./.ccache:/home/er4-user/.ccache
+      - /dev:/dev
+    command: sleep infinity
+    profiles: [deploy]
 
   dev:
     extends: _base
