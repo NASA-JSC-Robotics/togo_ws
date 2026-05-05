@@ -3,8 +3,6 @@
 
   <xacro:macro name="togo">
 
-  <xacro:arg name="is_sim" default="false" />
-
   <!-- Common; let Clearpath own this -->
   <xacro:include filename="$(find clearpath_platform_description)/urdf/common.urdf.xacro"/>
 
