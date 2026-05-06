@@ -59,23 +59,23 @@
     <link name="chassis_link">
       <visual>
         <geometry>
-          <mesh filename="package://togo_description/meshes/a300/chassis.dae" />
+          <mesh filename="package://clearpath_platform_description/meshes/a300/chassis.dae" />
         </geometry>
       </visual>
       <visual>
         <geometry>
-          <mesh filename="package://togo_description/meshes/a300/livery.dae" />
+          <mesh filename="package://clearpath_platform_description/meshes/a300/livery.dae" />
         </geometry>
       </visual>
       <visual>
         <geometry>
-          <mesh filename="package://togo_description/meshes/a300/status_lights.dae" />
+          <mesh filename="package://clearpath_platform_description/meshes/a300/status_lights.dae" />
         </geometry>
       </visual>
       <collision>
         <material name="clearpath_yellow"/>
         <geometry>
-          <mesh filename="package://togo_description/meshes/a300/chassis_collision.stl" />
+          <mesh filename="package://clearpath_platform_description/meshes/a300/chassis_collision.stl" />
         </geometry>
       </collision>
       <inertial>
@@ -136,12 +136,12 @@
     </joint>
 
     <!-- Suspension beams -->
-    <xacro:include filename="$(find togo_description)/urdf/a300/drivetrain/suspension_beam.urdf.xacro"/>
+    <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/drivetrain/suspension_beam.urdf.xacro"/>
     <xacro:a300_suspension_beam side="left"/>
     <xacro:a300_suspension_beam side="right"/>
 
     <!-- Add wheels -->
-    <xacro:include filename="$(find togo_description)/urdf/a300/drivetrain/wheels.urdf.xacro"/>
+    <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/drivetrain/wheels.urdf.xacro"/>
     <xacro:a300_drivetrain_wheels front_wheels="${front_wheels}" rear_wheels="${rear_wheels}"/>
 
     <!-- Add drivetrain -->

@@ -1,8 +1,15 @@
 prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;share/@PROJECT_NAME@/meshes
 prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;share/@PROJECT_NAME@/worlds
 prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;share
+prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;/opt/ros/jazzy/share
+prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;/opt/ros/jazzy/share/clearpath_platform_description/meshes
+prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;/opt/ros/jazzy/share/clearpath_sensors_description/meshes
 set-if-unset;MESA_GL_VERSION_OVERRIDE;3.3
 prepend-non-duplicate;SDF_PATH;share/@PROJECT_NAME@/meshes
 prepend-non-duplicate;SDF_PATH;share/@PROJECT_NAME@/worlds
+prepend-non-duplicate;SDF_PATH;/opt/ros/jazzy/share/clearpath_platform_description/meshes
+prepend-non-duplicate;SDF_PATH;/opt/ros/jazzy/share/clearpath_sensors_description/meshes
 prepend-non-duplicate;IGN_FILE_PATH;share/@PROJECT_NAME@/meshes
 prepend-non-duplicate;IGN_FILE_PATH;share/@PROJECT_NAME@/worlds
+prepend-non-duplicate;IGN_FILE_PATH;/opt/ros/jazzy/share/clearpath_platform_description/meshes
+prepend-non-duplicate;IGN_FILE_PATH;/opt/ros/jazzy/share/clearpath_sensors_description/meshes
