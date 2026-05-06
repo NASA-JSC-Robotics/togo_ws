@@ -19,6 +19,7 @@
     <xacro:property name="wheel_track" value="0.562"/>
 
     <!-- Chassis Positions relative to center of rotation -->
+    <!-- Togo will always use diff_4wd, but Clearpath does support these other options -->
     <xacro:if value="${control == 'diff_4wd' or control == 'omni_4wd'}">
       <xacro:property name="chassis_x" value="0"/>
       <xacro:property name="chassis_y" value="0"/>
@@ -145,7 +146,7 @@
     <xacro:a300_drivetrain_wheels front_wheels="${front_wheels}" rear_wheels="${rear_wheels}"/>
 
     <!-- Add drivetrain -->
-    <xacro:include filename="$(find togo_description)/urdf/a300/drivetrain/drivetrain.urdf.xacro"/>
+    <xacro:include filename="$(find togo_description)/urdf/a300/drivetrain.urdf.xacro"/>
 
     <!-- Hardware  -->
     <xacro:if value="$(arg is_sim)">

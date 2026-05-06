@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" xmlns:gz="http://gazebosim.org/schema" name="generic_drivetrain">
+
+  <xacro:macro name="generic_drivetrain" params="name control front_wheels rear_wheels hardware_plugin">
+    <!--
+      CLEARPATH DRIVETRAIN OPTIONS
+      Clearpath supports several drivetrain options: 'omni_4wd', 'diff_4wd', 'diff_fwd', and 'diff_rwd'.
+      This is typically indicated by the 'control' param for this macro.
+      Togo will use diff_4wd, so we ignore these other options and pull in just what we need for the diff_4wd.
+      This is meant to simplify togo_description and minimize how much of the open source Clearpath description we own.
+
+      GAZEBO ROS2 CONTROL PLUGIN
+      We care most about the Gazebo ROS2 control plugin.
+      In Clearpath's open source code, this plugin is included as part of the drivetrain macros.
+      For Togo, we now own the drivetrain macro (this file) to point to our own Gazebo ROS2 control plugin.
+      To prevent togo_description from depending on the togo_gz package, we refactored where this plugin gets included,
+      which is why we see no Gazebo plugins here!
+      Instead, the Gazebo ROS2 control plugin typically instantiated within the drivetrain is instantiated in
+      togo_gz/urdf/togo_gz.urdf.xacro, which pulls in togo_gz/urdf/togo_gz.ros2_control.xacro containing the plugin.
+
+      CLEARPATH REFERENCES
+      For reference, this macro is based on clearpath_platform_description/urdf/generic/drivetrain/drivetrain.urdf.xacro
+      which pulls in xacros for each of the 4 drivetrain options, all contained within
+      clearpath_platform_description/urdf/generic/drivetrain/control/
+
+      Also worth noting that in the Clearpath description, diff_4wd (Togo's drivetrain mode) is the same as omni_4wd.
+      This file, then, copy/pastes clearpath_platform_description/urdf/generic/drivetrain/control/omni_4wd.urdf.xacro
+    -->
+
+    <!-- Diff 4WD drivetrain ROS2 controls-->
+    <ros2_control name="${name}_hardware" type="system">
+      <hardware>
+        <plugin>${hardware_plugin}</plugin>
+      </hardware>
+      <joint name="front_left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="front_right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="rear_left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="rear_right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+
+</robot>
