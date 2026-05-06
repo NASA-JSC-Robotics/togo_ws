@@ -166,7 +166,7 @@ ARG USERNAME
 RUN . /opt/ros/${ROS_DISTRO}/setup.bash && \
     colcon build
 
-FROM ${ROS_WS_BASE_IMAGE} AS er4-deploy
+FROM ${ROS_WS_BASE_IMAGE} AS er4-robot
 
 ARG USERNAME
 ARG USER_UID
