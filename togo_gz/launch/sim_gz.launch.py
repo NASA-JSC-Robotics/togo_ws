@@ -42,7 +42,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_z",
-            default_value="0.02",
+            default_value="0.2",
             description="Initial Z-position of the robot when spawned into Gazebo",
         )
     )
