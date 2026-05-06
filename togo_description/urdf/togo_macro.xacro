@@ -3,7 +3,7 @@
 
   <xacro:macro name="togo">
 
-  <!-- Common; let Clearpath own this -->
+  <!-- Common -->
   <xacro:include filename="$(find clearpath_platform_description)/urdf/common.urdf.xacro"/>
 
   <!-- Platform -->
