@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: er4-deploy
+      target: er4-robot
       args:
         # WARNING: Changing username requires updating workspace mounts below.
         # Do not mess with these unless you know what you are doing!
@@ -62,13 +62,23 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - $HOME/.Xauthority:/home/er4-user/.Xauthority:ro
 
-  demo:
-    extends: _base
-    command: sleep infinity
-    # fix mounting; this is more like a release image, but that's not ultimately want we want for Togo
+  micro-ros:
+    init: true
+    stdin_open: true
+    tty: true
+    network_mode: host
+    image: microros/micro-ros-agent:jazzy
+    command: ["udp4", "-p", "11411"]
+    healthcheck:
+      test: ["CMD", "pidof", "-q", "micro_ros_agent"]
+      interval: 1s
+      timeout: 5s
+      retries: 3
 
-  deploy:
+  # The hardware services include any additional specifications for running on hardware.
+  hw-dev:
     extends: _base
+    # Ensures the drivers have access to RT priority
     ulimits:
       rtprio: 99
       memlock:
@@ -83,9 +93,13 @@ services:
       - ./build:/home/er4-user/ws/build/:rw
       - ./log:/home/er4-user/ws/log/:rw
       - ./.ccache:/home/er4-user/.ccache
+      # Bind for hardware
       - /dev:/dev
     command: sleep infinity
-    profiles: [deploy]
+    depends_on:
+      micro-ros:
+        condition: service_healthy
+    profiles: [hw-dev]
 
   dev:
     extends: _base
@@ -102,30 +116,3 @@ services:
       - ./.ccache:/home/er4-user/.ccache
     command: sleep infinity
     profiles: [dev]
-
-  # The hardware services include any additional specifications for running on hardware.
-  hw-demo:
-    extends: _base
-    # Ensures the drivers have access to RT priority
-    ulimits:
-      rtprio: 99
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - /dev:/dev
-    command: sleep infinity
-    profiles: [ hw-demo ]
-
-  hw-dev:
-    extends: dev
-    # Ensures the drivers have access to RT priority
-    ulimits:
-      rtprio: 99
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - /dev:/dev
-    command: sleep infinity
-    profiles: [ hw-dev ]
