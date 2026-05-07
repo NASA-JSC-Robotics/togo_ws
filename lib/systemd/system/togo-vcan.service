@@ -1,0 +1,12 @@
+[Unit]
+Description="Togo Virtual CAN over UDP Bridge"
+After=network-online.target
+
+[Service]
+Restart=on-failure
+User=root
+Type=forking
+ExecStart=/bin/bash -e /etc/togo/togo-vcan-start
+
+[Install]
+WantedBy=multi-user.target
