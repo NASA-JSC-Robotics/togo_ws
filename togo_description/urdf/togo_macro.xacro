@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="a300-00058">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="togo">
+  <xacro:macro name="togo">
 
   <!-- Common -->
   <xacro:include filename="$(find clearpath_platform_description)/urdf/common.urdf.xacro"/>
 
   <!-- Platform -->
-  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/a300.urdf.xacro"/>
+  <xacro:include filename="$(find togo_description)/urdf/a300/a300.urdf.xacro"/>
   <xacro:a300 control="diff_4wd" front_wheels="outdoor" rear_wheels="outdoor"/>
-
 
   <!-- Attachments -->
 
@@ -98,5 +97,5 @@
 
   <!-- Extras -->
 
-    </xacro:macro>
+  </xacro:macro>
 </robot>
