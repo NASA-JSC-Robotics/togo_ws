@@ -1,5 +1,6 @@
 [Unit]
 Description="Togo FastDDS discovery server"
+PartOf=togo-robot.target
 After=network-online.target
 
 [Service]
@@ -10,4 +11,4 @@ RestartSec=1
 ExecStart=/bin/bash -e /etc/togo/togo-discovery-server-start
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=togo-robot.target

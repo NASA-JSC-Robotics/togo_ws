@@ -1,5 +1,6 @@
 [Unit]
 Description="Togo Virtual CAN over UDP Bridge"
+PartOf=togo-robot.target
 After=network-online.target
 
 [Service]
@@ -9,4 +10,4 @@ Type=forking
 ExecStart=/bin/bash -e /etc/togo/togo-vcan-start
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=togo-robot.target
