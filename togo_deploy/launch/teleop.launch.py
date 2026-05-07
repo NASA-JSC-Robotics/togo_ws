@@ -105,6 +105,7 @@ def generate_launch_description():
                 "platform_velocity_controller/cmd_vel",
             ),
             ("/diagnostics", "diagnostics"),
+            ("/platform/emergency_stop", "/husky/platform/emergency_stop"),
         ],
         parameters=[
             config_twist_mux,

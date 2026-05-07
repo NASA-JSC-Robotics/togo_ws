@@ -181,6 +181,7 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
+            ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
         ],
         parameters=[
             {
@@ -198,6 +199,9 @@ def generate_launch_description():
         remappings=[
             ("/diagnostics", "diagnostics"),
             ("/husky/platform/motors/cmd", "/platform/motors/cmd"),
+            ("/husky/platform/motors/feedback", "/platform/motors/feedback"),
+            ("/husky/platform/motors/status", "/platform/motors/status"),
+            ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
         ],
         parameters=[
             ParameterFile(motor_driver_config, allow_substs=True),
@@ -212,6 +216,7 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
+            ("/husky/platform/motors/status", "/platform/motors/status"),
         ],
     )
 
