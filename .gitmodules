@@ -1,6 +1,3 @@
-[submodule "src/togo"]
-	path = src/togo
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo.git
 [submodule "src/external/fixposition_driver"]
 	path = src/external/fixposition_driver
 	url = https://github.com/fixposition/fixposition_driver.git
