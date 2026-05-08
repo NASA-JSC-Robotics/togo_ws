@@ -1,0 +1,66 @@
+/**:
+  ros__parameters:
+    log_directory: /opt/onav/missions
+    analyzers:
+      - 'thermals'
+      - 'autonomy'
+      - 'odometry'
+      - 'odometry_gps'
+      - 'battery'
+      - 'media_capture'
+      - 'geojson'
+      - 'lynx_motors'
+      - 'velocity_tracking'
+      - 'disk_usage'
+    thermals:
+      type: ThermalsAnalyzer
+      config:
+        robot: /${ROBOT}
+        lttb_threshold: 100
+    autonomy:
+      type: AutonomyAnalyzer
+      config:
+        robot: /${ROBOT}
+    odometry:
+      type: OdometryAnalyzer
+      config: 
+        odom_topic: /${ROBOT}/platform/odom
+        lttb_threshold: 1000
+        use_3d: False
+    odometry_gps:
+      type: OdometryAnalyzer
+      config: 
+        odom_topic: /${ROBOT}/localization/odom
+        lttb_threshold: 1000
+        use_3d: False
+    battery:
+      type: BatteryAnalyzer
+      config:
+        topic: /${ROBOT}/platform/bms/state
+    media_capture:
+      type: MediaCaptureAnalyzer
+      config:
+        topic: /${ROBOT}/platform/bms/state
+        copy_media: True
+        gnss_topic: /${ROBOT}/sensors/ins_0/xvn/odometry_llh
+    geojson:
+      type: NavSatGeoJSONAnalyzer
+      config:
+        topic: /${ROBOT}/sensors/ins_0/xvn/odometry_llh
+        heading_topic: /${ROBOT}/localization/odom
+        sample_distance: 0.3
+        trajectory_name: localization
+    lynx_motors:
+      type: LynxMotorsAnalyzer
+      config:
+        topic: /${ROBOT}/platform/motors
+        lttb_threshold: 1000
+    velocity_tracking:
+      type: VelocityTrackingAnalyzer
+      config:
+        lttb_threshold: 1000
+        cmd_vel_topic: /${ROBOT}/platform/cmd_vel_out
+        odom_topic: /${ROBOT}/localization/odom
+        imu_topic: /${ROBOT}/sensors/ins_0/xvn/poiimu
+    disk_usage:
+      type: DiskUsageAnalyzer

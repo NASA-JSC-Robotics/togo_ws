@@ -1,0 +1,94 @@
+#!/bin/bash
+# THIS IS A GENERATED FILE, NOT RECOMMENDED TO EDIT.
+
+function log() {
+  logger -s -p user.$1 ${@:2}
+}
+
+log info "clearpath-platform: Using workspace setup file /etc/clearpath/setup.bash"
+
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+
+rmw="rmw_fastrtps_cpp"
+rmw_config=""
+
+if [[ "$rmw" == "rmw_fastrtps_cpp" ]]
+then
+  if [[ ! -z $rmw_config ]]
+  then
+    export FASTRTPS_DEFAULT_PROFILES_FILE=$rmw_config
+  fi
+elif [[ "$rmw" == "rmw_cyclonedds_cpp" ]]
+then
+  if [[ ! -z $rmw_config ]]
+  then
+    export CYCLONEDDS_URI=$rmw_config
+  fi
+fi
+
+
+source /etc/clearpath/setup.bash
+JOB_FOLDER=/etc/ros/jazzy/clearpath-platform.d
+
+log_path="/tmp"
+if [[ ! -d $log_path ]]; then
+  CREATED_LOGDIR=true
+  trap 'CREATED_LOGDIR=false' ERR
+    log warn "clearpath-platform: The log directory you specified "$log_path" does not exist. Attempting to create."
+    mkdir -p $log_path 2>/dev/null
+    chown root:root $log_path 2>/dev/null
+    chmod ug+wr $log_path 2>/dev/null
+  trap - ERR
+  # if log_path could not be created, default to tmp
+  if [[ $CREATED_LOGDIR == false ]]; then
+    log warn "clearpath-platform: The log directory you specified "$log_path" cannot be created. Defaulting to "/tmp"!"
+    log_path="/tmp"
+  fi
+fi
+
+export ROS_HOSTNAME=$(hostname)
+
+export ROS_HOME=${ROS_HOME:=$(echo ~root)/.ros}
+export ROS_LOG_DIR=$log_path
+
+log info "clearpath-platform: Launching ROS_HOSTNAME=$ROS_HOSTNAME, ROS_IP=$ROS_IP, ROS_MASTER_URI=$ROS_MASTER_URI, ROS_HOME=$ROS_HOME, ROS_LOG_DIR=$log_path"
+
+# If xacro files are present in job folder, generate and expand an amalgamated urdf.
+XACRO_FILENAME=$log_path/clearpath-platform.xacro
+XACRO_ROBOT_NAME=$(echo "clearpath-platform" | cut -d- -f1)
+ros2 run robot_upstart mkxacro $JOB_FOLDER $XACRO_ROBOT_NAME > $XACRO_FILENAME
+if [[ "$?" == "0" ]]; then
+  URDF_FILENAME=$log_path/clearpath-platform.urdf
+  ros2 run xacro xacro $XACRO_FILENAME -o $URDF_FILENAME
+  if [[ "$?" == "0" ]]; then
+    log info "clearpath-platform: Generated URDF: $URDF_FILENAME"
+  else
+    log warn "clearpath-platform: URDF macro expansion failure. Robot description will not function."
+  fi
+  export ROBOT_URDF_FILENAME=$URDF_FILENAME
+fi
+
+# Assemble amalgamated launchfile.
+LAUNCH_FILENAME=$log_path/clearpath-platform.launch.py
+ros2 run robot_upstart mklaunch $JOB_FOLDER > $LAUNCH_FILENAME
+if [[ "$?" != "0" ]]; then
+  log err "clearpath-platform: Unable to generate amalgamated launchfile. $JOB_FOLDER $LAUNCH_FILENAME"
+  exit 1
+fi
+log info "clearpath-platform: Generated launchfile: $LAUNCH_FILENAME"
+
+# Warn and exit if setpriv is missing from the system.
+which setpriv > /dev/null
+if [ "$?" != "0" ]; then
+  log err "clearpath-platform: Can't launch as unprivileged user without setpriv. Please install the setpriv package."
+  exit 1
+fi
+
+# Punch it.
+setpriv --reuid robot ros2 launch $LAUNCH_FILENAME &
+PID=$!
+
+log info "clearpath-platform: Started ros2 launch as background process, PID $PID, ROS_LOG_DIR=$ROS_LOG_DIR"
+echo "$PID" > $log_path/clearpath-platform.pid
+
+wait "$PID"
