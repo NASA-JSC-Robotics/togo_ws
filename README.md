@@ -14,12 +14,14 @@ Note the `2`! As this is intended to be isolated from your system.
     - Don't worry about Docker Desktop
     - For Ubuntu recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
 2) ***VERY IMPORTANT*** Recursively initialize all submodules.  Note that the fixposition and seyond driver packages contain many nested submodules, so the `--recursive` flag is ***critical***.
+
     ```bash
     git submodule update --init --recursive
     ```
-3) Setup additional source code for the `src/` directory
-    - Either with git submodules (`git submodule add ...`)
-    - Or with a repos file and vcs tool (`vcs import ...`)
+
+3) Setup additional source code for the `src/` directory (if you need them)
+    - ie, `git submodule add ...`
+
 4) Set your user information for the project build
     - We recommend just putting this in your `~/.bashrc`:
 
@@ -35,14 +37,16 @@ Note the `2`! As this is intended to be isolated from your system.
 ## Using the Images
 
 ***VERY IMPORTANT*** Apply the required pre-build steps on the host by running the following script from the repo root:
+
 ```bash
 ./scripts/pre_build.sh
 ```
 
 Build the development image from the repo root, and then launch it:
+
 ```bash
 # Compile the image
-docker compose build
+docker compose build dev
 
 # Start it
 docker compose up dev -d
@@ -57,39 +61,14 @@ The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src
 ### Building the Togo Workspace
 
 Once you're attached to the container, built the workspace as normal:
+
 ```bash
 colcon build
 ```
+
 This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the build should complete just fine, the packages are just whiny.
 
 For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.  These are handled by the `pre_build.sh` script run before building the docker images.  By the time you attach to the container, these packages can be built as expected within a ROS workspace.
-
-## The Pixi Workflow
-
-We also provide a [pixi/robostack](https://prefix.dev) build for compiling on baremetal in consistent, isolated environments.
-Be sure to install the latest (after 0.65.0) release of the tool.
-The build relies on the [pixi-build-ros](https://prefix-dev.github.io/pixi-build-backends/backends/pixi-build-ros/) backend for compatibility with our ROS projects.
-
-This is an experimental workflow that is not as tested as the Docker build methods.
-For more information on pixi refer to the [instructions](./docs/USING_PIXI.md).
-
-To install and run with pixi:
-
-```bash
-# Install the frozen environment and configure colcon
-pixi install --frozen
-pixi run setup-colcon
-
-# Build and test
-pixi run build
-pixi run test
-
-# Or launch an interactive shell and do things "normally"
-pixi shell
-colcon build
-```
-
-Note that any package we are building from source must be included in [pixi.toml](./pixi.toml).
 
 ## Other Things to Note
 
