@@ -1,0 +1,133 @@
+default_watchdogs:
+  ## Platform ##
+  - base_config:
+      components: ['platform']
+      enabled: true
+      name: platform_odom_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /platform/odom
+  - base_config:
+      components: [ 'platform' ]
+      enabled: true
+      name: platform_bms_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /platform/bms/state
+    qos: SensorState
+  ## XVN ##
+  # - base_config:
+  #     components: ['ros']
+  #     enabled: true
+  #     name: xvn_node
+  #     on_trigger_action: stop
+  #     type: NodeStatusWatchdog
+  #   node_name: /xvn
+  #   num_requests: 1
+  - base_config:
+      components: [ 'networking' ]
+      enabled: true
+      name: xvn_ping
+      on_trigger_action: pause
+      type: CommunicationWatchdog
+    interface: ''
+    ip: 192.168.131.35
+    protocol: ip
+    timeout: 5
+  - base_config:
+      components: ['ros']
+      enabled: true
+      name: xvn_gnss1_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /sensors/ins_0/gps_0/fix
+  - base_config:
+      components: ['ros']
+      enabled: true
+      name: xvn_gnss2_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /sensors/ins_0/gps_1/fix
+  - base_config:
+      components: [ 'ros' ]
+      enabled: true
+      name: xvn_imu_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /sensors/ins_0/imu/data
+  - base_config:
+      components: ['navigation']
+      enabled: true
+      name: xvn_imu_inclination
+      on_trigger_action: pause
+      type: InclinationWatchdog
+    topic: /sensors/ins_0/imu/data
+    roll_limit: 30
+    pitch_limit: 30
+    delay: 2.0
+  ## LiDAR ##
+  # - base_config:
+  #     components: ['ros']
+  #     enabled: true
+  #     name: robin_w__node
+  #     on_trigger_action: stop
+  #     type: NodeStatusWatchdog
+  #   node_name: /robin_w
+  #   num_requests: 1
+  - base_config:
+      components: [ 'networking' ]
+      enabled: true
+      name: ouster_ping
+      on_trigger_action: pause
+      type: CommunicationWatchdog
+    interface: ''
+    ip: 192.168.131.20
+    protocol: ip
+    timeout: 5
+  - base_config:
+      components: [ 'ros' ]
+      enabled: true
+      name: ouster_pointcloud_topic
+      on_trigger_action: pause
+      type: TopicDataWatchdog
+    timeout: 5
+    topic: /sensors/lidar3d_0/pointcloud
+  - base_config:
+      components: [ 'collision_avoidance' ]
+      enabled: true
+      name: ouster_num_points
+      on_trigger_action: pause
+      type: NumPointsWatchdog
+    topic: /sensors/lidar3d_0/pointcloud
+    threshold: 10
+  # - base_config:
+  #     components: [ 'collision_avoidance' ]
+  #     enabled: true
+  #     name: collision_avoidance_trigger
+  #     on_trigger_action: pause
+  #     type: TriggerWatchdog
+  #   timeout: 5
+  #   topic: /navigation/collision_avoidance/state
+  #   condition: false
+  ## UI ##
+  # - base_config:
+  #     components: [ 'ros' ]
+  #     enabled: true
+  #     name: ui_node
+  #     on_trigger_action: pause
+  #     type: NodeStatusWatchdog
+  #   node_name: /rosbridge_websocket
+  #   num_requests: 1
+  - base_config:
+      components: ['ros']
+      enabled: true
+      name: ui_heartbeat
+      on_trigger_action: pause
+      type: HeartbeatWatchdog
+    topic: /ui/heartbeat
+    timeout: 3.0

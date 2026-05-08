@@ -1,0 +1,119 @@
+meta:
+  last_updated: '2025-11-07T15:28:43.822824'
+  path: /opt/onav/data/.watchdogs_config.yaml
+  version: 0.0.1
+watchdogs:
+- base_config:
+    components:
+    - platform
+    enabled: false
+    name: platform_odom_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /platform/odom
+- base_config:
+    components:
+    - platform
+    enabled: false
+    name: platform_bms_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /platform/bms/state
+- base_config:
+    components:
+    - networking
+    enabled: true
+    name: xvn_ping
+    on_trigger_action: pause
+    type: CommunicationWatchdog
+  interface: ''
+  ip: 192.168.131.35
+  protocol: ip
+  timeout: 5.0
+- base_config:
+    components:
+    - ros
+    enabled: false
+    name: xvn_gnss1_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /sensors/ins_0/gps_0/fix
+- base_config:
+    components:
+    - ros
+    enabled: false
+    name: xvn_gnss2_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /sensors/ins_0/gps_1/fix
+- base_config:
+    components:
+    - ros
+    enabled: false
+    name: xvn_imu_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /sensors/ins_0/imu/data
+- base_config:
+    components:
+    - navigation
+    enabled: false
+    name: xvn_imu_inclination
+    on_trigger_action: pause
+    type: InclinationWatchdog
+  delay: 2.0
+  pitch_limit: 30.0
+  qos: ''
+  roll_limit: 30.0
+  topic: /sensors/ins_0/imu/data
+- base_config:
+    components:
+    - networking
+    enabled: true
+    name: robin_w_ping
+    on_trigger_action: pause
+    type: CommunicationWatchdog
+  interface: ''
+  ip: 192.168.131.25
+  protocol: ip
+  timeout: 5.0
+- base_config:
+    components:
+    - ros
+    enabled: false
+    name: robin_w_pointcloud_topic
+    on_trigger_action: pause
+    type: TopicDataWatchdog
+  qos: ''
+  timeout: 5.0
+  topic: /sensors/lidar3d_0/pointcloud
+- base_config:
+    components:
+    - collision_avoidance
+    enabled: false
+    name: robin_w_num_points
+    on_trigger_action: pause
+    type: NumPointsWatchdog
+  qos: ''
+  threshold: 10
+  topic: /sensors/lidar3d_0/pointcloud
+- base_config:
+    components:
+    - ros
+    enabled: false
+    name: ui_heartbeat
+    on_trigger_action: pause
+    type: HeartbeatWatchdog
+  qos: ''
+  timeout: 3.0
+  topic: /ui/heartbeat

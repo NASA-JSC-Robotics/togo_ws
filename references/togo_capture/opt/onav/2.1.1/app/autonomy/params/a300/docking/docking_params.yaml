@@ -1,0 +1,60 @@
+/**:
+  ros__parameters:
+    dock_manager:
+      scan_topic: 'sensors/lidar2d_0/scan_filtered'
+      storage_path: '/opt/onav/data/docks.yaml'
+      dock_templates: [ 'a300_side_dock' ]
+      a300_side_dock:
+        target_name: 'side_dock_target'
+        # Transform stackup
+        # --- target->transmitter = 13.5 cm
+        # --- transmitter->receiver = 2 cm (ideally 2-4 cm)
+        # --- receiver->hokuyo = 5 cm
+        # --- hokuyo -> base = 28.75 cm
+        # --- [sum] target->base = 49.25 cm
+        T_target_dock: {x: -0.055, y: 0.4925, yaw: 0.0}
+        T_dock_predock: {x: -1.5, y: 0.0, yaw: 0.3}
+        T_dock_undock: {x: -1.5, y: 0.0, yaw: 0.0}
+
+    docking_server:
+      scan_topic: 'sensors/lidar2d_0/scan_filtered'
+      forward_speed: 0.2
+      reverse_speed: -0.2
+      target_detection_timeout: 30.0
+      target_tracking_timeout: 3.0
+      docking_timeout: 20.0
+      docking_xy_tolerance: 0.05
+      control_frequency: 10.0
+
+    target_tracker:
+      scan_topic: 'sensors/lidar2d_0/scan_filtered'
+      tracking_frequency: 10.0
+      targets: [ 'side_dock_target', 'side_dock_target_single' ]
+      ## Targets
+      side_dock_target:
+        map_resolution: 0.02
+        validation_threshold: 0.8
+        target_distance_threshold: 1.0
+        target_delta_distance_threshold: 0.3
+        pcd_path: '/opt/onav/app/autonomy/params/a300/docking/a300_side_dock_target.pcd'
+
+      scan_matcher:
+        max_connected_distance: 0.0
+        levels: ['level_0', 'level_1']
+        mask_out_of_range: true
+        motion_filter_mask: 255
+        penalize_covariance_with_score: false
+        step: 2
+        uniform_scan: true
+        search_size: 0.1
+        resolution: 0.01
+        level_0:
+          angle_search_size: !degrees 1.0
+          angle_resolution: !degrees 0.1
+          gaussian_kernel_std: 0.03
+          scan_max_points: 9999999
+        level_1:
+          angle_search_size: !degrees 10.0
+          angle_resolution: !degrees 1.0
+          gaussian_kernel_std: 0.015
+          scan_max_points: 9999999

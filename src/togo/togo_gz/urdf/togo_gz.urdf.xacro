@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="togo">
+
+  <xacro:arg name="ns" default=""/>
+  <!-- Gazebo controller configs -->
+  <xacro:arg name="gazebo_controller_configs" default="$(find togo_gz)/config/gazebo_controllers.yaml"/>
+
+  <!-- include description -->
+  <xacro:include filename="$(find togo_description)/urdf/togo_macro.xacro"/>
+  <!-- include Gazebo ROS2 control -->
+  <xacro:include filename="$(find togo_gz)/urdf/togo_gz.ros2_control.xacro"/>
+  <!-- include Gazebo plugins -->
+  <xacro:include filename="$(find togo_gz)/urdf/pose_publisher_gz.xacro"/>
+
+  <!-- if ignition or gazebo - need to use absolute paths instead of relative-->
+  <!-- <xacro:property name="force_abs_paths" value="$(arg is_sim)" scope="global" /> -->
+
+  <!-- robot -->
+  <xacro:togo/>
+
+  <!-- ROS2 control -->
+  <xacro:togo_gz_ros2_control
+    ns="$(arg ns)"
+    gazebo_controller_configs="$(arg gazebo_controller_configs)"
+  />
+
+  <!-- Gazebo plugins -->
+  <xacro:togo_gz_pose_publisher/>
+
+</robot>

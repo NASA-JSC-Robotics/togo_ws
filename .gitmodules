@@ -1,18 +1,9 @@
-[submodule "src/togo"]
-	path = src/togo
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo.git
 [submodule "src/external/fixposition_driver"]
 	path = src/external/fixposition_driver
 	url = https://github.com/fixposition/fixposition_driver.git
 [submodule "src/external/seyond_ros_driver"]
 	path = src/external/seyond_ros_driver
 	url = https://github.com/Seyond-Inc/seyond_ros_driver.git
-[submodule "references/documentation"]
-	path = references/documentation
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/documentation.git
-[submodule "references/togo_capture"]
-	path = references/togo_capture
-	url = git@gitlab-fsl.jsc.nasa.gov:lunarsurfaceopnav/togo/togo_capture.git
 [submodule "references/clearpath/clearpath_common"]
 	path = references/clearpath/clearpath_common
 	url = https://github.com/clearpathrobotics/clearpath_common.git

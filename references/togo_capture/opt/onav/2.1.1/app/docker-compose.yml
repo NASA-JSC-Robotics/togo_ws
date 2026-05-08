@@ -1,0 +1,165 @@
+x-config-common: &config-common
+  restart: always
+  ipc: host
+  network_mode: "host"
+
+services:
+  onav-autonomy:
+    <<: *config-common
+    image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+      cpr-onav-autonomy:2.1.1"
+    command: ros2 launch /opt/onav/app/docker/launch/onav_autonomy.launch.py
+    profiles: ["outdoornav", "autonomy"]
+    volumes:
+      - ../app:/opt/onav/app
+      - ../config:/opt/onav/config
+      - ../data:/opt/onav/data
+      - /etc/clearpath:/etc/clearpath
+      - /opt/onav/missions:/opt/onav/missions
+      - /opt/onav/logs/log:/opt/onav/log
+      - /opt/onav/logs/metrics:/opt/onav/metric_data
+      - /opt/onav/saved_files/media:/opt/onav/saved_files/media
+    environment:
+      - START_DELAY_SECONDS=60
+
+  onav-safety:
+    <<: *config-common
+    image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+      cpr-outdoornav-base:2.1.1"
+    command: ros2 launch /opt/onav/app/docker/launch/onav_safety.launch.py
+    profiles: ["outdoornav", "teleop", "safety"]
+    volumes:
+      - ../app:/opt/onav/app
+      - ../config:/opt/onav/config
+      - ../data:/opt/onav/data
+      - /etc/clearpath:/etc/clearpath
+      - /opt/onav/logs/log:/opt/onav/log
+    environment:
+      - START_DELAY_SECONDS=90
+
+  onav-sensors:
+    <<: *config-common
+    image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+      cpr-outdoornav-base:2.1.1"
+    command: ros2 launch /opt/onav/app/docker/launch/onav_sensors.launch.py
+    profiles: ["outdoornav", "teleop", "sensors"]
+    volumes:
+      - ../app:/opt/onav/app
+      - ../config:/opt/onav/config
+      - ../data:/opt/onav/data
+      - /etc/clearpath:/etc/clearpath
+      - /opt/onav/logs/log:/opt/onav/log
+      - /opt/onav/saved_files/media:/opt/onav/saved_files/media
+      - /dev/clearpath:/dev/clearpath
+    privileged: true
+    group_add:
+      - '29'
+    devices:
+      - /dev:/dev
+    environment:
+      - START_DELAY_SECONDS=60
+
+  onav-web-ros:
+    <<: *config-common
+    image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+      cpr-outdoornav-base:2.1.1"
+    command: ros2 launch /opt/onav/app/docker/launch/onav_ui.launch.py
+    profiles: ["outdoornav", "teleop", "ui"]
+    volumes:
+      - ../app:/opt/onav/app
+      - ../config:/opt/onav/config
+      - ../data:/opt/onav/data
+      - /etc/clearpath:/etc/clearpath
+      - /opt/onav/logs/log:/opt/onav/log
+      - /opt/onav/saved_files/media:/opt/onav/saved_files/media
+      - /opt/onav/saved_files/rosbags:/opt/onav/rosbag_data
+    environment:
+      - START_DELAY_SECONDS=20
+      - ROS_SUPER_CLIENT=true
+
+  onav-web:
+    image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+      outdoor-nav-react:2.1.1"
+    restart: always
+    profiles: ["outdoornav", "teleop", "ui"]
+    volumes:
+      - ../app:/opt/onav/app
+      - ../config:/opt/onav/config
+      - ../data:/opt/onav/data
+      - ../data/.outdoor-nav-react/storage:/opt/outdoor-nav-react/storage
+      - ../data/.outdoor-nav-react/eula:/opt/outdoor-nav-react/eula
+      - /etc/clearpath:/etc/clearpath
+      - /opt/onav/missions:/opt/onav/missions
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - START_DELAY_SECONDS=90
+      - PORT=5000
+      - ROS_BRIDGE_IP=host.docker.internal
+    depends_on:
+      - filebrowser
+
+  nginx-dep:
+    image: nginx:alpine
+    profiles: ["never"]
+  nginx:
+    restart: always
+    build:
+        context: ./docker/nginx
+    profiles: ["outdoornav", "teleop", "ui"]
+    depends_on:
+      - onav-web
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+    ports:
+        - "80:80"
+
+  dozzle:
+    image: amir20/dozzle:latest
+    restart: always
+    environment:
+      - DOZZLE_BASE=/_/logs
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 5200:8080
+
+  filebrowser:
+    image: "filebrowser/filebrowser:v2.32.3"
+    restart: always
+    ports:
+      - "5300:80"
+    volumes:
+      - /opt/onav/saved_files:/opt/onav/saved_files
+      - /opt/onav/logs:/opt/onav/logs
+      - /opt/onav/2.1.1:/opt/onav/2.1.1
+      - ./docker/filebrowser/filebrowser.json:/.filebrowser.json
+      - ./docker/filebrowser/branding:/branding
+      - ./docker/filebrowser/filebrowser.db:/database.db
+      - /etc/clearpath/robot.yaml:/opt/onav/robot.yaml
+      - /opt/onav/missions:/opt/onav/missions
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles: ["outdoornav", "ui"]
+
+  # onav-foxglove:
+  #   image: "public.ecr.aws/m7r3b2t3/foxglove-studio:latest"
+  #   restart: always
+  #   profiles: ["outdoornav", "ui", "autonomy"]
+  #   ports:
+  #     - 5100:8080
+  #   volumes:
+  #     - ./docker/nginx/foxglove-layout.json:/foxglove/default-layout.json
+
+  # onav-code:
+  #   <<: *config-common
+  #   image: "${DOCKER_PREFIX-harbor.clearpathrobotics.com/gps-navigation}/\
+  #     cpr-onav-vscode:ros2"
+  #   container_name: onav-code
+  #   volumes:
+  #     - ../config:/home/ros/workspace/onav/config
+  #     - ../app:/home/ros/workspace/onav/app
+  #     - ../data:/home/ros/workspace/onav/data
+  #     - /etc/clearpath/robot.yaml:/home/ros/workspace/robot.yaml
+  #     - /opt/onav/logs/log:/opt/onav/log
+  #   profiles: ["code"]

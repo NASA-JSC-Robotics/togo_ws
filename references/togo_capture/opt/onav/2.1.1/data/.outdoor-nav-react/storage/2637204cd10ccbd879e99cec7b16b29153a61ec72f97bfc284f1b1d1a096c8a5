@@ -1,0 +1,65 @@
+{
+  "key": "defaultState",
+  "value": {
+    "settings": {
+      "displayLatLon": false,
+      "saveImagesLocally": true,
+      "displayDatum": true,
+      "map": {
+        "offset": [
+          0,
+          0
+        ],
+        "source": 0,
+        "keyOrUrl": ""
+      },
+      "logging": {
+        "pointCloud": false,
+        "signalStrength": false,
+        "diagnostics": false,
+        "inspectionCamera": false,
+        "driveCamera": false,
+        "odometry": false
+      },
+      "isGPSOnly": false,
+      "showAutonomyModeControls": false,
+      "enableAudioTasks": false,
+      "useCellService": false,
+      "isLowPowerMode": false,
+      "isInNetworkMode": true,
+      "version": "2.1.1",
+      "hasMapView": true,
+      "posDisplayed": true,
+      "dirDisplayed": true,
+      "fusDisplayed": true
+    },
+    "joystick": {
+      "enabled": true,
+      "linear_velocity": 1,
+      "angular_velocity": 0.5,
+      "location": "right",
+      "max_linear_velocity": 1,
+      "max_angular_velocity": 0.5,
+      "default_linear_velocity": 1,
+      "default_angular_velocity": 0.5
+    },
+    "velocityDial": {
+      "enabled": true,
+      "min_velocity": 0,
+      "max_velocity": 2,
+      "vel_topic": "/odometry/filtered",
+      "value": 0
+    },
+    "watchedTopics": [],
+    "views": {
+      "0": {
+        "id": 0,
+        "type": "MAP",
+        "title": "Satellite",
+        "url": "/"
+      }
+    },
+    "batteryTopic": "/a300_00058/platform/bms/battery_0/state",
+    "teleopLockedOut": true
+  }
+}

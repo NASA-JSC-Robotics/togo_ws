@@ -1,0 +1,2 @@
+# UBLOX ZED-F9P / ZED-F9K
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a9", MODE="0666", GROUP="plugdev", SYMLINK+="ublox"

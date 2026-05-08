@@ -1,0 +1,39 @@
+/**:
+  ros__parameters:
+    log_directory: /opt/onav/missions
+    regex_match:
+      - ins
+      - odom
+      - bms
+      - cmd_vel
+      - media_capture
+      - mcu
+      - motor
+      - autonomy
+      - wiferion
+      - localization
+      - emergency_stop
+      - mission_manager
+      - docking
+      - log_manager
+      - xvn
+      - ccma
+    topic_match:
+      - /rosout
+      - /${ROBOT}/tf
+      - /${ROBOT}/tf_static
+      - /${ROBOT}/diagnostics
+      - /${ROBOT}/diagnostics_agg
+      - /${ROBOT}/map
+      - /${ROBOT}/plan
+      - /${ROBOT}/plan_smoothed
+      - /${ROBOT}/transformed_global_plan
+      - /${ROBOT}/optimal_trajectory
+      - /${ROBOT}/local_costmap/costmap
+      - /${ROBOT}/local_costmap/footprint      
+      - /${ROBOT}/global_costmap/costmap
+      - /${ROBOT}/global_costmap/footprint
+      - /${ROBOT}/robot_description
+      - /${ROBOT}/speed_limit
+      - /${ROBOT}/behavior_tree_log
+      - /${ROBOT}/critic_scores
