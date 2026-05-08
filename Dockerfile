@@ -1,6 +1,12 @@
 # Set desired ROS distribution
 ARG ROS_DISTRO=jazzy
 
+# The base image for the overlay deployment
+# These must be overridden from the local .env if using this workflow.
+ARG ROS_WS_BASE_IMAGE_TAG="latest"
+ARG ROS_WS_BASE_IMAGE="togo_docker_ws-dev"
+ARG ROS_WS_BASE_IMAGE="${ROS_WS_BASE_IMAGE}:${ROS_WS_BASE_IMAGE_TAG}"
+
 # This layer grabs package manifests from the src directory for preserving rosdep installs.
 # This can significantly speed up rebuilds for the base package when src contents have changed.
 FROM alpine:latest AS package-manifests
@@ -74,6 +80,12 @@ RUN groupadd -g ${USER_GID} ${USERNAME} \
         ${ER4_WS}/install \
         ${ER4_WS}/log && \
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
+
+# Add clearpath rosdeps and apt packages so that we can pull non-ros-standard clearpath ros packages
+RUN wget -q https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
+    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list && \
+    wget https://packages.clearpathrobotics.com/public.key -O - | sudo apt-key add - && \
+    sudo bash -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu noble main" > /etc/apt/sources.list.d/clearpath-latest.list'
 
 # Configure and install MuJoCo using the defaults for the MuJoCo drivers.
 # We use MuJoCo in many systems so we just install the drivers in the base workspace.
@@ -153,3 +165,23 @@ ARG USERNAME
 
 RUN . /opt/ros/${ROS_DISTRO}/setup.bash && \
     colcon build
+
+FROM ${ROS_WS_BASE_IMAGE} AS er4-robot
+
+ARG USERNAME
+ARG USER_UID
+ARG USER_GID
+
+USER root
+
+RUN OLD_UID=$(id -u ${USERNAME}) && \
+    OLD_GID=$(id -g ${USERNAME}) && \
+    if [ "${OLD_UID}" != "${USER_UID}" ] || [ "${OLD_GID}" != "${USER_GID}" ]; then \
+        sed -i "s/^\(${USERNAME}:[^:]*:\)[^:]*:[^:]*:/\1${USER_UID}:${USER_GID}:/" /etc/passwd && \
+        sed -i "s/^\(${USERNAME}:[^:]*:\)[^:]*:/\1${USER_GID}:/" /etc/group && \
+        find /home/${USERNAME} \
+            \( -user ${OLD_UID} -o -group ${OLD_GID} \) \
+            -print0 | xargs -0 -P $(nproc) -n 1000 chown ${USER_UID}:${USER_GID}; \
+    fi
+
+USER ${USERNAME}
