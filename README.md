@@ -66,9 +66,15 @@ Once you're attached to the container, built the workspace as normal:
 colcon build
 ```
 
-This workspace depends drivers for several sensors, namely fixposition and seyond.  These packages will complain when building, and will include messages marked "fatal".  Ignore this; the build should complete just fine, the packages are just whiny.
+This workspace depends drivers for several sensors, namely fixposition and seyond.
+These packages will complain when building, and will include messages marked "fatal".
+Ignore this; the build should complete just fine, the packages are just whiny.
 
-For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.  These are handled by the `pre_build.sh` script run before building the docker images.  By the time you attach to the container, these packages can be built as expected within a ROS workspace.
+For awareness, both the [fixposition](https://docs.fixposition.com/fd/installation-and-usage#Installationandusage-a%29SetupdriverforanexistingROSworkspace) and [seyond](https://github.com/Seyond-Inc/seyond_ros_driver/blob/main/src/seyond_lidar_ros/README.md#compile) require extra build steps.
+These are handled by the `pre_build.sh` script run before building the docker images.
+By the time you attach to the container, these packages can be built as expected within a ROS workspace.
+
+For more information on running applications refer to Togo's [README.md](./src/togo/README.md).
 
 ## Other Things to Note
 
