@@ -266,7 +266,11 @@ def generate_launch_description():
     nodes = [
         node_wireless_watcher,
         node_battery_state_control,
-        node_micro_ros_agent,
+        # NOTE for now, the micro-ROS agent gets started in its own docker container
+        # due to dependency versioning issues when installing in the Togo docker image.
+        # Until this is fixed, there is no need to launch the micro-ROS agent here,
+        # with the remainder of the Husky hardware comm nodes.
+        # node_micro_ros_agent,
         node_lighting_node,
         node_lynx_control,
         node_a300_fan_control,
