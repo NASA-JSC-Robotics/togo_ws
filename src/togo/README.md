@@ -197,12 +197,7 @@ ros2 launch togo_gz sim_gz.launch.py
 
 This launch file will launch the controls appropriately from the `togo_deploy` package using the Gazebo URDF in the `togo_gz` package.
 The Gazebo URDF instantiates the Togo macro in `togo_description` and adds the appropriate `ros2_control` plugins for Gazebo.
-
-You can view the simulated robot and sensor information in RViz:
-
-```bash
-ros2 launch togo_deploy robot_sensor_checkout.launch.py
-```
+This launch file will also automatically launch RViz to view the simulated robot and sensor information.
 
 Once Gazebo is running, you can publish velocity commands from the command line:
 
