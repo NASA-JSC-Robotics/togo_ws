@@ -13,41 +13,92 @@
 - ros_topic_name: "cmd_vel_unstamped"
   gz_topic_name: "cmd_vel_unstamped"
   ros_type_name: "geometry_msgs/msg/Twist"
-  gz_type_name: "ignition.msgs.Twist"
+  gz_type_name: "gz.msgs.Twist"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "imu_0/data_raw"
-  gz_topic_name: "sensors/imu_0/data_raw"
+# Front OAK-D camera
+- ros_topic_name: "/husky/sensors/front_oakd/rgb/camera_info"
+  gz_topic_name: "/sensors/camera_0/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/front_oakd/rgb/image_raw"
+  gz_topic_name: "/sensors/camera_0/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
+# - ros_topic_name: "/husky/sensors/front_oakd/aligned_depth_to_color/image_raw"
+#   gz_topic_name: "/sensors/camera_0/depth_image"
+#   ros_type_name: "sensor_msgs/msg/Image"
+#   gz_type_name: "gz.msgs.Image"
+#   direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/front_oakd/points"
+  gz_topic_name: "/sensors/camera_0/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# Rear OAK-D camera
+- ros_topic_name: "/husky/sensors/rear_oakd/rgb/camera_info"
+  gz_topic_name: "/sensors/camera_1/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/rear_oakd/rgb/image_raw"
+  gz_topic_name: "/sensors/camera_1/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
+# - ros_topic_name: "/husky/sensors/rear_oakd/aligned_depth_to_color/image_raw"
+#   gz_topic_name: "/sensors/camera_1/depth_image"
+#   ros_type_name: "sensor_msgs/msg/Image"
+#   gz_type_name: "gz.msgs.Image"
+#   direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/rear_oakd/points"
+  gz_topic_name: "/sensors/camera_1/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# Seyond LIDAR
+# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
+# - ros_topic_name: "/husky/sensors/seyond/scan"
+#   gz_topic_name: "/sensors/lidar3d_0/scan"
+#   ros_type_name: "sensor_msgs/msg/LaserScan"
+#   gz_type_name: "gz.msgs.LaserScan"
+#   direction: GZ_TO_ROS
+
+- ros_topic_name: "/iv_points"
+  gz_topic_name: "/sensors/lidar3d_0/scan/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# Phidgets IMU
+- ros_topic_name: "/husky/sensors/imu_0/data_raw"
+  gz_topic_name: "sensors/imu_0/data"
   ros_type_name: "sensor_msgs/msg/Imu"
-  gz_type_name: "ignition.msgs.IMU"
+  gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "gps_0/data_raw"
-  gz_topic_name: "/sensors/gps_0/data_raw"
+# FixPosition GPS
+# TODO Emily has no clue here...
+- ros_topic_name: "/husky/sensors/ins_0/gps_0/data_raw"
+  gz_topic_name: "/sensors/ins_0/gps_0/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
-  gz_type_name: "ignition.msgs.NavSat"
+  gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS
 
-# - ros_topic_name: "front_realsense/color/image_raw"
-#   gz_topic_name: "/sensors/front_realsense/image"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "ignition.msgs.Image"
-#   direction: GZ_TO_ROS
-
-# - ros_topic_name: "front_realsense/aligned_depth_to_color/image_raw"
-#   gz_topic_name: "/sensors/front_realsense/depth_image"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "ignition.msgs.Image"
-#   direction: GZ_TO_ROS
-
-# - ros_topic_name: "front_realsense/color/camera_info"
-#   gz_topic_name: "/sensors/front_realsense/camera_info"
-#   ros_type_name: "sensor_msgs/msg/CameraInfo"
-#   gz_type_name: "ignition.msgs.CameraInfo"
-#   direction: GZ_TO_ROS
-
-# - ros_topic_name: "front_realsense/depth/color/points"
-#   gz_topic_name: "/sensors/front_realsense/points"
-#   ros_type_name: "sensor_msgs/msg/PointCloud2"
-#   gz_type_name: "ignition.msgs.PointCloudPacked"
-#   direction: GZ_TO_ROS
+- ros_topic_name: "/husky/sensors/ins_0/gps_1/data_raw"
+  gz_topic_name: "/sensors/ins_0/gps_1/fix"
+  ros_type_name: "sensor_msgs/msg/NavSatFix"
+  gz_type_name: "gz.msgs.NavSat"
+  direction: GZ_TO_ROS
