@@ -43,6 +43,15 @@ Note the `2`! As this is intended to be isolated from your system.
 ./scripts/pre_build.sh
 ```
 
+We provide two Togo images, one for [local development](#development-image) and one for [development on hardware](#hardware-development-image).
+The images can be used the same way;
+the hardware container just includes different volume mounts and brings up the micro-ROS agent for Togo.
+
+Once you're attached to the container, you can use it as a regular colcon workspace (see [building the workspace](#building-the-togo-workspace)).
+The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src`.
+
+### Development Image
+
 Build the development image from the repo root, and then launch it:
 
 ```bash
@@ -53,11 +62,23 @@ docker compose build dev
 docker compose up dev -d
 
 # Connect to the console
-docker compose exec dev bash
+docker compose exec dev terminator
 ```
 
-Once you're attached to the container, you can use it as a regular colcon workspace.
-The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src`.
+### Hardware Development Image
+
+Build the hardware development image from the repo root, and then launch it:
+
+```bash
+# Compile the image
+docker compose build hw-dev
+
+# Start it; this container will automatically start the micro-ROS agent docker container as well
+docker compose up hw-dev -d
+
+# Connect to the console
+docker compose exec hw-dev terminator
+```
 
 ### Building the Togo Workspace
 
@@ -76,6 +97,7 @@ These are handled by the `pre_build.sh` script run before building the docker im
 By the time you attach to the container, these packages can be built as expected within a ROS workspace.
 
 For more information on running applications refer to Togo's [README.md](./src/togo/README.md).
+To get started, we recommend [Gazebo instructions](./src/togo/README.md#gazebo) for the dev image and [hardware instructions](./src/togo/README.md#deploy) for the hardware image.
 
 ## Other Things to Note
 
