@@ -83,7 +83,7 @@ we include a few convenient launch files for Togo's different operation modes.
         ros2 launch togo_deploy teleop.launch.py
         ```
 
-3. Start Togo's sensors (and related nodes, including the IMU filter and localization):
+3. Start Togo's sensors (and related nodes, including the IMU filter and localization) and view the robot and sensor data in RViz:
 
     ```bash
     ros2 launch togo_deploy togo_sensors.launch.py
@@ -197,6 +197,12 @@ ros2 launch togo_gz sim_gz.launch.py
 
 This launch file will launch the controls appropriately from the `togo_deploy` package using the Gazebo URDF in the `togo_gz` package.
 The Gazebo URDF instantiates the Togo macro in `togo_description` and adds the appropriate `ros2_control` plugins for Gazebo.
+
+You can view the simulated robot and sensor information in RViz:
+
+```bash
+ros2 launch togo_deploy robot_sensor_checkout.launch.py
+```
 
 Once Gazebo is running, you can publish velocity commands from the command line:
 
