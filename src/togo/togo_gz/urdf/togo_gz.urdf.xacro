@@ -11,6 +11,7 @@
   <xacro:include filename="$(find togo_gz)/urdf/togo_gz.ros2_control.xacro"/>
   <!-- include Gazebo plugins -->
   <xacro:include filename="$(find togo_gz)/urdf/pose_publisher_gz.xacro"/>
+  <xacro:include filename="$(find togo_gz)/urdf/sensors_gz.xacro"/>
 
   <!-- if ignition or gazebo - need to use absolute paths instead of relative-->
   <!-- <xacro:property name="force_abs_paths" value="$(arg is_sim)" scope="global" /> -->
@@ -26,5 +27,6 @@
 
   <!-- Gazebo plugins -->
   <xacro:togo_gz_pose_publisher/>
+  <xacro:togo_gz_sensors/>
 
 </robot>
