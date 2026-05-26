@@ -82,7 +82,7 @@ docker compose exec hw-dev terminator
 
 ### Building the Togo Workspace
 
-Once you're attached to the container, built the workspace as normal:
+Once you're attached to the container, build the workspace as normal:
 
 ```bash
 colcon build
