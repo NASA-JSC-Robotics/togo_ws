@@ -10,10 +10,19 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 
 # this is used by the telop panel in Gazebo
-- ros_topic_name: "cmd_vel_unstamped"
-  gz_topic_name: "cmd_vel_unstamped"
-  ros_type_name: "geometry_msgs/msg/Twist"
-  gz_type_name: "gz.msgs.Twist"
+# no longer used by velocity controller == must have stamped message
+#- ros_topic_name: "cmd_vel_unstamped"
+#  gz_topic_name: "cmd_vel_unstamped"
+#  ros_type_name: "geometry_msgs/msg/Twist"
+#  gz_type_name: "gz.msgs.Twist"
+#  direction: GZ_TO_ROS
+
+# can't use the gazebo teleop panel anymore the ros topic
+# will have to come from somewhere else
+- ros_topic_name: "cmd_vel"
+  gz_topic_name: "cmd_vel"
+  ros_type_name: "geometry_msgs/msg/TwistStamped"
+  gz_type_name: "gz.msgs.TwistStamped"
   direction: GZ_TO_ROS
 
 # Front OAK-D camera
@@ -29,12 +38,23 @@
   gz_type_name: "gz.msgs.Image"
   direction: GZ_TO_ROS
 
-# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
-# - ros_topic_name: "/husky/sensors/front_oakd/aligned_depth_to_color/image_raw"
-#   gz_topic_name: "/sensors/camera_0/depth_image"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "gz.msgs.Image"
-#   direction: GZ_TO_ROS
+# On hardware this is a depth image unless "i_output_disparity" is set
+# in the camera yaml, so these topics match
+ - ros_topic_name: "/husky/sensors/front_oakd/stereo/image_raw"
+   gz_topic_name: "/sensors/camera_0/depth_image"
+   ros_type_name: "sensor_msgs/msg/Image"
+   gz_type_name: "gz.msgs.Image"
+   direction: GZ_TO_ROS
+
+# Since the current camera yaml sets the pipeline to rgbd
+# and the image sizes for the depth image and the rgb image match,
+# the depth ("stereo") camera_info matches the rgb info
+# in practice, this is almost never used
+- ros_topic_name: "/husky/sensors/front_oakd/stereo/camera_info"
+  gz_topic_name: "/sensors/camera_0/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
 
 - ros_topic_name: "/husky/sensors/front_oakd/points"
   gz_topic_name: "/sensors/camera_0/points"
