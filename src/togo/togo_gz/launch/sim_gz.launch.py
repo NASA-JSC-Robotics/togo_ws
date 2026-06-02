@@ -130,7 +130,7 @@ def generate_launch_description():
         package="togo_gz",
         executable="gz_rgbd_point_fixer",
         name="gz_rgbd_point_fixer",
-        parameters=[rgbd_point_fix_config]
+        parameters=[rgbd_point_fix_config])
 
     # RViz
     rviz_launch = IncludeLaunchDescription(
