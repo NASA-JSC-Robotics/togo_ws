@@ -60,6 +60,7 @@ def generate_launch_description():
 
     # config files
     gz_bridge_config = PathJoinSubstitution([pkg_gazebo, "config", "bridge.yaml"])
+    rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
 
     # start world
     world_launch = IncludeLaunchDescription(
@@ -113,11 +114,23 @@ def generate_launch_description():
         }.items(),
     )
 
+    # fix the rgbd point clouds
+    
+    rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
+
+    gz_rgbd_point_fixer = Node(
+        package="togo_gz",
+        executable="gz_rgbd_point_fixer",
+        name="gz_rgbd_point_fixer",
+        parameters=[rgbd_point_fix_config]
+    )
+
     launches_nodes = [
         world_launch,
         gz_sim_node,
         gz_bridge_node,
         control_launch,
+        gz_rgbd_point_fixer,
     ]
 
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launches_nodes)
