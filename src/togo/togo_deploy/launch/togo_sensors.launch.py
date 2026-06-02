@@ -3,8 +3,9 @@ from launch_ros.actions import Node
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 
@@ -47,6 +48,11 @@ def generate_launch_description():
             "Will also launch IMU filter and localization, since they depend on IMU data.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rviz", default_value="true", description="Flag to start RViz for robot and sensor checkout."
+        )
+    )
 
     # Initialize Arguments
     launch_seyond = LaunchConfiguration("launch_seyond")
@@ -54,6 +60,7 @@ def generate_launch_description():
     launch_rear_oakd = LaunchConfiguration("launch_rear_oakd")
     launch_fixposition = LaunchConfiguration("launch_fixposition")
     launch_phidgets = LaunchConfiguration("launch_phidgets")
+    rviz = LaunchConfiguration("rviz")
     default_ns = "husky"
     sensor_ns = "husky/sensors"
 
@@ -227,6 +234,14 @@ def generate_launch_description():
         condition=IfCondition(launch_phidgets),
     )
 
+    # RViz
+    rviz_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([pkg_togo_deploy, "launch", "robot_sensor_checkout.launch.py"])
+        ),
+        condition=IfCondition(rviz),
+    )
+
     # LAUNCH DESCRIPTION
     sensor_launches = [
         seyond_node,
@@ -237,4 +252,4 @@ def generate_launch_description():
     ]
     sensor_dependent_nodes = [node_localization]
 
-    return LaunchDescription(declared_arguments + sensor_launches + sensor_dependent_nodes)
+    return LaunchDescription(declared_arguments + sensor_launches + sensor_dependent_nodes + [rviz_launch])

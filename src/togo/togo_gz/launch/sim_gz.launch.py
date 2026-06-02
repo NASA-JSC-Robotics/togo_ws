@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node, PushRosNamespace
@@ -46,6 +47,11 @@ def generate_launch_description():
             description="Initial Z-position of the robot when spawned into Gazebo",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "rviz", default_value="true", description="Flag to start RViz for robot and sensor checkout."
+        )
+    )
 
     # initialize arguments
     tf_prefix = LaunchConfiguration("tf_prefix")
@@ -53,6 +59,7 @@ def generate_launch_description():
     x = LaunchConfiguration("robot_x")
     y = LaunchConfiguration("robot_y")
     z = LaunchConfiguration("robot_z")
+    rviz = LaunchConfiguration("rviz")
 
     # include packages
     pkg_deploy = FindPackageShare("togo_deploy")
@@ -114,6 +121,7 @@ def generate_launch_description():
         }.items(),
     )
 
+
     # fix the rgbd point clouds
     
     rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
@@ -123,6 +131,14 @@ def generate_launch_description():
         executable="gz_rgbd_point_fixer",
         name="gz_rgbd_point_fixer",
         parameters=[rgbd_point_fix_config]
+
+    # RViz
+    rviz_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([pkg_deploy, "launch", "robot_sensor_checkout.launch.py"])
+        ),
+        condition=IfCondition(rviz),
+
     )
 
     launches_nodes = [
@@ -131,6 +147,7 @@ def generate_launch_description():
         gz_bridge_node,
         control_launch,
         gz_rgbd_point_fixer,
+        rviz_launch,
     ]
 
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launches_nodes)
