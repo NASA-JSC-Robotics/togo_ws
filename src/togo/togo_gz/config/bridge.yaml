@@ -102,7 +102,7 @@
 #   direction: GZ_TO_ROS
 
 # Seyond LIDAR
-- ros_topic_name: "/iv_points"
+- ros_topic_name: "husky/sensors/seyond/points"
   gz_topic_name: "/sensors/lidar3d_0/scan/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"
