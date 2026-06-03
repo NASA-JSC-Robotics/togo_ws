@@ -12,8 +12,8 @@ Note the `2`! As this is intended to be isolated from your system.
 
 1) Install Docker
     - Don't worry about Docker Desktop
-    - For Ubuntu recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
-    - After running the utility script, you should run the [post-installation steps for linux](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user), which helps manage the user settings and running without root access.
+    - For installing docker on Ubuntu recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script) (If you already have docker installed, it may be OK to skip this step)
+    - After running the utility script, you should run the [post-installation steps for linux](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user), which helps manage the user settings and running without root access. (Most important - make sure you are in the computer's `docker` usergroup; `sudo usermod -aG docker $USER`)
 2) ***VERY IMPORTANT*** Recursively initialize all submodules.  Note that the fixposition and seyond driver packages contain many nested submodules, so the `--recursive` flag is ***critical***.
 
     ```bash
@@ -61,8 +61,11 @@ docker compose build dev
 # Start it
 docker compose up dev -d
 
-# Connect to the console
+# Connect to the console using X forwarding:
 docker compose exec dev terminator
+
+# Connect to the console just in bash
+docker compose exec dev bash
 ```
 
 ### Hardware Development Image
