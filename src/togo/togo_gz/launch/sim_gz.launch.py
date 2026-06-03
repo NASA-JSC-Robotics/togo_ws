@@ -67,6 +67,7 @@ def generate_launch_description():
 
     # config files
     gz_bridge_config = PathJoinSubstitution([pkg_gazebo, "config", "bridge.yaml"])
+    rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
 
     # start world
     world_launch = IncludeLaunchDescription(
@@ -120,12 +121,24 @@ def generate_launch_description():
         }.items(),
     )
 
+
+    # Republishes the rgbd point clouds with the correct transforms
+    # https://github.com/gazebosim/gz-sensors/issues/545
+    rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
+
+    gz_rgbd_point_fixer = Node(
+        package="togo_gz",
+        executable="gz_rgbd_point_fixer",
+        name="gz_rgbd_point_fixer",
+        parameters=[rgbd_point_fix_config])
+
     # RViz
     rviz_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([pkg_deploy, "launch", "robot_sensor_checkout.launch.py"])
         ),
         condition=IfCondition(rviz),
+
     )
 
     launches_nodes = [
@@ -133,6 +146,7 @@ def generate_launch_description():
         gz_sim_node,
         gz_bridge_node,
         control_launch,
+        gz_rgbd_point_fixer,
         rviz_launch,
     ]
 

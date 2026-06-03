@@ -10,10 +10,19 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 
 # this is used by the telop panel in Gazebo
+# no longer used by velocity controller == must have stamped message
 - ros_topic_name: "cmd_vel_unstamped"
   gz_topic_name: "cmd_vel_unstamped"
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
+  direction: GZ_TO_ROS
+
+# can't use the gazebo teleop panel anymore the ros topic
+# will have to come from somewhere else
+- ros_topic_name: "cmd_vel"
+  gz_topic_name: "cmd_vel"
+  ros_type_name: "geometry_msgs/msg/TwistStamped"
+  gz_type_name: "gz.msgs.TwistStamped"
   direction: GZ_TO_ROS
 
 # Front OAK-D camera
@@ -29,20 +38,31 @@
   gz_type_name: "gz.msgs.Image"
   direction: GZ_TO_ROS
 
-# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
-# - ros_topic_name: "/husky/sensors/front_oakd/aligned_depth_to_color/image_raw"
-#   gz_topic_name: "/sensors/camera_0/depth_image"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "gz.msgs.Image"
-#   direction: GZ_TO_ROS
+# Since the current camera yaml sets the pipeline to rgbd
+# and the image sizes for the depth image and the rgb image match,
+# the depth ("stereo") camera_info matches the rgb info
+# in practice, this is almost never used
+- ros_topic_name: "/husky/sensors/front_oakd/stereo/camera_info"
+  gz_topic_name: "/sensors/camera_0/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
 
-- ros_topic_name: "/husky/sensors/front_oakd/points"
+# On hardware this is a depth image unless "i_output_disparity" is set
+# in the camera yaml, so these topics match
+- ros_topic_name: "/husky/sensors/front_oakd/stereo/image_raw"
+  gz_topic_name: "/sensors/camera_0/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/front_oakd/broken/points"
   gz_topic_name: "/sensors/camera_0/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
-# Rear OAK-D camera
+## Rear OAK-D camera
 - ros_topic_name: "/husky/sensors/rear_oakd/rgb/camera_info"
   gz_topic_name: "/sensors/camera_1/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
@@ -55,20 +75,25 @@
   gz_type_name: "gz.msgs.Image"
   direction: GZ_TO_ROS
 
-# TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
-# - ros_topic_name: "/husky/sensors/rear_oakd/aligned_depth_to_color/image_raw"
-#   gz_topic_name: "/sensors/camera_1/depth_image"
-#   ros_type_name: "sensor_msgs/msg/Image"
-#   gz_type_name: "gz.msgs.Image"
-#   direction: GZ_TO_ROS
+- ros_topic_name: "/husky/sensors/rear_oakd/stereo/camera_info"
+  gz_topic_name: "/sensors/camera_1/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
 
-- ros_topic_name: "/husky/sensors/rear_oakd/points"
+- ros_topic_name: "/husky/sensors/front_oakd/stereo/image_raw"
+  gz_topic_name: "/sensors/camera_1/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/husky/sensors/rear_oakd/broken/points"
   gz_topic_name: "/sensors/camera_1/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
-# Seyond LIDAR
+
 # TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
 # - ros_topic_name: "/husky/sensors/seyond/scan"
 #   gz_topic_name: "/sensors/lidar3d_0/scan"
@@ -76,7 +101,8 @@
 #   gz_type_name: "gz.msgs.LaserScan"
 #   direction: GZ_TO_ROS
 
-- ros_topic_name: "/iv_points"
+# Seyond LIDAR
+- ros_topic_name: "husky/sensors/seyond/points"
   gz_topic_name: "/sensors/lidar3d_0/scan/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"

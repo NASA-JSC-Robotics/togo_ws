@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="togo_gz_sensors">
     <gazebo>
-      <plugin filename="libignition-gazebo-sensors-system.so" name="ignition::gazebo::systems::Sensors">
+      <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
         <!-- this plugin allows all of the Gazebo <sensor> tags in the URDF to be processed! -->
       </plugin>
       <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu">
