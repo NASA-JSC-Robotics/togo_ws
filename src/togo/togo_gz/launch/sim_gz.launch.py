@@ -122,8 +122,8 @@ def generate_launch_description():
     )
 
 
-    # fix the rgbd point clouds
-    
+    # Republishes the rgbd point clouds with the correct transforms
+    # https://github.com/gazebosim/gz-sensors/issues/545
     rgbd_point_fix_config = PathJoinSubstitution([pkg_gazebo, "config", "rgbd_point_fix.yaml"])
 
     gz_rgbd_point_fixer = Node(
