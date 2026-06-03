@@ -38,10 +38,11 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
           subscriber = this->create_subscription<sensor_msgs::msg::PointCloud2>(
                 in_topics[idx], 10,
                 bound_callback_func);
-          publisher = this->create_publisher<sensor_msgs::msg::PointCloud2>(out_topics[idx], 10);
+          publisher = this->create_publisher<sensor_msgs::msg::PointCloud2>(out_topics[idx], rclcpp::SensorDataQoS());
           subscribers_.push_back(subscriber);
           publishers_.push_back(publisher);
         }
+        RCLCPP_FATAL(this->get_logger(), "GzRgbdPointCloudFixer does not have equal numbers of in/out cloud topics -- it will not publish clouds!");
       }
         
                   
@@ -53,9 +54,9 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
       transform_.transform.rotation.z = q.z();
       transform_.transform.rotation.w = q.w();
 
-      transform_.transform.translation.x = 0.0;
+      transform_.transform.translation.x = 0.0; // translation does not change
       transform_.transform.translation.y = 0.0;
-      transform_.transform.translation.z = 0.08;
+      transform_.transform.translation.z = 0.0;
 
       transform_.child_frame_id = "child"; // this is just a dummy -- pointcloud will retain it's header
       transform_.header.frame_id = "parent";
