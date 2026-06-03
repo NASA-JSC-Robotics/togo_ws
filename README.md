@@ -62,7 +62,7 @@ docker compose build dev
 # Start it
 docker compose up dev -d
 
-# Connect to the console using X forwarding:
+# Connect to the console by launching a terminator session (requires a display):
 docker compose exec dev terminator
 
 # Connect to the console just in bash
