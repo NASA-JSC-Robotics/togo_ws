@@ -16,10 +16,10 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
     GzRgbdPointCloudFixer()
     : Node("gz_rgbd_fixer")
     {
-      
+
       declare_parameter<std::vector<std::string>>("in_topics", {"in"});
       declare_parameter<std::vector<std::string>>("out_topics", {"out"});
-        
+
         // Retrieve the value
       std::vector<std::string> in_topics = this->get_parameter("in_topics").as_string_array();
       std::vector<std::string> out_topics = this->get_parameter("out_topics").as_string_array();
@@ -42,10 +42,13 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
           subscribers_.push_back(subscriber);
           publishers_.push_back(publisher);
         }
+      }
+      else
+      {
         RCLCPP_FATAL(this->get_logger(), "GzRgbdPointCloudFixer does not have equal numbers of in/out cloud topics -- it will not publish clouds!");
       }
-        
-                  
+
+
       tf2::Quaternion q;
       q.setRPY( 0.0000, -1.5708,  1.5708);
 
@@ -61,30 +64,30 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
       transform_.child_frame_id = "child"; // this is just a dummy -- pointcloud will retain it's header
       transform_.header.frame_id = "parent";
     }
-      
+
 
   private:
-    void topic_callback(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_in, const int32_t& pub_idx) 
+    void topic_callback(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_in, const int32_t& pub_idx)
     {
-      
+
       sensor_msgs::msg::PointCloud2 cloud_out;
 
       transform_.header.stamp = cloud_in->header.stamp;
 
       tf2::doTransform(*cloud_in, cloud_out, transform_);
-        
+
       // cloud_out is now populated, but has the dummy header
       cloud_out.header = cloud_in->header;
 
-    
+
       publishers_[pub_idx]->publish(cloud_out);
-        
+
     }
 
 
     std::vector<rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr> subscribers_;
     std::vector<rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr> publishers_;
-    
+
     geometry_msgs::msg::TransformStamped transform_;
 };
 
