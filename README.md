@@ -69,6 +69,11 @@ docker compose exec dev terminator
 docker compose exec dev bash
 ```
 
+If multiple people are using this docker container on the same device, please do the following:
+1. Change line 5 of `docker-compose.yml` to: `togo_docker_ws_YOURNAME`
+1. Change the ROS Domain ID (line 34) to any number between 1 and 31 not already used by other  users. 
+1. Replace `docker compose` in the above commands with `docker compose -p YOURNAME_dev`. 
+
 ### Hardware Development Image
 
 Build the hardware development image from the repo root, and then launch it:
