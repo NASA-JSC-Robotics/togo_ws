@@ -1,0 +1,9 @@
+/**:
+  gz_rgbd_point_fixer:
+    ros__parameters:
+      in_topics:
+        - "/husky/sensors/front_oakd/broken/points"
+        - "/husky/sensors/rear_oakd/broken/points"
+      out_topics:
+        - "/husky/sensors/front_oakd/points"
+        - "/husky/sensors/rear_oakd/points"

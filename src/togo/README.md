@@ -83,7 +83,7 @@ we include a few convenient launch files for Togo's different operation modes.
         ros2 launch togo_deploy teleop.launch.py
         ```
 
-3. Start Togo's sensors (and related nodes, including the IMU filter and localization):
+3. Start Togo's sensors (and related nodes, including the IMU filter and localization) and view the robot and sensor data in RViz:
 
     ```bash
     ros2 launch togo_deploy togo_sensors.launch.py
@@ -197,6 +197,7 @@ ros2 launch togo_gz sim_gz.launch.py
 
 This launch file will launch the controls appropriately from the `togo_deploy` package using the Gazebo URDF in the `togo_gz` package.
 The Gazebo URDF instantiates the Togo macro in `togo_description` and adds the appropriate `ros2_control` plugins for Gazebo.
+This launch file will also automatically launch RViz to view the simulated robot and sensor information.
 
 Once Gazebo is running, you can publish velocity commands from the command line:
 
@@ -233,3 +234,26 @@ twist:
     z: 0.0
 '
 ```
+
+### Troubleshooting
+
+- Stuck on `Requesting list of world names.`
+
+If the simulation isn't starting and there are repeated entries in the log:
+
+```bash
+[INFO] [1780503451.665904613] [ros_gz_sim]: Requesting list of world names.
+```
+
+Gazebo has its own discovery server that is separate from DDS.
+In some development environments this can cause problems with the simulation connecting to the backend.
+You may need to manually configure the environment to use localhost, set:
+
+```bash
+export GZ_IP=127.0.0.1
+
+# Depending you may also need
+export GZ_PARTITION=$(hostname)
+```
+
+For more information refer to the [Gazebo Transport Docs](https://gazebosim.org/api/transport/14/envvars.html).

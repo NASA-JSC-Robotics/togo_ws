@@ -10,10 +10,12 @@ Note the `2`! As this is intended to be isolated from your system.
 
 ## Quick Development Setup
 
-1) Install Docker
+1) Install Docker, if it is not already available
     - Don't worry about Docker Desktop
-    - For Ubuntu recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
+    - For installing docker on Ubuntu we recommend using the [utility script](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
     - After running the utility script, you should run the [post-installation steps for linux](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user), which helps manage the user settings and running without root access.
+    - Most importantly - make sure you are in the computer's `docker` usergroup with `sudo usermod -aG docker $USER` (requires logging out/logging back in)
+
 2) ***VERY IMPORTANT*** Recursively initialize all submodules.  Note that the fixposition and seyond driver packages contain many nested submodules, so the `--recursive` flag is ***critical***.
 
     ```bash
@@ -43,6 +45,15 @@ Note the `2`! As this is intended to be isolated from your system.
 ./scripts/pre_build.sh
 ```
 
+We provide two Togo images, one for [local development](#development-image) and one for [development on hardware](#hardware-development-image).
+The images can be used the same way;
+the hardware container just includes different volume mounts and brings up the micro-ROS agent for Togo.
+
+Once you're attached to the container, you can use it as a regular colcon workspace (see [building the workspace](#building-the-togo-workspace)).
+The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src`.
+
+### Development Image
+
 Build the development image from the repo root, and then launch it:
 
 ```bash
@@ -52,16 +63,37 @@ docker compose build dev
 # Start it
 docker compose up dev -d
 
-# Connect to the console
+# Connect to the console by launching a terminator session (requires a display):
+docker compose exec dev terminator
+
+# Connect to the console just in bash
 docker compose exec dev bash
 ```
 
-Once you're attached to the container, you can use it as a regular colcon workspace.
-The contents of the `src/` directory will be mounted into `/home/er4-user/ws/src`.
+If multiple people are using this docker container on the same device, please do the following:
+
+1. Change line 5 of `docker-compose.yml` to: `togo_docker_ws_YOURNAME`
+1. Change the ROS Domain ID (line 34) to any number between 1 and 31 not already used by other  users.
+1. Replace `docker compose` in the above commands with `docker compose -p YOURNAME_dev`.
+
+### Hardware Development Image
+
+Build the hardware development image from the repo root, and then launch it:
+
+```bash
+# Compile the image
+docker compose build hw-dev
+
+# Start it; this container will automatically start the micro-ROS agent docker container as well
+docker compose up hw-dev -d
+
+# Connect to the console
+docker compose exec hw-dev terminator
+```
 
 ### Building the Togo Workspace
 
-Once you're attached to the container, built the workspace as normal:
+Once you're attached to the container, build the workspace as normal:
 
 ```bash
 colcon build
@@ -76,6 +108,7 @@ These are handled by the `pre_build.sh` script run before building the docker im
 By the time you attach to the container, these packages can be built as expected within a ROS workspace.
 
 For more information on running applications refer to Togo's [README.md](./src/togo/README.md).
+To get started, we recommend [Gazebo instructions](./src/togo/README.md#gazebo) for the dev image and [hardware instructions](./src/togo/README.md#deploy) for the hardware image.
 
 ## Other Things to Note
 
