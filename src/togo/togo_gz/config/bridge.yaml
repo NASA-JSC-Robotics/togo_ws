@@ -109,7 +109,7 @@
   direction: GZ_TO_ROS
 
 # Phidgets IMU
-- ros_topic_name: "/husky/sensors/imu_0/data_raw"
+- ros_topic_name: "/husky/sensors/phidgets/data_raw"
   gz_topic_name: "sensors/imu_0/data"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
@@ -117,13 +117,13 @@
 
 # FixPosition GPS
 # TODO Emily has no clue here...
-- ros_topic_name: "/husky/sensors/ins_0/gps_0/data_raw"
+- ros_topic_name: "/husky/sensors/fixposition/right_gps/fix"
   gz_topic_name: "/sensors/ins_0/gps_0/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "/husky/sensors/ins_0/gps_1/data_raw"
+- ros_topic_name: "/husky/sensors/fixposition/left_gps/fix"
   gz_topic_name: "/sensors/ins_0/gps_1/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
