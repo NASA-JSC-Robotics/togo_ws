@@ -40,7 +40,7 @@
 
       base_frame_id: base_link
       odom_frame_id: odom
-      enable_odom_tf: False
+      enable_odom_tf: True
       position_feedback: False
 
       linear.x:
