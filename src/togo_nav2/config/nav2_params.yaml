@@ -190,7 +190,7 @@ global_costmap:
       robot_base_frame: base_link
       footprint: "[ [0.495, 0.349], [0.495, -0.349], [-0.495, -0.349], [-0.495, 0.349] ]"
       rolling_window: true
-      width: 5
+      width: 50
       height: 50
       resolution: 0.25
       track_unknown_space: true
