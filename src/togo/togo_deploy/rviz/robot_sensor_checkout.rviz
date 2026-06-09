@@ -7,6 +7,9 @@ Panels:
         - /Global Options1
         - /Status1
         - /front_oakd_rgb1/Topic1
+        - /front_oakd_points1/Topic1
+        - /rear_oakd_points1
+        - /rear_oakd_points1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 547
   - Class: rviz_common/Selection
@@ -509,7 +512,7 @@ Visualization Manager:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
-        Reliability Policy: Reliable
+        Reliability Policy: Best Effort
         Value: /husky/sensors/front_oakd/points
       Use Fixed Frame: true
       Use rainbow: true
@@ -542,7 +545,7 @@ Visualization Manager:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
-        Reliability Policy: Reliable
+        Reliability Policy: Best Effort
         Value: /husky/sensors/rear_oakd/points
       Use Fixed Frame: true
       Use rainbow: true
