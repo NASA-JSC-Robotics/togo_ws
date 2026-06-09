@@ -49,14 +49,14 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "world_pkg",
-            default_value="togo_gz",
+            default_value="practice_worlds",
             description="Name of the package that has the world file",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "world",
-            default_value="togo_parking_lot_world.sdf",
+            default_value="obstacle_lot.sdf",
             description="Name of the world file; must exist in worlds/ directory of world_pkg",
         )
     )
