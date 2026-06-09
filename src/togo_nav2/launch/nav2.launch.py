@@ -54,62 +54,32 @@ from nav2_common.launch import RewrittenYaml
 ARGUMENTS = [
     DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
-                          description='Use sim time'),
-#    DeclareLaunchArgument('setup_path',
-#                          default_value='/etc/clearpath/',
-#                          description='Clearpath setup path'),
-#    DeclareLaunchArgument('scan_topic',
-#                          default_value='',
-#                          description='Override the default 2D laserscan topic')
+                          description='Use sim time')
 ]
 
 
 def launch_setup(context, *args, **kwargs):
     # Packages
-#    pkg_clearpath_nav2_demos = get_package_share_directory('clearpath_nav2_demos')
     pkg_nav2_bringup = get_package_share_directory('nav2_bringup')
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration('use_sim_time')
-#    setup_path = LaunchConfiguration('setup_path')
-#    scan_topic = LaunchConfiguration('scan_topic')
-#
-#    # Read robot YAML
-#    config = read_yaml(os.path.join(setup_path.perform(context), 'robot.yaml'))
-#    # Parse robot YAML into config
-#    clearpath_config = ClearpathConfig(config)
-#
-#    platform_model = clearpath_config.platform.get_platform_model()
-#
-#    # see if we've overridden the scan_topic
-#    eval_scan_topic = scan_topic.perform(context)
-#    if len(eval_scan_topic) == 0:
-#        eval_scan_topic = f'/{namespace}/sensors/lidar2d_0/scan'
-    namespace = 'husky'
+    namespace = 'togo'
 
     pkg_togo_nav2 = get_package_share_directory('togo_nav2')
     file_parameters = PathJoinSubstitution([
         pkg_togo_nav2,
         'config',
-        'nav2.yaml'])
+        'nav2_params.yaml'])
 
-    #rewritten_parameters = RewrittenYaml(
-    #    source_file=file_parameters,
-    #    param_rewrites={
-    #        # the only *.topic parameters are scan.topic, so rewrite all of them to point to
-    #        # our desired scan_topic
-    #        'topic': eval_scan_topic,
-    #    },
-    #    convert_types=True
-    #)
 
     launch_nav2 = PathJoinSubstitution(
       [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
 
     nav2 = GroupAction([
-        PushRosNamespace(namespace),
-        SetRemap('/' + namespace + '/odom',
-                 '/' + namespace + '/platform/odom'),
+#        PushRosNamespace(namespace),
+#        SetRemap('/' + namespace + '/odom',
+#                 '/' + namespace + '/platform/odom'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_nav2),
@@ -117,7 +87,7 @@ def launch_setup(context, *args, **kwargs):
                 ('use_sim_time', use_sim_time),
                 ('params_file', file_parameters),
                 ('use_composition', 'False'),
-                ('namespace', namespace)
+#                ('namespace', namespace)
               ]
         ),
     ])

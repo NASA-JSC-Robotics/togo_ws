@@ -116,6 +116,7 @@ def generate_launch_description():
             "robot_description_package": "togo_gz",
             "robot_description_file": "togo_gz.urdf.xacro",
             "is_sim": "true",
+            "use_sim_time": "true",
             "tf_prefix": tf_prefix,
             "ns": ns,
         }.items(),
