@@ -5,6 +5,9 @@
       topics.joy.topic: 'joy_teleop/cmd_vel'
       topics.joy.timeout: 0.5
       topics.joy.priority: 10
+      topics.joy.topic: 'cmd_vel_nav'
+      topics.joy.timeout: 0.5
+      topics.joy.priority: 15
       topics.interactive_marker.topic: 'twist_marker_server/cmd_vel'
       topics.interactive_marker.timeout: 0.5
       topics.interactive_marker.priority: 8
