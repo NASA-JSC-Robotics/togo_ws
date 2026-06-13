@@ -77,9 +77,6 @@ def launch_setup(context, *args, **kwargs):
       [pkg_nav2_bringup, 'launch', 'navigation_launch.py'])
 
     nav2 = GroupAction([
-#        PushRosNamespace(namespace),
-#        SetRemap('/' + namespace + '/odom',
-#                 '/' + namespace + '/platform/odom'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_nav2),
@@ -90,7 +87,11 @@ def launch_setup(context, *args, **kwargs):
 #                ('namespace', namespace)
               ]
         ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_togo_nav2, "launch", "pointcloud2laserscan.launch.py"])),
+        )
     ])
+
 
     return [nav2]
 

@@ -81,6 +81,13 @@ def generate_launch_description():
             }.items()  
     )
 
+
+    teleop_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([pkg_deploy, "launch", "slam.launch.py"])
+        ),
+    )
+
     # RViz
     rviz_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(

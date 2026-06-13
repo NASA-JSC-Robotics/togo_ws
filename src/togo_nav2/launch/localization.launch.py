@@ -52,12 +52,9 @@ from nav2_common.launch import RewrittenYaml
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_sim_time', default_value='false',
+    DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
                           description='Use sim time'),
-    DeclareLaunchArgument('setup_path',
-                          default_value='/etc/clearpath/',
-                          description='Clearpath setup path'),
     DeclareLaunchArgument('scan_topic',
                           default_value='',
                           description='Override the default 2D laserscan topic')
@@ -66,12 +63,11 @@ ARGUMENTS = [
 
 def launch_setup(context, *args, **kwargs):
     # Packages
-    pkg_clearpath_nav2_demos = get_package_share_directory('clearpath_nav2_demos')
+    pkg_togo_nav2 = get_package_share_directory('togo_nav2')
     pkg_nav2_bringup = get_package_share_directory('nav2_bringup')
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration('use_sim_time')
-    setup_path = LaunchConfiguration('setup_path')
     map = LaunchConfiguration('map')  # noqa:A001
     scan_topic = LaunchConfiguration('scan_topic')
 
@@ -80,26 +76,16 @@ def launch_setup(context, *args, **kwargs):
     # Parse robot YAML into config
     clearpath_config = ClearpathConfig(config)
 
-    namespace = clearpath_config.system.namespace
-    platform_model = clearpath_config.platform.get_platform_model()
-
     eval_scan_topic = scan_topic.perform(context)
     if len(eval_scan_topic) == 0:
-        eval_scan_topic = f'/{namespace}/sensors/lidar2d_0/scan'
+        eval_scan_topic = 'sensors/lidar2d_0/scan'
+#        eval_scan_topic = f'/{namespace}/sensors/lidar2d_0/scan'
 
     file_parameters = PathJoinSubstitution([
-        pkg_clearpath_nav2_demos,
+        pkg_togo_nav2,
         'config',
-        platform_model,
         'localization.yaml'])
 
-    rewritten_parameters = RewrittenYaml(
-        source_file=file_parameters,
-        param_rewrites={
-            'scan_topic': eval_scan_topic,
-        },
-        convert_types=True
-    )
 
     launch_localization = PathJoinSubstitution(
       [pkg_nav2_bringup, 'launch', 'localization_launch.py'])
@@ -113,7 +99,7 @@ def launch_setup(context, *args, **kwargs):
                 ('namespace', namespace),
                 ('map', map),
                 ('use_sim_time', use_sim_time),
-                ('params_file', rewritten_parameters)
+                ('params_file', file_parameters)
               ]
         ),
     ])
@@ -122,11 +108,11 @@ def launch_setup(context, *args, **kwargs):
 
 
 def generate_launch_description():
-    pkg_clearpath_nav2_demos = get_package_share_directory('clearpath_nav2_demos')
+    pkg_togo_nav2 = get_package_share_directory('togo_nav2')
 
     map_arg = DeclareLaunchArgument(
         'map',
-        default_value=PathJoinSubstitution([pkg_clearpath_nav2_demos, 'maps', 'warehouse.yaml']),
+        default_value=PathJoinSubstitution([pkg_togo_nav2, 'maps', 'warehouse.yaml']),
         description='Full path to map yaml file to load')
 
     ld = LaunchDescription(ARGUMENTS)

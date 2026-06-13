@@ -52,12 +52,9 @@ from nav2_common.launch import RewrittenYaml
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('use_sim_time', default_value='false',
+    DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
                           description='Use sim time'),
-    DeclareLaunchArgument('setup_path',
-                          default_value='/etc/clearpath/',
-                          description='Clearpath setup path'),
     DeclareLaunchArgument('autostart', default_value='true',
                           choices=['true', 'false'],
                           description='Automatically startup the slamtoolbox. Ignored when use_lifecycle_manager is true.'),  # noqa: E501
@@ -69,50 +66,32 @@ ARGUMENTS = [
                           description='Use synchronous SLAM'),
     DeclareLaunchArgument('scan_topic',
                           default_value='',
-                          description='Override the default 2D laserscan topic')
+                          description='/husky/sensors/seyond/scan')
 ]
 
 
 def launch_setup(context, *args, **kwargs):
     # Packages
-    pkg_clearpath_nav2_demos = get_package_share_directory('clearpath_nav2_demos')
+    pkg_togo_nav2 = get_package_share_directory('togo_nav2')
     pkg_slam_toolbox = get_package_share_directory('slam_toolbox')
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration('use_sim_time')
-    setup_path = LaunchConfiguration('setup_path')
     autostart = LaunchConfiguration('autostart')
     use_lifecycle_manager = LaunchConfiguration('use_lifecycle_manager')
     sync = LaunchConfiguration('sync')
     scan_topic = LaunchConfiguration('scan_topic')
-
-    # Read robot YAML
-    config = read_yaml(os.path.join(setup_path.perform(context), 'robot.yaml'))
-    # Parse robot YAML into config
-    clearpath_config = ClearpathConfig(config)
-
-    namespace = clearpath_config.system.namespace
-    platform_model = clearpath_config.platform.get_platform_model()
     eval_scan_topic = scan_topic.perform(context)
 
     if len(eval_scan_topic) == 0:
-        eval_scan_topic = f'/{namespace}/sensors/lidar2d_0/scan'
+        eval_scan_topic = '/husky/sensors/lidar2d_0/scan'
+#        eval_scan_topic = f'/{namespace}/sensors/lidar2d_0/scan'
 
     file_parameters = PathJoinSubstitution([
-        pkg_clearpath_nav2_demos,
+        pkg_togo_nav2,
         'config',
-        platform_model,
         'slam.yaml'])
 
-    rewritten_parameters = RewrittenYaml(
-        source_file=file_parameters,
-        root_key=namespace,
-        param_rewrites={
-            'map_name': '/' + namespace + '/map',
-            'scan_topic': eval_scan_topic,
-        },
-        convert_types=True
-    )
 
     launch_slam_sync = PathJoinSubstitution(
         [pkg_slam_toolbox, 'launch', 'online_sync_launch.py'])
@@ -121,10 +100,10 @@ def launch_setup(context, *args, **kwargs):
         [pkg_slam_toolbox, 'launch', 'online_async_launch.py'])
 
     slam = GroupAction([
-        PushRosNamespace(namespace),
+#        PushRosNamespace(namespace),
 
-        SetRemap('/tf', '/' + namespace + '/tf'),
-        SetRemap('/tf_static', '/' + namespace + '/tf_static'),
+#        SetRemap('/tf', '/' + namespace + '/tf'),
+#        SetRemap('/tf_static', '/' + namespace + '/tf_static'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_slam_sync),
@@ -132,7 +111,7 @@ def launch_setup(context, *args, **kwargs):
                 ('use_sim_time', use_sim_time),
                 ('autostart', autostart),
                 ('use_lifecycle_manager', use_lifecycle_manager),
-                ('slam_params_file', rewritten_parameters)
+                ('slam_params_file', file_parameters)
             ],
             condition=IfCondition(sync)
         ),
@@ -143,7 +122,7 @@ def launch_setup(context, *args, **kwargs):
                 ('use_sim_time', use_sim_time),
                 ('autostart', autostart),
                 ('use_lifecycle_manager', use_lifecycle_manager),
-                ('slam_params_file', rewritten_parameters)
+                ('slam_params_file', file_parameters)
             ],
             condition=UnlessCondition(sync)
         )
