@@ -58,11 +58,11 @@ To start these select services:
     sudo systemctl start togo-discovery.service
 
     # Clearpath's ROS discovery service
-    sudo systemctl start clearpath-discovery.service    
+    sudo systemctl start clearpath-discovery.service
     ```
 
 - VCAN service:
-  
+
     ```bash
     # Togo's VCAN service
     sudo systemctl start togo-vcan.service
