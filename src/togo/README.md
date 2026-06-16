@@ -7,7 +7,7 @@ The Togo platform includes several systemd services that run whenever the robot 
 These services take the place of the default Clearpath configuration that comes on the robot out-of-the-box.
 For more information about enabling/disabling Clearpath's baseline configuration, please refer to our [Clearpath systemd docs](./docs/CLEARPATH_SYSTEMD_SERVICES.md).
 
-TODO INSERT PICTURE
+![Togo Robot](./docs/images/togo.jpg)
 
 ## Table of Contents
 
@@ -18,6 +18,7 @@ TODO INSERT PICTURE
     - [Non-Transport Mode](#non-transport-mode)
     - [Joystick Control](#joystick-control)
     - [Launch Sensors](#launch-sensors)
+    - [Shutting Down the Robot](#shutting-down-the-robot)
   - [Gazebo Run Instructions](#gazebo-run-instructions)
 
 ## Hardware Run Instructions
@@ -31,15 +32,18 @@ However, we provide additional details specific to Togo's setup.
    1. Unplug the charger and any ethernet cables.
    2. Close the port hatch door.
     The robot will not run if this hatch is open.
-    TODO insert picture
+
+    ![Port Hatch](./docs/images/togo-back-labeled.png)
+
 2. Press and hold the Power Button for one second and then release it.
-  TODO insert picture
+
+    ![Power Button](./docs/images/power-and-reset-buttons-labeled.jpg)
+
 3. Wait one minute for the robot's computer and MCU to boot up.
-4. Ensure all e-stops are unplunged.
+4. Ensure all e-stops (front and rear) are unplunged.
   If one of the e-stops is pressed, all 4 status lights will be blinking red in unison.
   Once the e-stops are released, the status lights will blinking red, alternating left/right, indicating the safety restart button needs to be pressed.
 5. Press and release the Safety Restart button.
-  TODO insert picture
 6. When the robot is up and ready to go, the front lights should be solid white and the rear lights (by the mast) should be solid red.
 7. All remaining hardware instructions will be run on the robot's control computer.
    1. SSH into the robot from the console computer:
@@ -63,6 +67,16 @@ However, we provide additional details specific to Togo's setup.
 
 By default, Togo starts in `transport_mode`.
 This means the basic platform comm nodes, control nodes, and joystick control nodes are brought up in the Togo docker container when the robot starts.
+For more in-depth information about what transport mode does, please refer to [transport mode docs](../../references/documentation/Transport_Mode.md).
+
+To check whether Togo is in transport mode:
+
+```bash
+systemctl status togo-transport.service
+```
+
+We expect to see the service as started, enabled, and active (all green).
+
 If the previous steps were completed in transport mode, then Togo is ready to go!
 See [joystick control](#joystick-control) below for more information on driving Togo.
 
@@ -101,6 +115,8 @@ we include a few convenient launch file for Togo's hardware operation mode.
     ros2 launch togo_deploy teleop.launch.py
     ```
 
+To restart transport mode, restart the robot.
+
 ### Joystick Control
 
 At this point after following the instructions above (for either transport or non-transport mode), joystick control should be active on the robot.
@@ -108,12 +124,12 @@ To use the PS4 controller to run the robot:
 
 1. Ensure the controller is charged.
 2. Press the middle button to power the controller on and connect it to the robot.
-3. L1 is the slow mode deadman switch, R1 is the fast mode deadman switch.
+3. L1 is the fast mode deadman switch, R1 is the slow mode deadman switch.
  Press and hold either deadman for whichever drive mode is desired.
  By default, fast mode velocity and acceleration limits are twice as fast as the slow mode limits.
 4. Use the left joystick to send linear (x-direction) commands to Togo. Use the right joystick to send angular (z-direction) commands to Togo.
 
-TODO include picture
+![PS4 Controller](./docs/images/ps4-controller-labeled.png)
 
 ### Launch Sensors
 
@@ -124,6 +140,17 @@ ros2 launch togo_deploy togo_sensors.launch.py
 ```
 
 For more information about the sensors available on Togo, please see [hardware overview of sensors](./docs/HARDWARE_OVERVIEW.md#sensors).
+
+### Shutting Down the Robot
+
+When you're done with Togo for the day:
+
+1. Stop any nodes you started.
+2. Exit the docker container.
+3. Turn off the robot by pressing the power button.
+4. Plug the robot in to charge.
+    ![Charger](./docs/images/charger.jpg)
+5. Say "Good boy, Togo!" and give him a lil pat of appreciation.
 
 
 ## Gazebo Run Instructions
