@@ -82,9 +82,9 @@ def generate_launch_description():
     )
 
 
-    teleop_launch = IncludeLaunchDescription(
+    slam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution([pkg_deploy, "launch", "slam.launch.py"])
+            PathJoinSubstitution([pkg_nav2, "launch", "slam.launch.py"])
         ),
     )
 
@@ -104,6 +104,7 @@ def generate_launch_description():
     launches_nodes = [
         sim_launch,
         nav2_launch,
+        slam_launch,
         rviz_launch,
         teleop_launch,
     ]
