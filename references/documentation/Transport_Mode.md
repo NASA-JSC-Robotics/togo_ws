@@ -22,7 +22,11 @@ With these in place, we use `docker compose` to run the transport service from t
 
 ## Stopping Transport Mode
 
-Since starting in transport mode is the default, there must be a way to stop it in order to return to the normal interactive setup. Stopping transport mode via docker compose is not particularly complicated, but we have added a convenience `stop_transport_mode` alias in the eguser's .bashrc to make it as simple as possible. This alias may be run from any directory.
+Since starting in transport mode is the default, there must be a way to stop it in order to return to the normal interactive setup. Since eguser does not have sudo, we stop the transport mode container directly using docker compose rather then using systemd. This is not particularly complicated, but we have added a convenience `stop_transport_mode` alias in the eguser's .bashrc to make it as simple as possible. This alias may be run from any directory and is defined as:
+```
+alias stop_transport_mode='docker compose -f /home/eguser/togo_ws/docker-compose.yml kill transport'
+```
+
 
 ## Running Transport Mode Manually
 
