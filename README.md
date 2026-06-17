@@ -108,7 +108,7 @@ These are handled by the `pre_build.sh` script run before building the docker im
 By the time you attach to the container, these packages can be built as expected within a ROS workspace.
 
 For more information on running applications refer to Togo's [README.md](./src/togo/README.md).
-To get started, we recommend [Gazebo instructions](./src/togo/README.md#gazebo) for the dev image and [hardware instructions](./src/togo/README.md#deploy) for the hardware image.
+To get started, we recommend [Gazebo instructions](./src/togo/README.md#gazebo-run-instructions) for the dev image and [hardware instructions](./src/togo/README.md#hardware-run-instructions) for the hardware image.
 
 ## Other Things to Note
 
