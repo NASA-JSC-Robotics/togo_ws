@@ -125,6 +125,10 @@ def launch_setup(context, *args, **kwargs):
                 ('slam_params_file', file_parameters)
             ],
             condition=UnlessCondition(sync)
+        ),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_togo_nav2, "launch", "pointcloud2laserscan.launch.py"])),
         )
     ])
 
