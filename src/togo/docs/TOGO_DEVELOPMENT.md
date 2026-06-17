@@ -29,5 +29,14 @@
     ```
 
 3. Continue with the [non-transport mode hardware instructions](../README.md#non-transport-mode).
+   1. After you connect to the hardware development container, remember to [build the workspace](../../../README.md#building-the-togo-workspace) so your changes take effect.
+
+      ```bash
+      # build the whole workspace; best practice is to do this before launching anything
+      colcon build
+
+      # source the workspace changes in all open terminals
+      source install/setup.bash
+      ```
 
 4. At the end of your ops session, ***commit and push all of your code!***
