@@ -95,7 +95,11 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<GzRgbdPointCloudFixer>());
+
+  std::shared_ptr<rclcpp::Node> cloudFixerPtr = std::make_shared<GzRgbdPointCloudFixer>();
+  while (rclcpp::ok()) {
+    rclcpp::spin_some(cloudFixerPtr);
+  }
   rclcpp::shutdown();
   return 0;
 }
