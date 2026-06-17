@@ -75,7 +75,7 @@ def generate_launch_description():
 
 
     nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_nav2, "launch", "nav2.launch.py"])),
+        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_nav2, "launch", "navigation.launch.py"])),
             launch_arguments={
                 'rviz': 'false',
             }.items()  
