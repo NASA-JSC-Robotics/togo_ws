@@ -48,7 +48,7 @@ flowchart TD
     C{{"/platform_velocity_controller<br/>(DiffDriveController)"}}
     D["/platform_velocity_controller/cmd_vel_out"]
     E(["Wheel Hardware Interface"])
-    F{{"/lynx_hardware_interface<br/>(bridges ROS 2 controland MCU)"}}
+    F{{"/lynx_hardware_interface<br/>(bridges ROS 2 control and MCU)"}}
     G["/platform/motors/cmd"]
     H{{"/husky/lynx_motor_driver"}}
     I(["Motors / MCU<br/>(Hardware)"])
@@ -56,7 +56,7 @@ flowchart TD
     A -->|"geometry_msgs/msg/TwistStamped"| B
     B --> C
     C -->|"geometry_msgs/msg/TwistStamped<br/>(limited velocities)"| D
-    C -.->|"computes wheel joint states;<br/>writes directly to hardware"| E
+    C -.->|"computes wheel velocities;<br/>writes command directly to hardware"| E
     E -.-> F
     F -->|"sensor_msgs/msg/JointState"| G
     G --> H
@@ -110,3 +110,7 @@ to the motors
 [via the CAN bus](https://github.com/clearpathrobotics/clearpath_robot/blob/jazzy/clearpath_motor_drivers/lynx_motor_driver/src/lynx_motor_driver.cpp#L503).
 
 Yay :tada: our command made it to the motors!
+
+## Next Steps
+
+Please refer to [tracing feedback up from hardware](./Clearpath_Platform_Feedback.md) for more information about we know a command has taken effect on a Clearpath platform.
