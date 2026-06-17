@@ -28,6 +28,10 @@ See our [hardware overview docs](./docs/HARDWARE_OVERVIEW.md) for more informati
 Hardware instructions are taken directly from the [Husky Quick Start](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/user_manual_husky/#quick-start) guide.
 However, we provide additional details specific to Togo's setup.
 
+> [!NOTE]
+> The following instructions are for running core Togo functionality.
+> Please refer to our [development docs](./docs/TOGO_DEVELOPMENT.md) for information about running your own code on Togo.
+
 1. Verify the robot is in a ready state.
    1. Unplug the charger and any ethernet cables.
    2. Close the port hatch door.
@@ -36,6 +40,7 @@ However, we provide additional details specific to Togo's setup.
     ![Port Hatch](./docs/images/togo-back-labeled.png)
 
 2. Press and hold the Power Button for one second and then release it.
+  The 4 status lights will be solid red while the robot's computer boots up.
 
     ![Power Button](./docs/images/power-and-reset-buttons-labeled.jpg)
 
@@ -45,29 +50,21 @@ However, we provide additional details specific to Togo's setup.
   Once the e-stops are released, the status lights will blinking red, alternating left/right, indicating the safety restart button needs to be pressed.
 5. Press and release the Safety Restart button.
 6. When the robot is up and ready to go, the front lights should be solid white and the rear lights (by the mast) should be solid red.
-7. All remaining hardware instructions will be run on the robot's control computer.
-   1. SSH into the robot from the console computer:
+7. All remaining hardware instructions will be run on the robot's control computer. SSH into the robot from the console computer:
 
-      ```bash
-      ssh robot
-      ```
-
-   2. Connect to the [hardware development docker container](../../README.md#hardware-development-image).
-   By default, this container will already be running:
-
-      ```bash
-      # connect to the already running container
-      docker compose exec hw-dev terminator # TODO is this right? or would it be transport?
-      ```
-
-> [!NOTE]
-> Unless otherwise noted, all remaining hardware instructions should be run on the robot's control computer in the hardware development docker container.
+    ```bash
+    ssh robot
+    ```
 
 ### Transport Mode
 
 By default, Togo starts in `transport_mode`.
 This means the basic platform comm nodes, control nodes, and joystick control nodes are brought up in the Togo docker container when the robot starts.
 For more in-depth information about what transport mode does, please refer to [transport mode docs](../../references/documentation/Transport_Mode.md).
+
+> [!NOTE]
+> Transport mode is intended for when we want basic robot functionality *without using the console computer* for anything besides visualization.
+> If you plan on using the console computer to run application nodes, please proceed to [Non-Transport Mode instructions](#non-transport-mode).
 
 To check whether Togo is in transport mode:
 
@@ -82,7 +79,7 @@ See [joystick control](#joystick-control) below for more information on driving 
 
 ### Non-Transport Mode
 
-To stop transport mode, run the following alias on Togo (*not* in the docker container):
+To stop transport mode, run the following alias on Togo (*not* in a docker container):
 
 ```bash
 stop_transport_mode
@@ -90,6 +87,21 @@ stop_transport_mode
 
 This kills the docker container running transport mode.
 This means all of the basic platform comm and control nodes are no longer running.
+
+All remaining hardware instructions will be run on the robot's control computer in the hardware development docker container.
+Connect to the [hardware development docker container](../../README.md#hardware-development-image):
+
+```bash
+# bring up the container; this will automatically start the micro-ROS agent docker container as well
+docker compose up hw-dev -d --force-recreate
+
+# connect to the running container
+docker compose exec hw-dev terminator
+```
+
+> [!NOTE]
+> Unless otherwise noted, all remaining hardware instructions should be run on the robot's control computer in the hardware development docker container.
+> The `docker compose exec` command above will spawn a terminator window where all of the following commands can be run.
 
 To bring up the robot manually in non-transport mode:
 
@@ -100,22 +112,17 @@ To bring up the robot manually in non-transport mode:
     ```
 
 2. To bring up Togo's controllers and teleop control (enabling control through the PS4 controller),
-we include a few convenient launch file for Togo's hardware operation mode.
+we include a convenient launch file for Togo's hardware operation mode.
 
     ```bash
     ros2 launch togo_deploy control_hardware.launch.py
     ```
 
-    This launch file is equivalent to launching controls and teleop separately:
+3. At this point, Togo is ready to drive!
+  See [joystick control](#joystick-control) below for more information on driving Togo.
 
-    ```bash
-    # controllers
-    ros2 launch togo_deploy control.launch.py
-    # teleop
-    ros2 launch togo_deploy teleop.launch.py
-    ```
-
-To restart transport mode, restart the robot.
+4. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors) as well.
+  Please see [development on Togo docs](./docs/TOGO_DEVELOPMENT.md) for best practices for your own development on Togo!
 
 ### Joystick Control
 
@@ -151,7 +158,6 @@ When you're done with Togo for the day:
 4. Plug the robot in to charge.
     ![Charger](./docs/images/charger.jpg)
 5. Say "Good boy, Togo!" and give him a lil pat of appreciation.
-
 
 ## Gazebo Run Instructions
 
