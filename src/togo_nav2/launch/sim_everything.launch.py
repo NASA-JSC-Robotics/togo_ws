@@ -70,6 +70,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_gazebo, "launch", "sim_gz.launch.py"])),
             launch_arguments={
                 'rviz': 'false',
+                'world': 'b59_localization_world.sdf'
             }.items()  
     )
 

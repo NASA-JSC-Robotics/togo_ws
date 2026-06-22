@@ -52,6 +52,20 @@ def generate_launch_description():
             "rviz", default_value="true", description="Flag to start RViz for robot and sensor checkout."
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world_pkg",
+            default_value="practice_worlds",
+            description="Name of the package that has the world file",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world",
+            default_value="obstacle_lot.sdf",
+            description="Name of the world file; must exist in worlds/ directory of world_pkg",
+        )
+    )
 
     # initialize arguments
     tf_prefix = LaunchConfiguration("tf_prefix")
@@ -60,6 +74,8 @@ def generate_launch_description():
     y = LaunchConfiguration("robot_y")
     z = LaunchConfiguration("robot_z")
     rviz = LaunchConfiguration("rviz")
+    world_pkg = LaunchConfiguration("world_pkg")
+    world = LaunchConfiguration("world")
 
     # include packages
     pkg_deploy = FindPackageShare("togo_deploy")
@@ -71,7 +87,11 @@ def generate_launch_description():
 
     # start world
     world_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_gazebo, "launch", "start_world.launch.py"]))
+        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_gazebo, "launch", "start_world.launch.py"])),
+        launch_arguments=[
+            ('world_pkg', world_pkg),
+            ('world', world)
+            ]
     )
 
     # Gazebo nodes
