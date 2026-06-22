@@ -73,7 +73,7 @@ docker compose exec dev bash
 If multiple people are using this docker container on the same device, please do the following:
 
 1. Comment out line 23 (`network_mode: host`) of docker_compose.yml
-2. Accept that you will not be  able to use this computer to run the robot. 
+2. Accept that you will not be  able to use this computer to run the robot - only sim. 
 
 ### Hardware Development Image
 
