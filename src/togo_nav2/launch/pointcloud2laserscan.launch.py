@@ -13,6 +13,7 @@ def generate_launch_description():
             ],
             parameters=[{
 #                'target_frame': 'camera_0_rgb_camera_frame',              # Center of your camera frame
+                'use_sim_time': True,
                 'transform_tolerance': 0.01,
                 'min_height': 0.,                        # Min Z point to consider (meters)
                 'max_height': 20.5,                         # Max Z point to consider (meters)

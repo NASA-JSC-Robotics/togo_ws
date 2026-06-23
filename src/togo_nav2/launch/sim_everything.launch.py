@@ -3,7 +3,7 @@ from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDesc
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node, PushRosNamespace, SetParameter
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -24,6 +24,13 @@ def generate_launch_description():
             "ns",
             default_value="",
             description="Namespace for the robot",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_sim_time",
+            default_value="true",
+            description="Use simulation time",
         )
     )
     declared_arguments.append(
@@ -60,6 +67,7 @@ def generate_launch_description():
     y = LaunchConfiguration("robot_y")
     z = LaunchConfiguration("robot_z")
     rviz = LaunchConfiguration("rviz")
+    use_sim_time = LaunchConfiguration("use_sim_time")
 
     # include packages
     pkg_deploy = FindPackageShare("togo_deploy")
@@ -102,7 +110,10 @@ def generate_launch_description():
         ),
     )
 
+    push_sim_time = SetParameter('use_sim_time', use_sim_time)
+
     launches_nodes = [
+        push_sim_time,
         sim_launch,
         nav2_launch,
         slam_launch,
