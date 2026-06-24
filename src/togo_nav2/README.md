@@ -41,7 +41,7 @@ This is a basic configuation of Nav2 packages for the Togo robot.
 In the docker, this builds alongside the togo package ---
 ```
 colcon build
-source /install/setup.bash
+source install/setup.bash
 ```
 
 ## Run
@@ -51,7 +51,7 @@ ros2 launch togo_nav2 sim_everything.launch.py
 ```
 
 ## Simulation vs Hardware Topic Differences
-As of 17 June 20206, some cases the topics used in the simulation do not match the hardware.
+As of 17 June 2026, some cases the topics used in the simulation do not match the hardware.
 The hardware topic names seemed to be in flux a bit, so differences made in the simulation were made so that a pattern was followed by the sensor data topic names --- /husky/sensors/sensor_name/data_type.  
 | Header Topic | Simulation Topic |
 |------------:|:-----------------|
