@@ -75,11 +75,15 @@ RUN groupadd -g ${USER_GID} ${USERNAME} \
         ${ER4_WS}/log && \
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
 
-# Add clearpath rosdeps and apt packages so that we can pull non-ros-standard clearpath ros packages
-RUN wget -q https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
-    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list && \
-    wget https://packages.clearpathrobotics.com/public.key -O - | sudo apt-key add - && \
-    sudo bash -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu noble main" > /etc/apt/sources.list.d/clearpath-latest.list'
+# Add the Clearpath Robotics public package signing key
+RUN wget https://packages.clearpathrobotics.com/public.key -O - | apt-key add -
+
+# Add the Clearpath stable package repository
+RUN sh -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/clearpath-latest.list'
+
+# Add Clearpath custom rosdep rules
+RUN wget https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
+    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list
 
 # Configure and install MuJoCo using the defaults for the MuJoCo drivers.
 # We use MuJoCo in many systems so we just install the drivers in the base workspace.
@@ -126,7 +130,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-ros2controlcli \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-rmw-fastrtps-cpp \
-    ros-${ROS_DISTRO}-plotjuggler-ros
+    ros-${ROS_DISTRO}-plotjuggler-ros \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-slam-toolbox \
+    ros-${ROS_DISTRO}-pointcloud-to-laserscan
 
 # Copy in the remainder of the src directory
 COPY --chown=${USERNAME}:${USERNAME} src/ src/

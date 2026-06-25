@@ -47,8 +47,6 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
       {
         RCLCPP_FATAL(this->get_logger(), "GzRgbdPointCloudFixer does not have equal numbers of in/out cloud topics -- it will not publish clouds!");
       }
-
-
       tf2::Quaternion q;
       q.setRPY( 0.0000, -1.5708,  1.5708);
 
@@ -79,7 +77,6 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
       // cloud_out is now populated, but has the dummy header
       cloud_out.header = cloud_in->header;
 
-
       publishers_[pub_idx]->publish(cloud_out);
 
     }
@@ -95,7 +92,11 @@ class GzRgbdPointCloudFixer : public rclcpp::Node
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<GzRgbdPointCloudFixer>());
+
+  std::shared_ptr<rclcpp::Node> cloudFixerPtr = std::make_shared<GzRgbdPointCloudFixer>();
+  while (rclcpp::ok()) {
+    rclcpp::spin_some(cloudFixerPtr);
+  }
   rclcpp::shutdown();
   return 0;
 }
