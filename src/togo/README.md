@@ -208,3 +208,8 @@ twist:
 ```
 
 If you have any problems running Gazebo, please refer to our [Gazebo troubleshooting docs](./docs/GAZEBO_TROUBLESHOOTING.md).
+
+### Nav2 Integration
+
+A nav2 configuration is provided, along with several sample worlds and deployment mechanisms.
+For more information refer to the [README](./togo_nav2/README.md).
