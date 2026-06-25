@@ -1,12 +1,6 @@
 # Set desired ROS distribution
 ARG ROS_DISTRO=jazzy
 
-# The base image for the overlay deployment
-# These must be overridden from the local .env if using this workflow.
-ARG ROS_WS_BASE_IMAGE_TAG="latest"
-ARG ROS_WS_BASE_IMAGE="togo_docker_ws-dev"
-ARG ROS_WS_BASE_IMAGE="${ROS_WS_BASE_IMAGE}:${ROS_WS_BASE_IMAGE_TAG}"
-
 # This layer grabs package manifests from the src directory for preserving rosdep installs.
 # This can significantly speed up rebuilds for the base package when src contents have changed.
 FROM alpine:latest AS package-manifests
@@ -174,7 +168,8 @@ ARG USERNAME
 RUN . /opt/ros/${ROS_DISTRO}/setup.bash && \
     colcon build
 
-FROM ${ROS_WS_BASE_IMAGE} AS er4-robot
+#FROM ${ROS_WS_BASE_IMAGE}:${ROS_WS_BASE_IMAGE_TAG} AS er4-robot
+FROM er4-dev AS er4-robot
 
 ARG USERNAME
 ARG USER_UID

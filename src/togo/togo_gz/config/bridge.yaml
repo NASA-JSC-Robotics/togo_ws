@@ -62,7 +62,7 @@
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
-## Rear OAK-D camera
+# Rear OAK-D camera
 - ros_topic_name: "/husky/sensors/rear_oakd/rgb/camera_info"
   gz_topic_name: "/sensors/camera_1/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
@@ -92,7 +92,6 @@
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
-
 
 # TODO this topic is available in Gazebo, but Emily's not sure what comparable topic on hardware is?
 # - ros_topic_name: "/husky/sensors/seyond/scan"
