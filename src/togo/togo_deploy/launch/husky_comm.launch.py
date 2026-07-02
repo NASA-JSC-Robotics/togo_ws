@@ -256,7 +256,7 @@ def generate_launch_description():
                 FindExecutable(name="ros2"),
                 " service call /platform/mcu/configure",
                 " clearpath_platform_msgs/srv/ConfigureMcu",
-                ' "{domain_id: 0,',
+                ' "{domain_id: 76,',
                 f" robot_namespace: '{default_ns}'}}\"",
             ],
         ],
