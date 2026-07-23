@@ -75,30 +75,15 @@ RUN groupadd -g ${USER_GID} ${USERNAME} \
         ${ER4_WS}/log && \
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
 
-# Add clearpath rosdeps and apt packages so that we can pull non-ros-standard clearpath ros packages
-RUN wget -q https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
-    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list && \
-    wget https://packages.clearpathrobotics.com/public.key -O - | sudo apt-key add - && \
-    sudo bash -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu noble main" > /etc/apt/sources.list.d/clearpath-latest.list'
+# Add the Clearpath Robotics public package signing key
+RUN wget https://packages.clearpathrobotics.com/public.key -O - | apt-key add -
 
-# Configure and install MuJoCo using the defaults for the MuJoCo drivers.
-# We use MuJoCo in many systems so we just install the drivers in the base workspace.
-# The install is CPU dependent, this works with `x86_64` and `arm64` chips, TBD on others.
-ARG MUJOCO_VERSION=3.4.0
-ENV MUJOCO_VERSION=${MUJOCO_VERSION}
-ENV MUJOCO_DIR="/opt/mujoco/mujoco-${MUJOCO_VERSION}"
-RUN mkdir -p ${MUJOCO_DIR} && \
-    chown -R ${USERNAME}:${USERNAME} ${MUJOCO_DIR} && \
-    CPU_ARCH=$(uname -m); \
-    wget https://github.com/google-deepmind/mujoco/releases/download/${MUJOCO_VERSION}/mujoco-${MUJOCO_VERSION}-linux-${CPU_ARCH}.tar.gz && \
-    tar -xzf "mujoco-${MUJOCO_VERSION}-linux-${CPU_ARCH}.tar.gz" -C $(dirname "${MUJOCO_DIR}") && \
-    rm "mujoco-${MUJOCO_VERSION}-linux-${CPU_ARCH}.tar.gz"
+# Add the Clearpath stable package repository
+RUN sh -c 'echo "deb https://packages.clearpathrobotics.com/stable/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/clearpath-latest.list'
 
-# Install MuJoCo specific pip dependencies at the system level because it's an image
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    pip3 install mujoco obj2mjcf trimesh
+# Add Clearpath custom rosdep rules
+RUN wget https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
+    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list
 
 # Setup the install directory and copy the workspace to it.
 # We could alternatively copy package manifests to preserve the layer cache if the build duration becomes too onerous.
@@ -126,7 +111,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-ros2controlcli \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-rmw-fastrtps-cpp \
-    ros-${ROS_DISTRO}-plotjuggler-ros
+    ros-${ROS_DISTRO}-plotjuggler-ros \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-slam-toolbox \
+    ros-${ROS_DISTRO}-pointcloud-to-laserscan
 
 # Copy in the remainder of the src directory
 COPY --chown=${USERNAME}:${USERNAME} src/ src/

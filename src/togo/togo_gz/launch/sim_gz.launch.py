@@ -3,7 +3,7 @@ from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDesc
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node, PushRosNamespace, SetParameter
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -24,6 +24,13 @@ def generate_launch_description():
             "ns",
             default_value="",
             description="Namespace for the robot",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_sim_time",
+            default_value="true",
+            description="Use simulation time",
         )
     )
     declared_arguments.append(
@@ -52,6 +59,20 @@ def generate_launch_description():
             "rviz", default_value="true", description="Flag to start RViz for robot and sensor checkout."
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world_pkg",
+            default_value="practice_worlds",
+            description="Name of the package that has the world file",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "world",
+            default_value="obstacle_lot.sdf",
+            description="Name of the world file; must exist in worlds/ directory of world_pkg",
+        )
+    )
 
     # initialize arguments
     tf_prefix = LaunchConfiguration("tf_prefix")
@@ -60,6 +81,9 @@ def generate_launch_description():
     y = LaunchConfiguration("robot_y")
     z = LaunchConfiguration("robot_z")
     rviz = LaunchConfiguration("rviz")
+    world_pkg = LaunchConfiguration("world_pkg")
+    world = LaunchConfiguration("world")
+    use_sim_time = LaunchConfiguration("use_sim_time")
 
     # include packages
     pkg_deploy = FindPackageShare("togo_deploy")
@@ -71,7 +95,11 @@ def generate_launch_description():
 
     # start world
     world_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_gazebo, "launch", "start_world.launch.py"]))
+        PythonLaunchDescriptionSource(PathJoinSubstitution([pkg_gazebo, "launch", "start_world.launch.py"])),
+        launch_arguments=[
+            ('world_pkg', world_pkg),
+            ('world', world)
+            ]
     )
 
     # Gazebo nodes
@@ -116,6 +144,7 @@ def generate_launch_description():
             "robot_description_package": "togo_gz",
             "robot_description_file": "togo_gz.urdf.xacro",
             "is_sim": "true",
+            "use_sim_time": "true",
             "tf_prefix": tf_prefix,
             "ns": ns,
         }.items(),
@@ -141,7 +170,10 @@ def generate_launch_description():
 
     )
 
+    push_sim_time = SetParameter('use_sim_time', use_sim_time)
+
     launches_nodes = [
+        push_sim_time,
         world_launch,
         gz_sim_node,
         gz_bridge_node,
@@ -151,5 +183,6 @@ def generate_launch_description():
     ]
 
     ns_action = GroupAction(actions=[PushRosNamespace(ns)] + launches_nodes)
+
 
     return LaunchDescription(declared_arguments + [ns_action])
