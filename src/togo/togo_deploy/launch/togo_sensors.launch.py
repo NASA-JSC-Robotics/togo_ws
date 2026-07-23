@@ -62,7 +62,7 @@ def generate_launch_description():
     launch_phidgets = LaunchConfiguration("launch_phidgets")
     rviz = LaunchConfiguration("rviz")
     default_ns = "husky"
-    sensor_ns = "husky/sensors"
+    sensor_ns = "sensors"
 
     # INCLUDE PACKAGES
     pkg_togo_deploy = FindPackageShare("togo_deploy")
@@ -87,6 +87,9 @@ def generate_launch_description():
         parameters=[
             {"config_path": config_seyond},
         ],
+        remappings=[
+            ("/iv_points", "/sensors/lidar3d/iv_points"),
+        ],
         condition=IfCondition(launch_seyond),
     )
 
@@ -107,9 +110,9 @@ def generate_launch_description():
         name="front_point_cloud_xyz_node",
         namespace=sensor_ns,
         remappings=[
-            ("image_rect", "/husky/sensors/front_oakd/stereo/image_raw"),
-            ("camera_info", "/husky/sensors/front_oakd/stereo/camera_info"),
-            ("points", "/husky/sensors/front_oakd/points"),
+            ("image_rect", "/sensors/rgbd_front/stereo/image_raw"),
+            ("camera_info", "/sensors/rgbd_front/stereo/camera_info"),
+            ("points", "/sensors/rgbd_front/points"),
         ],
         condition=IfCondition(launch_front_oakd),
     )
@@ -144,9 +147,9 @@ def generate_launch_description():
         name="rear_point_cloud_xyz_node",
         namespace=sensor_ns,
         remappings=[
-            ("image_rect", "/rear_oakd/stereo/image_raw"),
-            ("camera_info", "/rear_oakd/stereo/camera_info"),
-            ("points", "/rear_oakd/points"),
+            ("image_rect", "/sensors/rgbd_rear/stereo/image_raw"),
+            ("camera_info", "/sensors/rgbd_rear/stereo/camera_info"),
+            ("points", "/sensors/rgbd_rear/points"),
         ],
         condition=IfCondition(launch_rear_oakd),
     )
@@ -184,9 +187,9 @@ def generate_launch_description():
         namespace=sensor_ns,
         parameters=[config_phidgets],
         remappings=[
-            ("imu/data_raw", "/husky/sensors/imu_0/data_raw"),
-            ("imu/is_calibrated", "/husky/sensors/imu_0/is_calibrated"),
-            ("imu/mag", "/husky/sensors/imu_0/mag"),
+            ("imu/data_raw", "/sensors/imu/data_raw"),
+            ("imu/is_calibrated", "/sensors/imu/is_calibrated"),
+            ("imu/mag", "/sensors/imu/mag"),
         ],
         condition=IfCondition(launch_phidgets),
     )
@@ -196,12 +199,12 @@ def generate_launch_description():
         package="imu_filter_madgwick",
         plugin="ImuFilterMadgwickRos",
         name="imu_filter_madgwick",
-        namespace=default_ns,
+        namespace=sensor_ns,
         parameters=[config_imu_filter],
         remappings=[
-            ("imu/data", "sensors/imu_0/data"),
-            ("imu/data_raw", "sensors/imu_0/data_raw"),
-            ("imu/mag", "sensors/imu_0/mag"),
+            ("imu/data", "/sensors/imu/data"),
+            ("imu/data_raw", "/sensors/imu/data_raw"),
+            ("imu/mag", "/sensors/imu/mag"),
         ],
         condition=IfCondition(launch_phidgets),
     )
