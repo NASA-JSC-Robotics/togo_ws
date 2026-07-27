@@ -19,3 +19,7 @@
 [submodule "references/clearpath/clearpath_simulator"]
 	path = references/clearpath/clearpath_simulator
 	url = https://github.com/clearpathrobotics/clearpath_simulator.git
+[submodule "src/external/apriltag"]
+	path = src/external/apriltag
+	url = https://github.com/AprilRobotics/apriltag.git
+	branch = master
