@@ -7,7 +7,8 @@ from geometry_msgs.msg import PoseStamped
 from cv_bridge import CvBridge
 import cv2
 from apriltag import apriltag
-from togo_apriltag.msg import AprilTagDetection 
+from togo_apriltag_msgs.msg import AprilTagDetection 
+import numpy as np
 
 class AprilTagPublisher(Node):
     def __init__(self):
@@ -18,13 +19,13 @@ class AprilTagPublisher(Node):
 
         self.img_sub = self.create_subscription(
             Image,
-            '/husky/sensors/front_oakd/rgb/image_raw',
+            '/husky/sensors/rear_oakd/rgb/image_raw',
             self.image_callback,
             10)
 
         self.cam_info_sub = self.create_subscription(
             CameraInfo, 
-            '/husky/sensors/front_oakd/rgb/camera_info', 
+            '/husky/sensors/rear_oakd/rgb/camera_info', 
             self.info_callback, 
             10)
 
@@ -41,6 +42,9 @@ class AprilTagPublisher(Node):
 
     # receive image, publish apriltagdetection object to /apriltag_pos. 
     def image_callback(self, msg):
+        if self.camera_matrix is None:
+            return 
+
         img = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         results = self.detector.detect(gray)
@@ -50,6 +54,8 @@ class AprilTagPublisher(Node):
         detection_msg.img_width = float(msg.width)
         detection_msg.img_height = float(msg.height)
         
+        self.get_logger().info(f"{len(results)} apriltags found.")
+
         if len(results) > 0:
             res = results[0]
             detection_msg.tag_found = True
@@ -57,14 +63,13 @@ class AprilTagPublisher(Node):
             detection_msg.center_x = res["center"][0]
             detection_msg.center_y = res["center"][1]
 
-            pose = detector.estimate_tag_pose(res, self.april_tag_size_cm/100., **self.camera_matrix) 
+            pose = self.detector.estimate_tag_pose(res, self.april_tag_size_cm/100., self.camera_matrix[0], self.camera_matrix[1], self.camera_matrix[2], self.camera_matrix[3]) 
             t = pose['t'].flatten()
             tx, ty, tz = t[0], t[1], t[2]
 
             # translation in opencv puts Z as the "going out of image frame"
             # ros2/posestamped puts it as X. 
-            pose_stamped = PoseStamped()
-            pose_stamped.header = msg.header
+            pose_msg = PoseStamped()
             pose_msg.header = msg.header
             pose_msg.pose.position.x = float(tz)   # OpenCV Z -> ROS X
             pose_msg.pose.position.y = float(-tx)  # OpenCV X -> ROS Y
@@ -76,10 +81,6 @@ class AprilTagPublisher(Node):
             pose_msg.pose.orientation.z = q[2]
             pose_msg.pose.orientation.w = q[3]
             
-            print(f"Tag {det['id']}:")
-            print(f"  Position (meters): {pose['t'].T}")
-            print(f"  Rotation matrix:\n{pose['R']}")
-            print(f"  Reprojection error: {pose['error']}")
 
             detection_msg.pose = pose_msg
         else:
@@ -92,7 +93,7 @@ class AprilTagPublisher(Node):
     def info_callback(self, msg):
         # Extract the 4 essential parameters for the AprilTag estimator
         # msg.k is [fx, 0, cx, 0, fy, cy, 0, 0, 1]
-        self.intrinsics = [msg.k[0], msg.k[4], msg.k[2], msg.k[5]]
+        self.camera_matrix = [msg.k[0], msg.k[4], msg.k[2], msg.k[5]]
 
     # https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/
     def rotation_matrix_to_quaternion(self, R):

@@ -3,7 +3,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped, Vector3, Twist
 from std_msgs.msg import Header
-from my_robot_msgs.msg import AprilTagDetection
+from togo_apriltag_msgs.msg import AprilTagDetection
 import numpy as np
 from time import time
 

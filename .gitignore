@@ -4,6 +4,9 @@ install/*
 log/*
 .ccache/
 
+# Python cache
+__pycache__
+
 # bash history
 .bash/*
 

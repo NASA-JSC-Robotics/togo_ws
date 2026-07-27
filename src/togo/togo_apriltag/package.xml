@@ -8,6 +8,7 @@
   <license>Apache-2.0</license>
 
   <depend>apriltag</depend>
+  <depend>togo_apriltag_msgs</depend>
   <depend>libopencv-dev</depend>
   <depend>python3-opencv</depend> 
   <test_depend>ament_copyright</test_depend>
