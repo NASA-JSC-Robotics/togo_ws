@@ -83,6 +83,7 @@ def generate_launch_description():
     seyond_node = Node(
         package="seyond",
         executable="seyond_node",
+        name="lidar3d",
         namespace=sensor_ns,
         parameters=[
             {"config_path": config_seyond},
@@ -107,7 +108,7 @@ def generate_launch_description():
     front_depthai_pcl_node = ComposableNode(
         package="depth_image_proc",
         plugin="depth_image_proc::PointCloudXyzNode",
-        name="front_point_cloud_xyz_node",
+        name="point_cloud_xyz_front",
         namespace=sensor_ns,
         remappings=[
             ("image_rect", "/sensors/rgbd_front/stereo/image_raw"),
@@ -118,7 +119,7 @@ def generate_launch_description():
     )
 
     front_image_processing_container = ComposableNodeContainer(
-        name="front_image_processing_container",
+        name="image_processing_container_front",
         package="rclcpp_components",
         namespace=sensor_ns,
         executable="component_container",
@@ -144,7 +145,7 @@ def generate_launch_description():
     rear_depthai_pcl_node = ComposableNode(
         package="depth_image_proc",
         plugin="depth_image_proc::PointCloudXyzNode",
-        name="rear_point_cloud_xyz_node",
+        name="point_cloud_xyz_rear",
         namespace=sensor_ns,
         remappings=[
             ("image_rect", "/sensors/rgbd_rear/stereo/image_raw"),
@@ -155,7 +156,7 @@ def generate_launch_description():
     )
 
     rear_image_processing_container = ComposableNodeContainer(
-        name="rear_image_processing_container",
+        name="image_processing_container_rear",
         package="rclcpp_components",
         namespace=sensor_ns,
         executable="component_container",
@@ -183,7 +184,7 @@ def generate_launch_description():
     phidgets_node = ComposableNode(
         package="phidgets_spatial",
         plugin="phidgets::SpatialRosI",
-        name="phidgets_spatial",
+        name="imu",
         namespace=sensor_ns,
         parameters=[config_phidgets],
         remappings=[

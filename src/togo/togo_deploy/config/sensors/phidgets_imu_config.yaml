@@ -1,5 +1,5 @@
 /**:
-  phidgets_spatial:
+  imu:
     ros__parameters:
       serial: -1
       hub_port: 0
