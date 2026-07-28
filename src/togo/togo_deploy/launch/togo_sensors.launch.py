@@ -96,7 +96,7 @@ def generate_launch_description():
     # OAK-D Front Camera
     front_depthai_oakd_node = ComposableNode(
         package="depthai_ros_driver",
-        name="front_oakd",
+        name="rgbd_front",
         namespace=sensor_ns,
         plugin="depthai_ros_driver::Camera",
         parameters=[config_front_oakd],
@@ -133,7 +133,7 @@ def generate_launch_description():
     # OAK-D Rear Camera
     rear_depthai_oakd_node = ComposableNode(
         package="depthai_ros_driver",
-        name="rear_oakd",
+        name="rgbd_rear",
         namespace=sensor_ns,
         plugin="depthai_ros_driver::Camera",
         parameters=[config_rear_oakd],
