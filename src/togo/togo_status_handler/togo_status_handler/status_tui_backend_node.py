@@ -109,7 +109,17 @@ class StatusSubscriptionSet:
 class StatusTUIBackendNode(Node):
     """Determines simplified Togo system state from a set of Clearpath subscriptions."""
 
+    #######################
+    # STATE CUTOFF VALUES #
+    #######################
+    # based on Togo Standard Operating Procedures and Clearpath Husky A300 AMP documentation
+
+    # battery percentages
     BATTERY_LOW_PERCENTAGE = 0.2
+    BATTERY_HIGH_PERCENTAGE = 0.9
+    # temperature cutoffs
+    TEMPERATURE_LOW_VALUE = 10.0
+    TEMPERATURE_HIGH_VALUE = 45.0
 
     def __init__(self, display=None):
         """Constructor for Status TUI Backend Node.
@@ -220,6 +230,7 @@ class StatusTUIBackendNode(Node):
         if not self.state_set.msgs["battery_status"].updated:
             # no message received
             self.status.battery_state = StatusState.BATTERY_STATE_NO_COMM
+            self.status.temperature_state = StatusState.TEMPERATURE_STATE_NO_COMM
             self.status.charging_state = StatusState.CHARGING_STATE_NO_COMM
             self.status.battery_percent = math.nan
             self.status.battery_voltage = math.nan
@@ -237,15 +248,26 @@ class StatusTUIBackendNode(Node):
         if self.state_set.msgs["battery_status"].msg.power_supply_health != BatteryState.POWER_SUPPLY_HEALTH_GOOD:
             # faulted
             self.status.battery_state = StatusState.BATTERY_STATE_FAULTED
-        elif self.status.battery_percent <= int(self.BATTERY_LOW_PERCENTAGE * 100):
+        elif self.status.battery_percent <= self.BATTERY_LOW_PERCENTAGE * 100:
             # low battery
             self.status.battery_state = StatusState.BATTERY_STATE_LOW
-        elif self.status.battery_percent == 100:
+        elif self.status.battery_percent > self.BATTERY_HIGH_PERCENTAGE * 100:
             # full
             self.status.battery_state = StatusState.BATTERY_STATE_FULL
         else:
             # ok
             self.status.battery_state = StatusState.BATTERY_STATE_OK
+
+        # set temperature status
+        if self.status.battery_temp < self.TEMPERATURE_LOW_VALUE:
+            # low temp
+            self.status.temperature_state = StatusState.TEMPERATURE_STATE_LOW
+        elif self.status.battery_temp > self.TEMPERATURE_HIGH_VALUE:
+            # high temp
+            self.status.temperature_state = StatusState.TEMPERATURE_STATE_HIGH
+        else:
+            # ok
+            self.status.temperature_state = StatusState.TEMPERATURE_STATE_OK
 
         # set charging state
         if self.state_set.msgs["battery_status"].msg.power_supply_status == BatteryState.POWER_SUPPLY_STATUS_CHARGING:
