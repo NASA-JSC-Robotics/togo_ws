@@ -10,22 +10,26 @@ from apriltag import apriltag
 from togo_apriltag_msgs.msg import AprilTagDetection 
 import numpy as np
 
+CAMERA= "front" #"rear"
+
 class AprilTagPublisher(Node):
     def __init__(self):
         super().__init__('apriltag_detector')
         # consts regarding the tag
         self.april_tag_size_cm = 10.0 
 
+        cameratopic = f"/husky/sensors/{CAMERA}_oakd/rgb/image_raw"
+        caminfotopic = f"/husky/sensors/{CAMERA}_oakd/rgb/camera_info"
 
         self.img_sub = self.create_subscription(
             Image,
-            '/husky/sensors/rear_oakd/rgb/image_raw',
+            cameratopic,
             self.image_callback,
             10)
 
         self.cam_info_sub = self.create_subscription(
             CameraInfo, 
-            '/husky/sensors/rear_oakd/rgb/camera_info', 
+            caminfotopic, 
             self.info_callback, 
             10)
 
@@ -48,6 +52,8 @@ class AprilTagPublisher(Node):
         img = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         results = self.detector.detect(gray)
+
+        cv2.imwrite("test.png", gray)
 
         detection_msg = AprilTagDetection()
         detection_msg.header = msg.header
