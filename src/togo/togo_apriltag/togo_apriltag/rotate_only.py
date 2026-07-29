@@ -12,7 +12,7 @@ class TagFollower(Node):
         super().__init__('tag_follower')
         self.subscription = self.create_subscription(
             AprilTagDetection,
-            '/detected_tag',
+            '/apriltag_pos',
             self.tag_callback,
             10)
         self.publisher = self.create_publisher(TwistStamped, "/platform_velocity_controller/cmd_vel", 10)
@@ -25,6 +25,7 @@ class TagFollower(Node):
         self.dt = 0.0
 
     def tag_callback(self, msg):
+        self.get_logger().info("in tag callback..")
         self.dt = time() - self.last_execution_time
         self.last_execution_time = time()
         
@@ -51,6 +52,7 @@ class TagFollower(Node):
 
         self.current_rot_speed = np.clip(self.current_rot_speed, -self.target_rot_speed, self.target_rot_speed)
 
+        self.get_logger().info(f"Publishing rotation speed: {self.current_rot_speed}")
         # Publish Twist
         cmd = TwistStamped()
         cmd.header.stamp = self.get_clock().now().to_msg()
