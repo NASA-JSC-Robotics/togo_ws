@@ -106,12 +106,12 @@ class StatusTUIFrontend:
     # mast positions
     MAST_START_ROW = 2
     MAST_END_ROW = MAST_START_ROW + len(ROBOT)
-    MAST_START_COL = 0
+    MAST_START_COL = 4
     MAST_END_COL = MAST_START_COL + len(ROBOT[0])
     # body positions
     BODY_START_ROW = MAST_START_ROW + 2
     BODY_END_ROW = MAST_END_ROW - 2
-    BODY_START_COL = len(ROBOT[0])
+    BODY_START_COL = MAST_START_COL + len(ROBOT[0])
     BODY_END_COL = MAST_START_COL + len(ROBOT[2])
     # wheel spacing from edges of body
     WHEEL_SPACING = 3
@@ -237,7 +237,7 @@ class StatusTUIFrontend:
         self.screen.clear()
 
         # status title
-        self.screen.addstr(0, 11, "Togo Status", (self.colors["grey"] | curses.A_UNDERLINE))
+        self.screen.addstr(0, 15, "Togo Status", (self.colors["grey"] | curses.A_UNDERLINE))
 
         # draw robot body
         row = self.MAST_START_ROW
