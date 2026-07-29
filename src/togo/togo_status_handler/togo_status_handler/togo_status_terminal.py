@@ -4,8 +4,7 @@ import argparse
 import sys
 import rclpy
 from togo_status_handler.status_tui_backend_node import StatusTUIBackendNode
-
-# from phoebe_status_handler_py.status_ncurses_frontend import StatusNcursesFrontend
+from togo_status_handler.status_tui_frontend import StatusTUIFrontend
 
 
 def main(args=None):
@@ -24,7 +23,7 @@ def main(args=None):
     if parsed_args.no_display:
         display = None
     else:
-        display = None  # StatusNcursesFrontend()
+        display = StatusTUIFrontend()
 
     # create status TUI node
     status_node = StatusTUIBackendNode(display)
