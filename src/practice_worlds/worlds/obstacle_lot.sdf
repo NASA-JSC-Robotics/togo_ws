@@ -118,6 +118,13 @@
       <pose >-2 0 0 0 0 1.2</pose>
       <uri>model://jersey_barrier</uri>
     </include>
+
+    <include>
+      <static>true</static>
+      <name>apriltag_00</name>
+      <pose >4 0 0.7 1.5708 0 1.5708</pose>
+      <uri>model://Apriltag36_11_00000</uri>
+    </include>
   
     <light name='sun' type='directional'>
       <pose>0 0 10 0 0 0</pose>
