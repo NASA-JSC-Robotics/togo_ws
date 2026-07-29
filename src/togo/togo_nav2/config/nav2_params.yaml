@@ -2,7 +2,7 @@
   bt_navigator:
     ros__parameters:
       enable_stamped_cmd_vel: true
-      global_frame: map
+      global_frame: odom
       robot_base_frame: base_link
       odom_topic: platform/odom/filtered
       bt_loop_duration: 10
@@ -187,7 +187,7 @@
         enable_stamped_cmd_vel: true
         update_frequency: 1.0
         publish_frequency: 1.0
-        global_frame: map
+        global_frame: odom
         robot_base_frame: base_link
         footprint: "[ [0.495, 0.349], [0.495, -0.349], [-0.495, -0.349], [-0.495, 0.349] ]"
         rolling_window: true
@@ -196,7 +196,7 @@
         resolution: 0.25
         track_unknown_space: true
         always_send_full_costmap: true
-        plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+        plugins: ["obstacle_layer", "inflation_layer"]
         obstacle_layer:
           plugin: "nav2_costmap_2d::ObstacleLayer"
           enabled: true
@@ -286,7 +286,7 @@
         plugin: "nav2_behaviors::Wait"
       assisted_teleop:
         plugin: "nav2_behaviors::AssistedTeleop"
-      global_frame: map
+      global_frame: odom
       local_frame: odom
       robot_base_frame: base_link
       transform_tolerance: 0.1

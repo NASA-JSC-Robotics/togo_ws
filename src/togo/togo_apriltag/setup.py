@@ -27,7 +27,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'apriltag_pos = togo_apriltag.apriltag_pos:main', 'rotate_only = togo_apriltag.rotate_only:main'
+            'apriltag_pos = togo_apriltag.apriltag_pos:main', 
+            'rotate_only = togo_apriltag.rotate_only:main',
+            'nav_to_apriltag = togo_apriltag.nav_to_apriltag:main'
             
             ],
     },
