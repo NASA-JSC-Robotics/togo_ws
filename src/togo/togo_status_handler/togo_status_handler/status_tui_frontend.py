@@ -10,7 +10,7 @@
 |     |--------------------------
 |     | _BAT_ 100% 28.0V 10.0A  |
 |     |                         |
-|     | _TMP_      72.0C        | front
+|     | _TMP_      72.0C  HOT   | front
 |     |                         |
 |     | _CHG_                   |
 |     |--------------------------
@@ -306,7 +306,7 @@ class StatusTUIFrontend:
 
         # update temperature state
         if state.temperature_state == StatusState.TEMPERATURE_STATE_LOW:
-            self.update_temperature("blue")  # using blue to indicate cold, but is that confusing?
+            self.update_temperature("red")
         elif state.temperature_state == StatusState.TEMPERATURE_STATE_OK:
             self.update_temperature("green")
         elif state.temperature_state == StatusState.TEMPERATURE_STATE_HIGH:
@@ -484,6 +484,12 @@ class StatusTUIFrontend:
 
         # create content string
         stats_content = f"{status_msg.battery_temp:>4.1f}C"
+        if status_msg.temperature_state == StatusState.TEMPERATURE_STATE_HIGH:
+            stats_content += "  HOT"
+        elif status_msg.temperature_state == StatusState.TEMPERATURE_STATE_LOW:
+            stats_content += "  COLD"
+        else:  # nothing to report, be sure to overwrite where HOT/COLD were written
+            stats_content += "      "
         # set content
         self.status_objects["temp_stats"].content = stats_content
 
