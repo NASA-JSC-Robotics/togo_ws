@@ -21,6 +21,12 @@ class StatusState:
     BATTERY_STATE_FULL = 3
     BATTERY_STATE_FAULTED = 4
 
+    # temperature state
+    TEMPERATURE_STATE_NO_COMM = 0
+    TEMPERATURE_STATE_OK = 1
+    TEMPERATURE_STATE_LOW = 2
+    TEMPERATURE_STATE_HIGH = 3
+
     # charging state
     CHARGING_STATE_NO_COMM = 0
     CHARGING_STATE_INACTIVE = 1
@@ -52,6 +58,14 @@ class StatusState:
         BATTERY_STATE_FAULTED: "FAULTED",
     }
 
+    # temperature state
+    TEMPERATURE_STATE_STR = {
+        TEMPERATURE_STATE_NO_COMM: "NO COMM",
+        TEMPERATURE_STATE_OK: "OK",
+        TEMPERATURE_STATE_LOW: "LOW",
+        TEMPERATURE_STATE_HIGH: "HIGH",
+    }
+
     # charging state
     CHARGING_STATE_STR = {
         CHARGING_STATE_NO_COMM: "NO COMM",
@@ -76,6 +90,7 @@ class StatusState:
         # initialize everything to no comms
         self.robot_state = self.ROBOT_STATE_NO_COMM
         self.battery_state = self.BATTERY_STATE_NO_COMM
+        self.temperature_state = self.TEMPERATURE_STATE_NO_COMM
         self.charging_state = self.CHARGING_STATE_NO_COMM
         self.driving_state = self.DRIVING_STATE_NO_COMM
         # set all battery info to NaN
@@ -92,6 +107,7 @@ class StatusState:
         serialized_msg += f"Battery percent: {self.battery_percent}\n"
         serialized_msg += f"Battery volts: {self.battery_voltage}\n"
         serialized_msg += f"Battery amps: {self.battery_amps}\n"
+        serialized_msg += f"Temperature state: {self.TEMPERATURE_STATE_STR[self.temperature_state]}\n"
         serialized_msg += f"Battery temp: {self.battery_temp}\n"
         serialized_msg += f"Charging state: {self.CHARGING_STATE_STR[self.charging_state]}\n"
         serialized_msg += f"Driving state: {self.DRIVING_STATE_STR[self.driving_state]}\n"
