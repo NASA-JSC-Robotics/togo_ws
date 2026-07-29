@@ -239,7 +239,7 @@ class StatusTUIBackendNode(Node):
             return
 
         # set battery state values
-        self.status.battery_percent = int(self.state_set.msgs["battery_status"].msg.percentage * 100)
+        self.status.battery_percent = int(round(self.state_set.msgs["battery_status"].msg.percentage, 2) * 100)
         self.status.battery_voltage = self.state_set.msgs["battery_status"].msg.voltage
         self.status.battery_amps = self.state_set.msgs["battery_status"].msg.current
         self.status.battery_temp = self.state_set.msgs["battery_status"].msg.temperature
