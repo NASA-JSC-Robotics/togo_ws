@@ -289,12 +289,12 @@ class StatusTUIBackendNode(Node):
             return
 
         # check estop state
-        if self.state_set.msgs["estop_status"].msg.data:
-            # estopped
-            self.status.robot_state = StatusState.ROBOT_STATE_ESTOPPED
-        elif self.state_set.msgs["stop_status"].msg.needs_reset:
+        if self.state_set.msgs["stop_status"].msg.needs_reset:
             # reset
             self.status.robot_state = StatusState.ROBOT_STATE_NEEDS_RESET
+        elif self.state_set.msgs["estop_status"].msg.data:
+            # estopped   
+            self.status.robot_state = StatusState.ROBOT_STATE_ESTOPPED
         else:
             # running
             self.status.robot_state = StatusState.ROBOT_STATE_RUNNING
