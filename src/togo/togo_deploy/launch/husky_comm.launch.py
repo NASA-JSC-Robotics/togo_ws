@@ -29,8 +29,8 @@ def generate_launch_description():
 
     # initialize arguments
     ns = LaunchConfiguration("ns")
-    default_ns = ""
-    vcan1_ns = "platform/bms"
+    default_ns = "husky"
+    vcan1_ns = "husky/platform/bms"
     tf_prefix = LaunchConfiguration("tf_prefix")
     tf_prefix = tf_prefix  # dummy use to stop precommit complaining about unused variables
     # tf_prefix will get passed into nodes implicitly
@@ -181,7 +181,7 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
-            # ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
+            ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
         ],
         parameters=[
             {
@@ -198,10 +198,10 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
-            # ("/husky/platform/motors/cmd", "/platform/motors/cmd"),
-            # ("/husky/platform/motors/feedback", "/platform/motors/feedback"),
-            # ("/husky/platform/motors/status", "/platform/motors/status"),
-            # ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
+            ("/husky/platform/motors/cmd", "/platform/motors/cmd"),
+            ("/husky/platform/motors/feedback", "/platform/motors/feedback"),
+            ("/husky/platform/motors/status", "/platform/motors/status"),
+            ("/husky/platform/motors/system_protection", "/platform/motors/system_protection"),
         ],
         parameters=[
             ParameterFile(motor_driver_config, allow_substs=True),
@@ -216,7 +216,7 @@ def generate_launch_description():
         output="screen",
         remappings=[
             ("/diagnostics", "diagnostics"),
-            # ("/husky/platform/motors/status", "/platform/motors/status"),
+            ("/husky/platform/motors/status", "/platform/motors/status"),
         ],
     )
 
