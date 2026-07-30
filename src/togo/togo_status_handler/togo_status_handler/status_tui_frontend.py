@@ -12,7 +12,7 @@
 |     |                         |
 |     | _TMP_      72.0C  HOT   | front
 |     |                         |
-|     | _CHG_                   |
+|     | _PLG_      _CHG_        |
 |     |--------------------------
 |     |   ___              ___    -->
 -------
@@ -185,15 +185,18 @@ class StatusTUIFrontend:
             ),
             # battery temperature
             "temp_light": StrStatusFrontend(self.screen, self.BODY_START_ROW + 3, self.BODY_START_COL + 1, " TMP "),
+            # horiz spacing: space for light (1+len(" TMP ")) and battery percent (1+len("100%")) and stats start (+1)
             "temp_stats": StrStatusFrontend(
                 self.screen,
                 self.BODY_START_ROW + 3,
-                self.BODY_START_COL
-                + 12,  # space for light (1+len(" TMP ")) and battery percent (1+len("100%")) and stats start (+1)
+                self.BODY_START_COL + 12,
                 "",
             ),
+            # plugged in indicator
+            "plugged_light": StrStatusFrontend(self.screen, self.BODY_START_ROW + 5, self.BODY_START_COL + 1, " PLG "),
             # charging indicator
-            "charge_light": StrStatusFrontend(self.screen, self.BODY_START_ROW + 5, self.BODY_START_COL + 1, " CHG "),
+            # horiz spacing: center with temperature
+            "charge_light": StrStatusFrontend(self.screen, self.BODY_START_ROW + 5, self.BODY_START_COL + 12, " CHG "),
             # driving indicators
             "drive_left": StrStatusFrontend(self.screen, self.BODY_START_ROW - 1, self.BODY_END_COL + 1, "-->"),
             "drive_right": StrStatusFrontend(self.screen, self.BODY_END_ROW, self.BODY_END_COL + 1, "-->"),
@@ -249,6 +252,7 @@ class StatusTUIFrontend:
         self.update_all_wheel_lights("grey")
         self.update_battery("grey")
         self.update_temperature("grey")
+        self.update_plugged("grey")
         self.update_charging("grey")
         self.update_driving("black")  # black on black effectively hides the object
 
@@ -315,6 +319,14 @@ class StatusTUIFrontend:
             self.update_temperature("grey")
 
         self.update_temperature_stats(state)
+
+        # update plugged state
+        if state.battery_amps >= 0.0:  # plugged in, drawing current
+            self.update_plugged("green")
+        elif state.battery_amps < 0.0:  # not plugged in, discharging current
+            self.update_plugged("black")
+        else:  # no comm
+            self.update_plugged("grey")
 
         # update charging state
         if state.charging_state == StatusState.CHARGING_STATE_INACTIVE:
@@ -444,9 +456,9 @@ class StatusTUIFrontend:
             status_msg (StatusState): status message containing battery stats
         """
 
-        # create content string
+        # create content string (negative current could add extra character; be sure to overwrite)
         stats_content = (
-            f"{status_msg.battery_percent:>3.0f}% {status_msg.battery_voltage:>4.1f}V {status_msg.battery_amps:>4.1f}A"
+            f"{status_msg.battery_percent:>3.0f}% {status_msg.battery_voltage:>4.1f}V {status_msg.battery_amps:>4.1f}A "
         )
         # set content
         self.status_objects["battery_stats"].content = stats_content
@@ -495,6 +507,25 @@ class StatusTUIFrontend:
 
         # draw temperature stats
         self.status_objects["temp_stats"].draw(self.colors["white"])
+
+        return
+
+    def update_plugged(self, color: str):
+        """Draw charging light status object.
+
+        Args:
+            color (str): color name, corresponding to color preset key in colors dictionary
+
+        Raises:
+            ValueError: unknown color
+        """
+
+        # check color
+        if color not in self.colors:
+            raise ValueError("Unknown color " + color + "; expected one of " + str(list(self.colors.keys())))
+
+        # draw charging light
+        self.status_objects["plugged_light"].draw(self.colors[color] | curses.A_REVERSE)
 
         return
 
