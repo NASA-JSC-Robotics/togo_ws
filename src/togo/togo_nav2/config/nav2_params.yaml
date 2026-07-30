@@ -41,7 +41,7 @@
         yaw_goal_tolerance: 0.25
       FollowPath:
         plugin: "nav2_mppi_controller::MPPIController"
-        time_steps: 56
+        time_steps: 128
         model_dt: 0.05
         batch_size: 2000
         ax_max: 3.0
@@ -124,62 +124,61 @@
           max_angle_to_furthest: 1.0
           mode: 0
 
+
+
   local_costmap:
-    local_costmap:
-      ros__parameters:
-        enable_stamped_cmd_vel: true
-        update_frequency: 5.0
-        publish_frequency: 2.0
-        global_frame: odom
-        robot_base_frame: base_link
-        rolling_window: true
-        width: 10
-        height: 10
-        resolution: 0.25
-        footprint: "[ [0.495, 0.349], [0.495, -0.349], [-0.495, -0.349], [-0.495, 0.349] ]"
-        always_send_full_costmap: true
-        plugins: ["obstacle_layer", "inflation_layer"]
-        inflation_layer:
-          plugin: "nav2_costmap_2d::InflationLayer"
-          cost_scaling_factor: 4.0
-          inflation_radius: 0.8
-        obstacle_layer:
-          plugin: "nav2_costmap_2d::ObstacleLayer"
-          enabled: True
-          observation_sources: lidar
-          front_rgbd:
-            topic: husky/sensors/front_oakd/points 
-            max_obstacle_height: 2.0
-            clearing: true
-            marking: true
-            data_type: "PointCloud2"
-            raytrace_max_range: .0
-            raytrace_min_range: 0.0
-            obstacle_max_range: 2.5
-            obstacle_min_range: 0.0
-          rear_rgbd:
-            topic: /husky/sensors/rear_oakd/points 
-            max_obstacle_height: 2.0
-            clearing: true
-            marking: true
-            data_type: "PointCloud2"
-            raytrace_max_range: 3.0
-            raytrace_min_range: 0.0
-            obstacle_max_range: 2.5
-            obstacle_min_range: 0.0
-          lidar:
-            topic: /husky/sensors/seyond/points 
-            max_obstacle_height: 2.0
-            clearing: true
-            marking: true
-            data_type: "PointCloud2"
-            raytrace_max_range: 3.0
-            raytrace_min_range: 0.0
-            obstacle_max_range: 2.5
-            obstacle_min_range: 0.0
-        static_layer:
-          plugin: "nav2_costmap_2d::StaticLayer"
-          map_subscribe_transient_local: true
+    ros__parameters:
+      use_sim_time: true # change to false if running the robot in real life (e.g. true if running in gz)
+      enable_stamped_cmd_vel: true
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: base_link
+      robot_base_frame: base_link
+      rolling_window: true
+      width: 10
+      height: 10
+      resolution: 0.25
+      footprint: "[ [0.495, 0.349], [0.495, -0.349], [-0.495, -0.349], [-0.495, 0.349] ]"
+      always_send_full_costmap: true
+      plugins: ["obstacle_layer", "inflation_layer"]
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 4.0
+        inflation_radius: 0.7
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: True
+        observation_sources: lidar front_rgbd rear_rgbd
+        front_rgbd:
+          topic: husky/sensors/front_oakd/points 
+          max_obstacle_height: 20.0
+          clearing: true
+          marking: true
+          data_type: "PointCloud2"
+          raytrace_max_range: 5.0
+          raytrace_min_range: 0.0
+          obstacle_max_range: 5.0
+          obstacle_min_range: 0.0
+        rear_rgbd:
+          topic: /husky/sensors/rear_oakd/points 
+          max_obstacle_height: 20.0
+          clearing: true
+          marking: true
+          data_type: "PointCloud2"
+          raytrace_max_range: 5.0  
+          raytrace_min_range: 0.0
+          obstacle_max_range: 5.0
+          obstacle_min_range: 0.0
+        lidar:
+          topic: /husky/sensors/seyond/points 
+          max_obstacle_height: 20.0
+          clearing: true
+          marking: true
+          data_type: "PointCloud2"
+          raytrace_max_range: 5.0
+          raytrace_min_range: 0.0
+          obstacle_max_range: 5.0
+          obstacle_min_range: 0.0
 
   global_costmap:
     global_costmap:
@@ -250,13 +249,6 @@
         use_astar: false
         allow_unknown: true
 
-  map_server:
-    ros__parameters:
-      use_sim_time: True
-#      yaml_filename: "map.yaml"
-      topic_name: "map"
-      frame_id: "map"
-
   smoother_server:
     ros__parameters:
       enable_stamped_cmd_vel: true
@@ -307,97 +299,3 @@
         plugin: "nav2_waypoint_follower::WaitAtWaypoint"
         enabled: true
         waypoint_pause_duration: 200
-
-  velocity_smoother:
-    ros__parameters:
-      enable_stamped_cmd_vel: true
-      smoothing_frequency: 20.0
-      scale_velocities: False
-      feedback: "OPEN_LOOP"
-      max_velocity: [2.0, 0.0, 2.0]
-      min_velocity: [-2.0, 0.0, -2.0]
-      max_accel: [4.0, 0.0, 4.0]
-      max_decel: [-4.0, 0.0, -4.0]
-      odom_topic: "platform/odom/filtered"
-      odom_duration: 0.1
-      deadband_velocity: [0.0, 0.0, 0.0]
-      velocity_timeout: 1.0
-
-  collision_monitor:
-    ros__parameters:
-      enable_stamped_cmd_vel: true
-      base_frame_id: "base_link"
-      odom_frame_id: "odom"
-      cmd_vel_in_topic: "cmd_vel_smoothed"
-      cmd_vel_out_topic: "cmd_vel"
-      state_topic: "collision_monitor_state"
-      transform_tolerance: 0.2
-      source_timeout: 1.0
-      base_shift_correction: True
-      stop_pub_timeout: 2.0
-      # Polygons represent zone around the robot for "stop", "slowdown" and "limit" action types,
-      # and robot footprint for "approach" action type.
-      polygons: ["FootprintApproach"]
-      FootprintApproach:
-        type: "polygon"
-        action_type: "approach"
-        footprint_topic: "local_costmap/published_footprint"
-        time_before_collision: 1.2
-        simulation_time_step: 0.1
-        min_points: 6
-        visualize: False
-        enabled: True
-      observation_sources: ["scan"]
-      scan:
-        type: "scan"
-        topic: "sensors/lidar2d_0/scan"
-        min_height: 0.15
-        max_height: 2.0
-        enabled: True
-
-  docking_server:
-    ros__parameters:
-      enable_stamped_cmd_vel: true
-      controller_frequency: 50.0
-      initial_perception_timeout: 5.0
-      wait_charge_timeout: 5.0
-      dock_approach_timeout: 30.0
-      undock_linear_tolerance: 0.05
-      undock_angular_tolerance: 0.1
-      max_retries: 3
-      base_frame: "base_link"
-      fixed_frame: "odom"
-      dock_backwards: false
-      dock_prestaging_tolerance: 0.5
-
-      # Types of docks
-      dock_plugins: ['simple_charging_dock']
-      simple_charging_dock:
-        plugin: 'opennav_docking::SimpleChargingDock'
-        docking_threshold: 0.05
-        staging_x_offset: -0.7
-        use_external_detection_pose: true
-        use_battery_status: false # true
-        use_stall_detection: false # true
-
-        external_detection_timeout: 1.0
-        external_detection_translation_x: -0.18
-        external_detection_translation_y: 0.0
-        external_detection_rotation_roll: -1.57
-        external_detection_rotation_pitch: -1.57
-        external_detection_rotation_yaw: 0.0
-        filter_coef: 0.1
-
-      # Dock instances
-      # The following example illustrates configuring dock instances.
-      # docks: ['home_dock']  # Input your docks here
-      # home_dock:
-      #   type: 'simple_charging_dock'
-      #   frame: map
-      #   pose: [0.0, 0.0, 0.0]
-
-      controller:
-        k_phi: 3.0
-        k_delta: 2.0
-        v_linear_min: 0.15
-        v_linear_max: 0.15
