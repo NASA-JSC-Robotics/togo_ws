@@ -146,7 +146,7 @@ we include a convenient launch file for Togo's hardware operation mode.
     ros2 run togo_status_handler togo_status_terminal -n --ros-args -r __ns:=/husky
     ```
 
-    TODO PICTURE, DUPLICATE ABOVE
+    ![Togo Status Monitor No Display](./docs/images/status-monitor-no-display.png)
 
 4. At this point, Togo is ready to drive!
   See [joystick control](#joystick-control) below for more information on driving Togo.
