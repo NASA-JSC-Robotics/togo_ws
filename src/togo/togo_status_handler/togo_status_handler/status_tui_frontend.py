@@ -321,10 +321,10 @@ class StatusTUIFrontend:
         self.update_temperature_stats(state)
 
         # update plugged state
-        if state.battery_amps >= 0.0:  # plugged in, drawing current
-            self.update_plugged("green")
-        elif state.battery_amps < 0.0:  # not plugged in, discharging current
+        if state.plugged_in_state == StatusState.PLUGGED_STATE_INACTIVE:
             self.update_plugged("black")
+        elif state.plugged_in_state == StatusState.PLUGGED_STATE_ACTIVE:
+            self.update_plugged("green")
         else:  # no comm
             self.update_plugged("grey")
 

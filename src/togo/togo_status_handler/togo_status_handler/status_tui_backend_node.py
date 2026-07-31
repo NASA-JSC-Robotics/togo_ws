@@ -231,6 +231,7 @@ class StatusTUIBackendNode(Node):
             # no message received
             self.status.battery_state = StatusState.BATTERY_STATE_NO_COMM
             self.status.temperature_state = StatusState.TEMPERATURE_STATE_NO_COMM
+            self.status.plugged_in_state = StatusState.PLUGGED_STATE_NO_COMM
             self.status.charging_state = StatusState.CHARGING_STATE_NO_COMM
             self.status.battery_percent = math.nan
             self.status.battery_voltage = math.nan
@@ -269,12 +270,20 @@ class StatusTUIBackendNode(Node):
             # ok
             self.status.temperature_state = StatusState.TEMPERATURE_STATE_OK
 
-        # set charging state
+        # set plugged in state
         if self.state_set.msgs["battery_status"].msg.power_supply_status == BatteryState.POWER_SUPPLY_STATUS_CHARGING:
             # charging
-            self.status.charging_state = StatusState.CHARGING_STATE_ACTIVE
+            self.status.plugged_in_state = StatusState.PLUGGED_STATE_ACTIVE
         else:
             # not charging
+            self.status.plugged_in_state = StatusState.PLUGGED_STATE_INACTIVE
+
+        # set charging state
+        if self.status.battery_amps > 0.0:
+            # charging, drawing current
+            self.status.charging_state = StatusState.CHARGING_STATE_ACTIVE
+        else:  # self.status.battery_amps <= 0.0
+            # not charging, discharging current
             self.status.charging_state = StatusState.CHARGING_STATE_INACTIVE
 
         return
@@ -293,7 +302,7 @@ class StatusTUIBackendNode(Node):
             # reset
             self.status.robot_state = StatusState.ROBOT_STATE_NEEDS_RESET
         elif self.state_set.msgs["estop_status"].msg.data:
-            # estopped   
+            # estopped
             self.status.robot_state = StatusState.ROBOT_STATE_ESTOPPED
         else:
             # running
