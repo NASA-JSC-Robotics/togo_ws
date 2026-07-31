@@ -73,7 +73,7 @@ docker compose exec dev bash
 If multiple people are using this docker container on the same device, please do the following:
 
 1. Comment out line 23 (`network_mode: host`) of docker_compose.yml
-2. Accept that you will not be  able to use this computer to run the robot - only sim. 
+2. Accept that you will not be able to use this computer to run the robot - only sim.
 
 ### Hardware Development Image
 
@@ -89,6 +89,10 @@ docker compose up hw-dev -d
 # Connect to the console
 docker compose exec hw-dev terminator
 ```
+
+> [!WARNING]
+> Especially on the robot hardware, it will be helpful to somewhat regularly rebuild the docker images (`transport` and `hw-dev`) to update the packages (especially Clearpath packages) used within the containers.
+> Rebuilding the docker images will ensure the latest package updates are pulled down and used on the hardware.
 
 ### Building the Togo Workspace
 
