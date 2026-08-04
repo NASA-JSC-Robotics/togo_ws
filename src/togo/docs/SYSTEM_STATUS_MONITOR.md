@@ -13,6 +13,7 @@ An example of no data for all status information is shown below:
 ## Robot State
 
 Robot state (e-stopped, needs reset, or driving) is indicated by the lights in the 4 corners of the robot.
+The lights displayed in the status monitor are designed to mimic the physical lights on the robot.
 
 When the robot is e-stopped, all 4 lights will blink red:
 
@@ -22,7 +23,7 @@ When the robot needs a reset, the lights will blink red, alternating left/right:
 
 ![Robot State Reset](./images/status_monitor/robot-state-reset.gif)
 
-When the robot is ready, the back lights will be red and front lights will be white:
+When the robot is ready, the back lights will be solid red and front lights will be solid white:
 
 ![Robot State Ready](./images/status_monitor/robot-state-driving.png)
 
@@ -85,12 +86,12 @@ When the robot is not plugged in (and therefore not charging), neither indicator
 
 ## Driving State
 
-When commands are being sent to the robot, two small arrows will be drawn in the monitor.
+When velocity commands are being sent to the robot, two small arrows will be drawn in the monitor.
 
-When the robot is receiving an all-zero command, the driving arrows will be solid yellow:
+When the robot is receiving an all-zero velocity command, the driving arrows will be solid yellow:
 
 ![Driving Zero Command](./images/status_monitor/driving-zero.png)
 
-When the robot is receiving a non-zero command, the driving arrows will blink green:
+When the robot is receiving a non-zero velocity command, the driving arrows will blink green:
 
 ![Driving Command](./images/status_monitor/driving.gif)
