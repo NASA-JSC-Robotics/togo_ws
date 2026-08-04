@@ -16,15 +16,11 @@ Robot state (e-stopped, needs reset, or driving) is indicated by the lights in t
 
 When the robot is e-stopped, all 4 lights will blink red:
 
-![Robot State E-Stopped](./images/status_monitor/robot-state-estopped.png)
-
-![Robot State E-Stopped Blink](./images/status_monitor/robot-state-estopped-blink.png)
+![Robot State E-Stopped](./images/status_monitor/robot-state-estopped.gif)
 
 When the robot needs a reset, the lights will blink red, alternating left/right:
 
-![Robot State Reset](./images/status_monitor/robot-state-reset.png)
-
-![Robot State Reset](./images/status_monitor/robot-state-reset-blink.png)
+![Robot State Reset](./images/status_monitor/robot-state-reset.gif)
 
 When the robot is ready, the back lights will be red and front lights will be white:
 
@@ -97,6 +93,4 @@ When the robot is receiving an all-zero command, the driving arrows will be soli
 
 When the robot is receiving a non-zero command, the driving arrows will blink green:
 
-![Driving Command](./images/status_monitor/driving.png)
-
-![Driving Command Blink](./images/status_monitor/driving-blink.png)
+![Driving Command](./images/status_monitor/driving.gif)
