@@ -10,16 +10,23 @@ from apriltag import apriltag
 from togo_apriltag_msgs.msg import AprilTagDetection 
 import numpy as np
 
-CAMERA= "front" #"rear"
-
 class AprilTagPublisher(Node):
     def __init__(self):
         super().__init__('apriltag_detector')
         # consts regarding the tag
-        self.april_tag_size_cm = 10.0 
+        self.declare_parameter('camera_facing', "front")
+        self.declare_parameter('april_tag_size_cm', 10.0)
 
-        cameratopic = f"/husky/sensors/{CAMERA}_oakd/rgb/image_raw"
-        caminfotopic = f"/husky/sensors/{CAMERA}_oakd/rgb/camera_info"
+        self.camera_direction = self.get_parameter('camera_facing').value
+        if self.camera_direction not in ["front", "rear"]:
+            error_msg = f"{self.camera_direction} is not a valid value for camera_facing. camera_facing must be \'rear\' or \'front\'. "
+            self.get_logger().error(error_msg)
+            raise ValueError(error_msg)  # This will successfully halt node startup on bad input
+
+        self.april_tag_size_cm = self.get_parameter('april_tag_size_cm').value
+
+        cameratopic = f"/husky/sensors/{self.camera_direction}_oakd/rgb/image_raw"
+        caminfotopic = f"/husky/sensors/{self.camera_direction}_oakd/rgb/camera_info"
 
         self.img_sub = self.create_subscription(
             Image,
@@ -42,7 +49,7 @@ class AprilTagPublisher(Node):
 
         # camera params
         self.camera_matrix = None # fx, fy, cx, cy from  the camera
-        self.dist_coeffs = None # distortion coefficients as provided by CameraInfo
+        self.dist_coeffs = None # distortion coefficients as provided by CameraInfo... only for use if we're using fisheye lens or something silly
 
     # receive image, publish apriltagdetection object to /apriltag_pos. 
     def image_callback(self, msg):
@@ -74,6 +81,7 @@ class AprilTagPublisher(Node):
             tx, ty, tz = t[0], t[1], t[2]
 
             # translation in opencv puts Z as the "going out of image frame"
+            # This part written by genAI because it knows how to convert opencv to ros coords
             # ros2/posestamped puts it as X. 
             pose_msg = PoseStamped()
             pose_msg.header = msg.header
