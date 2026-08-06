@@ -11,6 +11,13 @@ import time
 class AprilTagFollower(Node):
     def __init__(self):
         super().__init__('apriltag_nav_follower')
+
+        self.declare_parameter('refresh_rate', 60.0) # 60 seconds between target location updates. 
+        self.refresh_rate = self.get_parameter('refresh_rate').value
+
+        self.declare_parameter('tag_safety_dist', 0.5) # meters(?) before the tag to stop. 
+        self.tag_safety_dist = self.get_parameter('tag_safety_dist').value
+
         self.subscription = self.create_subscription(
             AprilTagDetection, '/apriltag_pos', self.tag_callback, 10)
         
@@ -33,12 +40,12 @@ class AprilTagFollower(Node):
             duration = current_time - self.last_time_sent 
             self.last_time = current_time
             # https://deepwiki.com/ros2/rclpy/7.1-clock-and-time
-            if duration / 1e9 < 60. : # 60 seconds
+            if duration / 1e9 < self.refresh_rate:
                 return 
 
         # The pose from your detector is relative to the camera frame (e.g., oakd_rgb_optical_frame)
         tag_pose_camera = msg.pose 
-        tag_pose_camera.pose.position.x -= 0.5 # so we don't finish directly at the tag
+        tag_pose_camera.pose.position.x -= self.tag_safety_dist # so we don't finish directly at the tag
 
         try:
             goal_msg = NavigateToPose.Goal()
