@@ -1,5 +1,5 @@
 /**:
-  front_oakd:
+  rgbd_front:
     ros__parameters:
       camera.i_enable_imu: False
       camera.i_enable_ir: False

@@ -1,5 +1,5 @@
 /**:
-  rear_oakd:
+  rgbd_rear:
     ros__parameters:
       camera.i_enable_imu: False
       camera.i_enable_ir: False
