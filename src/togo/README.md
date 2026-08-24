@@ -20,6 +20,7 @@ For more information about enabling/disabling Clearpath's baseline configuration
     - [Launch Sensors](#launch-sensors)
     - [Shutting Down the Robot](#shutting-down-the-robot)
   - [Gazebo Run Instructions](#gazebo-run-instructions)
+    - [Nav2 Integration](#nav2-integration)
 
 ## Hardware Run Instructions
 
@@ -45,10 +46,13 @@ However, we provide additional details specific to Togo's setup.
     ![Power Button](./docs/images/power-and-reset-buttons-labeled.jpg)
 
 3. Wait one minute for the robot's computer and MCU to boot up.
-4. Ensure all e-stops (front and rear) are unplunged.
+4. Ensure all e-stops (two on robot, front and rear, and one wireless) are unplunged.
   If one of the e-stops is pressed, all 4 status lights will be blinking red in unison.
   Once the e-stops are released, the status lights will blinking red, alternating left/right, indicating the safety restart button needs to be pressed.
-5. Press and release the Safety Restart button.
+
+    ![Wireless E-Stop and Safety Reset Button](./docs/images/wireless-estop-reset-labeled.png)
+
+5. Press and release the Safety Restart button, either the one on the robot or the wireless reset button.
 6. When the robot is up and ready to go, the front lights should be solid white and the rear lights (by the mast) should be solid red.
 7. All remaining hardware instructions will be run on the robot's control computer. SSH into the robot from the console computer:
 
@@ -66,13 +70,15 @@ For more in-depth information about what transport mode does, please refer to [t
 > Transport mode is intended for when we want basic robot functionality *without using the console computer* for anything besides visualization.
 > If you plan on using the console computer to run application nodes, please proceed to [Non-Transport Mode instructions](#non-transport-mode).
 
+When you SSH into the robot, the transport mode status will be reported (transport mode defaults to on):
+
+![Transport Mode On](./docs/images/transport-mode-on.png)
+
 To check whether Togo is in transport mode:
 
 ```bash
-systemctl status togo-transport.service
+check_transport_mode
 ```
-
-We expect to see the service as started, enabled, and active (all green).
 
 If the previous steps were completed in transport mode, then Togo is ready to go!
 See [joystick control](#joystick-control) below for more information on driving Togo.
@@ -87,6 +93,10 @@ stop_transport_mode
 
 This kills the docker container running transport mode.
 This means all of the basic platform comm and control nodes are no longer running.
+
+We can confirm transport mode is off using the command `check_transport_mode`:
+
+![Transport Mode Off](./docs/images/check-transport-mode.png)
 
 All remaining hardware instructions will be run on the robot's control computer in the hardware development docker container.
 Connect to the [hardware development docker container](../../README.md#hardware-development-image):
@@ -118,10 +128,30 @@ we include a convenient launch file for Togo's hardware operation mode.
     ros2 launch togo_deploy control_hardware.launch.py
     ```
 
-3. At this point, Togo is ready to drive!
+3. Start Togo's system status monitor:
+
+    ```bash
+    ros2 run togo_status_handler togo_status_terminal --ros-args -r __ns:=/husky
+    ```
+
+    The status monitor displays information about Togo's robot state (e-stopped, needs reset, and driving based on lighting), battery information, battery temperature, plugged in and charging states, and driving state.
+    Please see [status monitor docs](./docs/SYSTEM_STATUS_MONITOR.md) for more information about the data provided by the status monitor.
+    Below is an example status monitor showing the robot is e-stopped, nominal battery charge and temperature, and the robot is plugged in and charging.
+
+    ![Togo Status Monitor](./docs/images/status-monitor.png)
+
+    The status monitor can also be started without a display with flag `-n` for `--no-display`, in which case status information will be printed out:
+
+    ```bash
+    ros2 run togo_status_handler togo_status_terminal -n --ros-args -r __ns:=/husky
+    ```
+
+    ![Togo Status Monitor No Display](./docs/images/status-monitor-no-display.png)
+
+4. At this point, Togo is ready to drive!
   See [joystick control](#joystick-control) below for more information on driving Togo.
 
-4. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors) as well.
+1. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors) as well.
   Please see [development on Togo docs](./docs/TOGO_DEVELOPMENT.md) for best practices for your own development on Togo!
 
 ### Joystick Control
