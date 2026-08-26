@@ -25,22 +25,14 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-import os
 
 from ament_index_python.packages import get_package_share_directory
-
-from clearpath_config.clearpath_config import ClearpathConfig
-from clearpath_config.common.utils.yaml import read_yaml
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-
-from launch_ros.actions import PushRosNamespace
-
-from nav2_common.launch import RewrittenYaml
 
 
 ARGUMENTS = [
@@ -59,11 +51,6 @@ def launch_setup(context, *args, **kwargs):
     map = LaunchConfiguration("map")  # noqa:A001
     scan_topic = LaunchConfiguration("scan_topic")
 
-    # Read robot YAML
-    config = read_yaml(os.path.join(setup_path.perform(context), "robot.yaml"))
-    # Parse robot YAML into config
-    clearpath_config = ClearpathConfig(config)
-
     eval_scan_topic = scan_topic.perform(context)
     if len(eval_scan_topic) == 0:
         eval_scan_topic = "sensors/lidar2d_0/scan"
@@ -75,11 +62,9 @@ def launch_setup(context, *args, **kwargs):
 
     localization = GroupAction(
         [
-            PushRosNamespace(namespace),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(launch_localization),
                 launch_arguments=[
-                    ("namespace", namespace),
                     ("map", map),
                     ("use_sim_time", use_sim_time),
                     ("params_file", file_parameters),

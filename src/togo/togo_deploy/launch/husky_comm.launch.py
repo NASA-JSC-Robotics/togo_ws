@@ -177,19 +177,6 @@ def generate_launch_description():
         ],
     )
 
-    node_micro_ros_agent = Node(
-        name="micro_ros_agent",
-        executable="micro_ros_agent",
-        package="micro_ros_agent",
-        namespace=default_ns,
-        output="screen",
-        arguments=[
-            "udp4",
-            "--port",
-            "11411",
-        ],
-    )
-
     node_lighting_node = Node(
         name="lighting_node",
         executable="lighting_node",
