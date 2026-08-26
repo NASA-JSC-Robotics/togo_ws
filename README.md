@@ -1,6 +1,6 @@
 # Togo Containerized Workspace
 
-Basic dockerized workspace for the EG Husky Togo.
+Basic workflow for the EG Husky Togo.
 The contents of the `src` directory should be treated similarly to a "normal" ROS workspace.
 That is, source code can be imported and added as needed to `src/`, then be built and run inside of an isolated, ROS enabled environment.
 
@@ -63,17 +63,17 @@ docker compose build dev
 # Start it
 docker compose up dev -d
 
-# Connect to the console by launching a terminator session (requires a display):
-docker compose exec dev terminator
-
-# Connect to the console just in bash
+# Start a bash session in the container
 docker compose exec dev bash
+
+# Or optionally connect to the console by launching a terminator session (requires a display):
+docker compose exec dev terminator
 ```
 
-If multiple people are using this docker container on the same device, please do the following:
+It is possible for multiple devs to work on the same machine, if users:
 
 1. Comment out line 23 (`network_mode: host`) of docker_compose.yml
-2. Accept that you will not be able to use this computer to run the robot - only sim.
+2. Accept that you will not be able to use this computer to run the robot - only sim
 
 ### Hardware Development Image
 
