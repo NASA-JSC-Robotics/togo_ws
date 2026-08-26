@@ -82,3 +82,7 @@ repos:
     hooks:
       - id: codespell
         exclude: \.(svg|stl|dae|lock)$
+
+# Ignore externals and references
+exclude: (?x)
+  ^references/

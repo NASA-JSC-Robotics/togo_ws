@@ -11,7 +11,7 @@ slam_toolbox:
 
     # ROS Parameters
     # These are modified by slam.launch.py
-    # Do mot modify the map_name or scan_topic here
+    # Do not modify the map_name or scan_topic here
     odom_frame: odom
     map_frame: map
     map_name: /map
