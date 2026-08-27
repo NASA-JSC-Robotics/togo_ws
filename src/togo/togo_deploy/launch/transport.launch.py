@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-#
-# Copyright (c) 2025, United States Government, as represented by the
+# Copyright (c) 2026, United States Government, as represented by the
 # Administrator of the National Aeronautics and Space Administration.
 #
 # All rights reserved.
@@ -16,7 +14,6 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
@@ -75,4 +72,3 @@ def generate_launch_description():
     launches.append(MakeLaunchDescription(launch_file_transport_control, common_launch_args))
 
     return LaunchDescription(declared_arguments + launches)
-

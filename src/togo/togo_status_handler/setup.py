@@ -9,7 +9,7 @@ package_name = "togo_status_handler"
 
 setup(
     name=package_name,
-    version="0.0.0",
+    version="1.0.0",
     packages=find_packages(exclude=["test"]),
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
@@ -20,7 +20,7 @@ setup(
     maintainer="Emily Sheetz",
     maintainer_email="emily.j.sheetz@nasa.gov",
     description="Status handler for Togo, summarizing status information from Clearpath Husky A300 AMP.",
-    license="TODO",
+    license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={
         "console_scripts": ["togo_status_terminal = togo_status_handler.togo_status_terminal:main"],
