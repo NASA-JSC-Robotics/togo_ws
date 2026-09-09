@@ -1,6 +1,6 @@
-# Togo Containerized Workspace
+# Togo Workspace
 
-Basic workflow for the EG Husky Togo.
+Containerized development workflows for the EG Husky Robot, affectionately named "Togo".
 The contents of the `src` directory should be treated similarly to a "normal" ROS workspace.
 That is, source code can be imported and added as needed to `src/`, then be built and run inside of an isolated, ROS enabled environment.
 
