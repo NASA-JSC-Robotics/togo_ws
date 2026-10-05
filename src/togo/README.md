@@ -30,7 +30,7 @@ See our [hardware overview docs](./docs/HARDWARE_OVERVIEW.md) for more informati
 Hardware instructions are taken directly from the [Husky Quick Start](https://docs.clearpathrobotics.com/docs_robots/outdoor_robots/husky/a300/user_manual_husky/#quick-start) guide.
 However, we provide additional details specific to Togo's setup.
 
-For Togo, we recognize two distinct operational use cases. The first addresses the desire to start the robot and drive it somewhere with the joystick controller without needing network setup or another computer in the mix. We call this "Transport Mode." The second addresses the need to interact with the robot -- to look at sensor values, or collect rosbags, or run custom software packages. These tasks are by their nature interactive and require another computer to act as an interface to the robot, so we'll call this use case "Interactive Mode," and we'll label this second computer the "robot console." 
+For Togo, we recognize two distinct operational use cases. The first addresses the desire to start the robot and drive it somewhere with the joystick controller without needing network setup or another computer in the mix. We call this "Transport Mode." The second addresses the need to interact with the robot -- to look at sensor values, or collect rosbags, or run custom software packages. These tasks are by their nature interactive and require another computer to act as an interface to the robot, so we'll call this use case "Interactive Mode," and we'll label this second computer the "robot console."
 
 By default, the robot boots into Transport Mode, so that the basic platform comm nodes, control nodes, and joystick control nodes are brought up in the Togo docker container as part of startup. For more in-depth information about what transport mode does, please refer to [transport mode docs](../../references/documentation/Transport_Mode.md). The robot may be transitioned to Interactive Mode by connecting the console and sending commands over ssh to start the stock ROS launch files for control and visualization. Developing custom code on the robot throws up a different set of considerations. Please refer to our [development docs](./docs/TOGO_DEVELOPMENT.md) for information on this.
 
@@ -49,7 +49,7 @@ By default, the robot boots into Transport Mode, so that the basic platform comm
 
     ![Power Button](./docs/images/power-and-reset-buttons-labeled.jpg)
 
-3. Wait one minute for the robot's computer and MCU to boot up. 
+3. Wait one minute for the robot's computer and MCU to boot up.
 4. Ensure all e-stops (two on robot, front and rear, and one wireless) are unplunged. Don't forget about the port hatch needing to be closed.
   If one of the e-stops is pressed, all 4 status lights will be blinking red in unison.
   Once the e-stops are released, the status lights will alternate blinking red left/right, indicating the safety restart button needs to be pressed.
