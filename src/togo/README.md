@@ -40,7 +40,8 @@ By default, the robot boots into Transport Mode, so that the basic platform comm
    1. Unplug the charger and any other cables attached at the port hatch.
    2. Close the port hatch door.
 
-   > Note: The robot treats the hatch door as an EStop and will not enable motion if this hatch is open.
+   > [!NOTE]
+   > The robot treats the hatch door as an EStop and will not enable motion if this hatch is open.
 
     ![Port Hatch](./docs/images/togo-back-labeled.png)
 
