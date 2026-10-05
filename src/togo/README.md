@@ -85,7 +85,7 @@ We can confirm transport mode is off using the command `check_transport_mode`:
 
 ![Transport Mode Off](./docs/images/check-transport-mode.png)
 
-4. Start the hardware docker container and launch a terminator inside it. Note that transport mode must be stopped before starting this container or the robot will have two end up with two different control sources.
+4. Start the hardware docker container and launch a terminator inside it. Note that transport mode must be stopped before starting this container or the robot will end up with two different control sources.
 
 ```bash
 # bring up the container; this will automatically start the micro-ROS agent docker container as well
