@@ -1,0 +1,141 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Name: TF
+    - Class: rviz_default_plugins/Map
+      Enabled: false
+      Name: Global Costmap
+      Topic:
+        Value: /global_costmap/costmap
+    - Class: rviz_default_plugins/Map
+      Enabled: false
+      Name: Local Costmap
+      Topic:
+        Value: /local_costmap/costmap
+    - Class: rviz_default_plugins/Map
+      Enabled: true
+      Color Scheme: costmap
+      Name: Backend Navigation Costs
+      Topic:
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        Value: /map
+    - Class: rviz_default_plugins/Map
+      Enabled: false
+      Name: Backend Hazards Before Inflation
+      Topic:
+        Value: /hazard/raw
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Terrain Slope Degrees
+      Color Transformer: Intensity
+      Channel Name: intensity
+      Topic:
+        Value: /hazard/slope
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: false
+      Name: Temporary Obstacle Confidence
+      Color Transformer: Intensity
+      Channel Name: intensity
+      Autocompute Intensity Bounds: false
+      Min Intensity: 0
+      Max Intensity: 100
+      Min Color: 0; 255; 0
+      Max Color: 255; 0; 0
+      Use rainbow: false
+      Decay Time: 0
+      Position Transformer: XYZ
+      Size (m): 0.08
+      Style: Flat Squares
+      Topic:
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        Value: /hazard/obstacles
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Filtered Cloud
+      Topic:
+        Value: /hazard/normalized_cloud
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Backend Modified Map
+      Topic:
+        Value: /modified_map_timed
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Registered LiDAR
+      Topic:
+        Value: /dlio/deskewed
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Global Plan
+      Topic:
+        Value: /plan
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: DLIO Path
+      Topic:
+        Value: /dlio/path_simple
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Backend Path
+      Topic:
+        Value: /modified_path
+  Enabled: true
+  Global Options:
+    Fixed Frame: map
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+      Line color: 128; 128; 0
+    - Class: rviz_default_plugins/SetInitialPose
+      Covariance x: 0.25
+      Covariance y: 0.25
+      Covariance yaw: 0.06853891909122467
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        # The relay checks this exact position against the backend map.
+        # Valid goals are forwarded unchanged to Nav2.
+        Value: /goal_pose_requested
+    - Class: rviz_default_plugins/PublishPoint
+      Single click: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 20
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 0.785
+      Target Frame: <Fixed Frame>
+      Yaw: 0.785
+    Saved: ~
