@@ -15,6 +15,7 @@ For more information about enabling/disabling Clearpath's baseline configuration
   - [Table of Contents](#table-of-contents)
   - [Hardware Run Instructions](#hardware-run-instructions)
     - [From Power Off to Transport Mode](#from-power-off-to-transport-mode)
+    - [Troubleshooting Transport Mode](#troubleshooting-transport-mode)
     - [Switching to Interactive Mode](#switching-to-interactive-mode)
     - [Joystick Control](#joystick-control)
     - [Launch Sensors and Visualization](#launch-sensors-and-visualization)
@@ -59,6 +60,31 @@ By default, the robot boots into Transport Mode, so that the basic platform comm
 
 5. Press and release the Safety Restart button, either the one on the robot (see picture) or the wireless reset button. When the robot is ready to go, the front lights will be solid white and the rear lights (by the mast) should be solid red. If you plan to move to Interactive Mode, skip to the next section.
 6. Power on the PS4 controller and wait for it to connect to the robot. You're now ready to drive. See [joystick control](#joystick-control) below for more information on driving Togo.
+
+### Troubleshooting Transport Mode
+
+While the purpose of transport mode is to start the robot without the need for a console,
+we can optionally connect a console and view the status of the robot for monitoring or troubleshooting purposes.
+
+To start Togo's [system status monitor](./docs/SYSTEM_STATUS_MONITOR.md) for transport mode:
+
+1. Connect to the robot.
+
+    ```bash
+    ssh robot
+    ```
+
+2. Access the robot's main workspace.
+
+    ```bash
+    cd ~/togo_ws/
+    ```
+
+3. Run the status monitor script.
+
+    ```bash
+    ./run_status_gui.sh
+    ```
 
 ### Switching to Interactive Mode
 
