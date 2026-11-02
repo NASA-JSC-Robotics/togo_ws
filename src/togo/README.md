@@ -40,20 +40,20 @@ By default, the robot boots into Transport Mode, so that the basic platform comm
    1. Unplug the charger and any other cables attached at the port hatch.
    2. Close the port hatch door.
 
-   > [!NOTE]
-   > The robot treats the hatch door as an EStop and will not enable motion if this hatch is open.
+      > [!NOTE]
+      > The robot treats the hatch door as an EStop and will not enable motion if this hatch is open.
 
-    ![Port Hatch](./docs/images/togo-back-labeled.png)
+      ![Port Hatch](./docs/images/togo-back-labeled.png)
 
 2. Press and hold the Power Button for one second and then release it.
-  The 4 status lights will be solid red while the robot's computer boots up.
+    The 4 status lights will be solid red while the robot's computer boots up.
 
     ![Power Button](./docs/images/power-and-reset-buttons-labeled.jpg)
 
 3. Wait one minute for the robot's computer and MCU to boot up.
 4. Ensure all e-stops (two on robot, front and rear, and one wireless) are unplunged. Don't forget about the port hatch needing to be closed.
-  If one of the e-stops is pressed, all 4 status lights will be blinking red in unison.
-  Once the e-stops are released, the status lights will alternate blinking red left/right, indicating the safety restart button needs to be pressed.
+    If one of the e-stops is pressed, all 4 status lights will be blinking red in unison.
+    Once the e-stops are released, the status lights will alternate blinking red left/right, indicating the safety restart button needs to be pressed.
 
     ![Wireless E-Stop and Safety Reset Button](./docs/images/wireless-estop-reset-labeled.png)
 
@@ -63,40 +63,43 @@ By default, the robot boots into Transport Mode, so that the basic platform comm
 ### Switching to Interactive Mode
 
 These instructions assume the robot has been powered on and is ready to move in Transport Mode.
+
 1. Log in to the console computer and check that it has connected to the robot "cpr-..." WiFi network (for example by opening a terminal and using `ping robot`). The robot WiFi typically takes longer to come up than the rest of the robot, so give it an extra minute beyond the usual robot boot time.
+
 2. Ssh into the robot from the console computer:
+
     ```bash
     ssh robot
     ```
 
-Note that when you SSH into the robot, the transport mode status will be reported (transport mode defaults to on):
+    Note that when you SSH into the robot, the transport mode status will be reported (transport mode defaults to on):
 
-![Transport Mode On](./docs/images/transport-mode-on.png)
+    ![Transport Mode On](./docs/images/transport-mode-on.png)
 
 3. To stop transport mode, run the following alias on Togo (on the host side, *not* in a docker container):
 
-```bash
-stop_transport_mode
-```
+    ```bash
+    stop_transport_mode
+    ```
 
-This kills the docker container running transport mode. The basic platform comm and control nodes are now no longer running.
+    This kills the docker container running transport mode. The basic platform comm and control nodes are now no longer running.
 
-We can confirm transport mode is off using the command `check_transport_mode`:
+    We can confirm transport mode is off using the command `check_transport_mode`:
 
-![Transport Mode Off](./docs/images/check-transport-mode.png)
+    ![Transport Mode Off](./docs/images/check-transport-mode.png)
 
 4. Start the hardware docker container and launch a terminator inside it. Note that transport mode must be stopped before starting this container or the robot will end up with two different control sources.
 
-```bash
-# bring up the container; this will automatically start the micro-ROS agent docker container as well
-docker compose up hw-dev -d --force-recreate
+    ```bash
+    # bring up the container; this will automatically start the micro-ROS agent docker container as well
+    docker compose up hw-dev -d --force-recreate
 
-# connect to the running container
-docker compose exec hw-dev terminator
-```
+    # connect to the running container
+    docker compose exec hw-dev terminator
+    ```
 
-> [!NOTE]
-> Unless otherwise noted, all remaining hardware instructions should be run in the terminator window or in a shell inside the container.
+    > [!NOTE]
+    > Unless otherwise noted, all remaining hardware instructions should be run in the terminator window or in a shell inside the container.
 
 5. Start Husky hardware communications:
 
@@ -133,8 +136,8 @@ we include a convenient launch file for Togo's hardware operation mode.
 
 8. At this point, Togo is ready to drive! Connect the PS4 controller and see [joystick control](#joystick-control) below for more information on driving Togo.
 
-9. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors) as well.
-  Please see [development on Togo docs](./docs/TOGO_DEVELOPMENT.md) for best practices for your own development on Togo!
+9. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors-and-visualization) as well.
+    Please see [development on Togo docs](./docs/TOGO_DEVELOPMENT.md) for best practices for your own development on Togo!
 
 ### Joystick Control
 
@@ -148,7 +151,7 @@ To use the PS4 controller to run the robot:
  By default, fast mode velocity and acceleration limits are twice as fast as the slow mode limits.
 4. Use the left joystick to send linear (x-direction) commands to Togo. Use the right joystick to send angular (z-direction) commands to Togo.
 
-![PS4 Controller](./docs/images/ps4-controller-labeled.png)
+    ![PS4 Controller](./docs/images/ps4-controller-labeled.png)
 
 ### Launch Sensors and Visualization
 
@@ -161,8 +164,10 @@ ros2 launch togo_deploy togo_sensors.launch.py
 For more information about the sensors available on Togo, please see [hardware overview of sensors](./docs/HARDWARE_OVERVIEW.md#sensors).
 
 ### E-stop Recovery
-If the E-stop has been pressed during operations, recovery is straightforward.
-1. Unplunge the E-stop. The robot will return to alternative left/right blinking red lights.
+
+If the e-stop has been pressed during operations, recovery is straightforward.
+
+1. Unplunge the e-stop. The robot will return to alternative left/right blinking red lights.
 2. Press the reset button.
 
 ### Shutting Down the Robot
