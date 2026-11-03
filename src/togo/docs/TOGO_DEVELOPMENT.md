@@ -28,7 +28,7 @@
     docker compose build hw-dev
     ```
 
-3. Continue with the [non-transport mode hardware instructions](../README.md#non-transport-mode).
+3. Continue with the [Interactive Mode hardware instructions](../README.md#switching-to-interactive-mode).
    1. After you connect to the hardware development container, remember to [build the workspace](../../../README.md#building-the-togo-workspace) so your changes take effect.
 
       ```bash
