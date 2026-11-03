@@ -17,8 +17,8 @@ For more information about enabling/disabling Clearpath's baseline configuration
     - [From Power Off to Transport Mode](#from-power-off-to-transport-mode)
     - [Troubleshooting Transport Mode](#troubleshooting-transport-mode)
     - [Switching to Interactive Mode](#switching-to-interactive-mode)
-    - [Joystick Control](#joystick-control)
     - [Launch Sensors and Visualization](#launch-sensors-and-visualization)
+    - [Joystick Control](#joystick-control)
     - [E-stop Recovery](#e-stop-recovery)
     - [Shutting Down the Robot](#shutting-down-the-robot)
   - [Gazebo Run Instructions](#gazebo-run-instructions)
@@ -127,20 +127,7 @@ These instructions assume the robot has been powered on and is ready to move in 
     > [!NOTE]
     > Unless otherwise noted, all remaining hardware instructions should be run in the terminator window or in a shell inside the container.
 
-5. Start Husky hardware communications:
-
-    ```bash
-    ros2 launch togo_deploy husky_comm.launch.py
-    ```
-
-6. To bring up Togo's controllers and teleop control (enabling control through the PS4 controller),
-we include a convenient launch file for Togo's hardware operation mode.
-
-    ```bash
-    ros2 launch togo_deploy control_hardware.launch.py
-    ```
-
-7. Start Togo's system status monitor:
+5. Start Togo's system status monitor:
 
     ```bash
     ros2 run togo_status_handler togo_status_terminal --ros-args -r __ns:=/husky
@@ -152,7 +139,7 @@ we include a convenient launch file for Togo's hardware operation mode.
 
     ![Togo Status Monitor](./docs/images/status-monitor.png)
 
-    The status monitor can also be started without a display with flag `-n` for `--no-display`, in which case status information will be printed out:
+    (***Optional***) The status monitor can also be started without a display with flag `-n` for `--no-display`, in which case status information will be printed out:
 
     ```bash
     ros2 run togo_status_handler togo_status_terminal -n --ros-args -r __ns:=/husky
@@ -160,10 +147,33 @@ we include a convenient launch file for Togo's hardware operation mode.
 
     ![Togo Status Monitor No Display](./docs/images/status-monitor-no-display.png)
 
+6. Start Husky hardware communications:
+
+    ```bash
+    ros2 launch togo_deploy husky_comm.launch.py
+    ```
+
+7. To bring up Togo's controllers and teleop control (enabling control through the PS4 controller),
+we include a convenient launch file for Togo's hardware operation mode.
+
+    ```bash
+    ros2 launch togo_deploy control_hardware.launch.py
+    ```
+
 8. At this point, Togo is ready to drive! Connect the PS4 controller and see [joystick control](#joystick-control) below for more information on driving Togo.
 
 9. To launch your own application nodes, you may need to [launch the sensors](#launch-sensors-and-visualization) as well.
     Please see [development on Togo docs](./docs/TOGO_DEVELOPMENT.md) for best practices for your own development on Togo!
+
+### Launch Sensors and Visualization
+
+Start Togo's sensors (and related nodes, including the IMU filter and localization) and view the robot and sensor data in RViz:
+
+```bash
+ros2 launch togo_deploy togo_sensors.launch.py
+```
+
+For more information about the sensors available on Togo, please see [hardware overview of sensors](./docs/HARDWARE_OVERVIEW.md#sensors).
 
 ### Joystick Control
 
@@ -178,16 +188,6 @@ To use the PS4 controller to run the robot:
 4. Use the left joystick to send linear (x-direction) commands to Togo. Use the right joystick to send angular (z-direction) commands to Togo.
 
     ![PS4 Controller](./docs/images/ps4-controller-labeled.png)
-
-### Launch Sensors and Visualization
-
-Start Togo's sensors (and related nodes, including the IMU filter and localization) and view the robot and sensor data in RViz:
-
-```bash
-ros2 launch togo_deploy togo_sensors.launch.py
-```
-
-For more information about the sensors available on Togo, please see [hardware overview of sensors](./docs/HARDWARE_OVERVIEW.md#sensors).
 
 ### E-stop Recovery
 
